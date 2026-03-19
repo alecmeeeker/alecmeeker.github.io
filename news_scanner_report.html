@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYCNewsScanner & Publisher | Alec Meeker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-primary: #0f0e0c;
+        --bg-secondary: #171614;
+        --bg-card: #1c1b18;
+        --text-primary: #ece6d9;
+        --text-secondary: #a89f8f;
+        --text-muted: #706a5e;
+        --text-bright: #f7f3ea;
+        --accent: #d4a054;
+        --accent-dim: #9a7340;
+        --border: #2a2822;
+        --font-editorial: 'Fraunces', Georgia, serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+    }
+    .back-link {
+        position: fixed;
+        top: 20px; left: 24px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-decoration: none;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(15, 14, 12, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
+    }
+    .back-link:hover { background: var(--bg-card); }
+    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
+    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
+    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
+    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
+    .paper-content strong { color: var(--text-primary); }
+    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
+    .paper-content li { margin-bottom: 6px; }
+    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
+    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
+    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
+    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
+    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
+    .paper-content td { color: var(--text-secondary); }
+    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    .paper-content a { color: var(--accent); text-decoration: none; }
+    .paper-content a:hover { text-decoration: underline; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">&#8592; Back</a>
+    <div class="paper-container">
+        <div class="paper-content">
+<h1>NYCNewsScanner &amp; Publisher System</h1>
+<h2>With Memory and Reflection Integration</h2>
+<h3>Bushwick Daily AI Newsroom</h3>
+<hr />
+<h3>Executive Summary</h3>
+<p>The NYCNewsScanner &amp; Publisher System is a sophisticated AI-powered news monitoring and content production pipeline that transforms passive data collection into active newsroom intelligence. The system employs a multi-agent architecture using the Claude Agent SDK to scan 7+ major NYC news outlets and 200K+ emails, extracting newsworthy stories with structured 5W analysis (Who, What, Where, When, Why). What makes this system particularly advanced is its integration with an adaptive memory layer based on Mem0 research that enables institutional learning across four scope levels (sender, organization, project, global) and a reflection system with quality gates that prevents the well-documented degradation that occurs when AI systems learn from raw feedback. Together, these components create an AI newsroom assistant that improves over time while maintaining editorial control.</p>
+<hr />
+<h3>Section 1: Technical Architecture</h3>
+<p><strong>System Overview:</strong></p>
+<p>The NYCNewsScanner operates as a hub-and-spoke architecture where a news coordinator agent orchestrates parallel research agents that query both internal databases (1.5M+ articles, 200K+ emails) and external web sources. Extracted stories flow through a pitch generation system, then into a publishing pipeline that produces WordPress-ready payloads. Throughout this workflow, the Memory System captures institutional knowledge about sources, organizations, and ongoing projects, while the Reflection Engine validates AI outputs through deterministic quality gates before any learning occurs.</p>
+<div class="codehilite"><pre><span></span><code>                                 ┌─────────────────────┐
+                                 │  News Coordinator   │
+                                 │  (Orchestrator)     │
+                                 └──────────┬──────────┘
+                    ┌───────────────────────┼───────────────────────┐
+                    ↓                       ↓                       ↓
+         ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+         │  DB Researcher   │    │  Email Researcher │    │  Web Researcher  │
+         │  (7 outlets)     │    │  (Press/News)     │    │  (Reddit/Web)    │
+         └────────┬─────────┘    └────────┬─────────┘    └────────┬─────────┘
+                  │                       │                       │
+                  └───────────────────────┴───────────────────────┘
+                                          ↓
+                               ┌──────────────────────┐
+                               │  Story Extractor     │
+                               │  (5W Analysis)       │
+                               └──────────┬───────────┘
+                                          ↓
+                               ┌──────────────────────┐
+                               │  Memory Store        │←─── Quality Gate
+                               │  (4-Level Scope)     │←─── Feedback Parser
+                               └──────────┬───────────┘
+                                          ↓
+                               ┌──────────────────────┐
+                               │  Publish Pipeline    │
+                               │  (WordPress Ready)   │
+                               └──────────────────────┘
+</code></pre></div>
+
+<p><strong>Core Technologies:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scanner</td>
+<td>Claude Agent SDK + LangGraph</td>
+<td>Multi-agent orchestration for parallel news research</td>
+</tr>
+<tr>
+<td>Memory System</td>
+<td>PostgreSQL + pgvector (HNSW)</td>
+<td>Adaptive memory with hybrid semantic/keyword search</td>
+</tr>
+<tr>
+<td>Reflection Engine</td>
+<td>Deterministic Python (difflib)</td>
+<td>Quality gates and feedback parsing without LLM involvement</td>
+</tr>
+<tr>
+<td>Publisher</td>
+<td>FastAPI + WordPress REST API</td>
+<td>Article assembly with SEO generation and S3 image handling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scanning &amp; Analysis Pipeline:</strong></p>
+<ol>
+<li>
+<p><strong>Source Monitoring:</strong> The database researcher queries 7 major outlets (Gothamist, Hell Gate, QNS, THE CITY, Bklyner, Brooklyn Paper, amNY) using deterministic PostgreSQL queries against the article corpus. The email researcher scans 215+ newsletters and 122+ press releases classified via Gemini Flash. The web researcher monitors r/Bushwick and conducts targeted web searches for hyperlocal content.</p>
+</li>
+<li>
+<p><strong>Content Extraction:</strong> Articles and emails are pre-chunked into ~500-byte semantic segments with 384-dimensional embeddings (all-MiniLM-L6-v2). The story extractor analyzes these chunks using Claude to identify the 5W's: Who (entities involved), What (the news event), Where (geographic relevance to Bushwick), When (timing/urgency), and Why (significance).</p>
+</li>
+<li>
+<p><strong>Relevance Scoring:</strong> Each extracted story receives a newsworthiness score based on geographic proximity to Bushwick, entity recognition matches with known community figures, and temporal relevance. Stories scoring below threshold are filtered before human review.</p>
+</li>
+<li>
+<p><strong>Entity Recognition:</strong> The system maintains a dynamic entity database of 2,580+ entities including email senders, government officials, and organizations. Entity extraction uses SpaCy NER combined with Aho-Corasick pattern matching for O(n) performance across thousands of patterns.</p>
+</li>
+<li>
+<p><strong>Context Enrichment:</strong> When drafting content or responses, the Memory System retrieves relevant memories using Reciprocal Rank Fusion across four scopes, providing historical context about sources, organizational relationships, and ongoing project involvement.</p>
+</li>
+</ol>
+<p><strong>Memory System Architecture:</strong></p>
+<ul>
+<li>
+<p><strong>Short-term Memory:</strong> Session state managed via PostgreSQL-backed storage with Redis caching for cross-instance coordination. The <code>nycnews_agent_sessions</code> table tracks active research sessions with workflow state, HITL blocking signals, and conversation history.</p>
+</li>
+<li>
+<p><strong>Long-term Memory:</strong> The <code>am_memories</code> table stores learned preferences with 384-dimensional embeddings for semantic retrieval. Each memory includes <code>times_applied</code>, <code>times_led_to_acceptance</code>, confidence scores, and effectiveness tracking. Memories persist across sessions and are scoped hierarchically.</p>
+</li>
+<li>
+<p><strong>Memory Retrieval:</strong> The <code>search_memories()</code> PostgreSQL function implements hybrid search combining vector similarity (cosine distance via HNSW index) with full-text search (tsvector) using Reciprocal Rank Fusion. Retrieval applies scope-based boosting: sender (+0.3), organization (+0.2), project (+0.1), global (baseline).</p>
+</li>
+<li>
+<p><strong>Memory Formation:</strong> New memories form through the AUDN cycle (Add/Update/Delete/Noop) implemented in <code>reconciler.py</code>. When a user edits an AI-generated draft, the <code>FeedbackParser</code> deterministically classifies the edit type (tone, factual, intent, structural), then the <code>QualityGate</code> filters noise (minimum magnitude 10%, confidence 60%, 5-minute debounce). Only high-quality signals proceed to LLM-based memory extraction and reconciliation.</p>
+</li>
+</ul>
+<p><strong>Reflection Integration:</strong></p>
+<ul>
+<li>
+<p><strong>Self-Assessment:</strong> The <code>QualityGate</code> class evaluates feedback signals before any LLM involvement. It blocks minor edits, approval-without-change signals, and signals below confidence thresholds. This deterministic filtering prevents the documented degradation that occurs when raw feedback is sent directly to LLMs for reflection.</p>
+</li>
+<li>
+<p><strong>Learning Loop:</strong> The effectiveness tracker computes memory utility using the formula: <code>0.6 * acceptance_rate + 0.4 * (1 - edit_ratio)</code>. Memories that consistently lead to rejected drafts accumulate negative signals and are candidates for automatic pruning via the <code>ea memory prune</code> CLI command.</p>
+</li>
+<li>
+<p><strong>Quality Gates:</strong> The research finding that informed this architecture states: "Reflection without external feedback degrades performance. When you see a reflection system that works, you're almost always looking at a verification system in disguise." The quality gate IS that verification system.</p>
+</li>
+</ul>
+<p><strong>Publishing Pipeline:</strong></p>
+<p>The <code>publish_pipeline/</code> module handles the transition from journalist-generated content to WordPress-ready payloads:</p>
+<ol>
+<li><code>MetadataExtractor</code>: Parses article markdown, extracts structured metadata</li>
+<li><code>SEOGenerator</code>: LLM-based SEO title, description, and tag generation</li>
+<li><code>ImageAnalyzer</code>: Claude Vision integration for image captioning and alt text</li>
+<li><code>S3UploadService</code>: Direct S3 uploads for CDN distribution</li>
+<li><code>InlineImageProcessor</code>: Extracts inline images and converts to CDN URLs</li>
+<li><code>PublishAssembler</code>: Final JSON assembly with validation (title &lt;110 chars, slug &lt;60 chars, 3-10 tags, content &gt;100 words)</li>
+</ol>
+<p><strong>Key Technical Achievements:</strong></p>
+<ul>
+<li><strong>68x improvement in email query results</strong> after fixing the classification JOIN bug (0 to 342+ emails with extractable URLs)</li>
+<li><strong>Query performance &lt;1 second</strong> for all database researcher queries against 1.5M+ articles</li>
+<li><strong>4-level memory scope hierarchy</strong> enabling organization-level memory persistence through staff turnover</li>
+<li><strong>HNSW index optimization</strong> reducing search from 16 minutes to 9 seconds for email corpus</li>
+</ul>
+<hr />
+<h3>Section 2: Features &amp; Standards</h3>
+<p><strong>Core Capabilities:</strong></p>
+<ol>
+<li>
+<p><strong>Intelligent News Discovery:</strong> The parallel researcher architecture (database + email + web) surfaces stories that exist across multiple source types. A press release in the email corpus might be enriched by related Reddit discussion and prior coverage in the article database. This cross-referencing catches stories a single-source scan would miss.</p>
+</li>
+<li>
+<p><strong>Contextual Understanding:</strong> When drafting responses to a source, the system retrieves not just sender-level memories ("Maria prefers informal tone") but also organization-level context ("HPD requires form XYZ for FOIL requests") and project-level notes ("Bushwick rezoning investigation - Maria is sympathetic"). This multi-scope retrieval provides depth that single-level systems lack.</p>
+</li>
+<li>
+<p><strong>Self-Improving Analysis:</strong> The effectiveness tracker ensures that memories earning poor outcomes are deprioritized or pruned. A tone preference that consistently leads to rejected drafts will decay in confidence, while successful memories strengthen. This creates a virtuous cycle without human intervention in memory management.</p>
+</li>
+<li>
+<p><strong>Editorial Assistance:</strong> The system assists rather than replaces journalists. Story extraction produces structured pitches that require human approval. Draft generation surfaces learned preferences but presents them for editor review. The HITL (Human-in-the-Loop) signaling system blocks automated actions until human decisions are recorded.</p>
+</li>
+</ol>
+<p><strong>Standards &amp; Best Practices:</strong></p>
+<ul>
+<li>
+<p><strong>LLM Integration Patterns:</strong> The architecture strictly separates deterministic operations (feedback parsing, quality gates, database queries) from LLM operations (memory extraction, content generation). This reduces API costs and prevents the documented performance degradation from overusing LLMs for tasks better handled deterministically.</p>
+</li>
+<li>
+<p><strong>State Management:</strong> Complex workflow state is persisted to PostgreSQL rather than held in memory. The <code>session_store.py</code> implements write-through caching (every update persists immediately) and read-through retrieval (database fallback when session not in memory). This enables server restarts without losing session state.</p>
+</li>
+<li>
+<p><strong>Error Handling:</strong> The agent employs exponential backoff retry with CLI death detection. When the underlying Claude subprocess terminates, the system saves session state and provides clear recovery instructions rather than silently failing or corrupting data.</p>
+</li>
+<li>
+<p><strong>Human-in-the-Loop:</strong> HITL decision points are implemented using PostgreSQL <code>LISTEN/NOTIFY</code> for cross-instance signaling. The <code>hitl_signaling.py</code> module tracks decisions with atomic ordering: database write precedes in-memory state update, ensuring consistency even during crashes.</p>
+</li>
+</ul>
+<p><strong>Evolution &amp; Learning:</strong></p>
+<p>The developer blog reveals a critical pivot in the memory system design. The initial implementation (commit 990af0f) sent raw edit diffs directly to Claude for reflection. After a research phase that produced 15,000+ lines of documentation analyzing Mem0, Letta/MemGPT, and academic memory systems, the team discovered that "reflection without external feedback degrades performance."</p>
+<p>The redesigned system (commit 3b7e2ae) implements deterministic parsing BEFORE any LLM involvement. The <code>FeedbackParser</code> uses Python's <code>difflib.SequenceMatcher</code> to classify edit types (tone, factual, intent, structural, complete_rewrite, minor) without any AI inference. Only signals that pass the quality gate proceed to LLM memory extraction.</p>
+<p>This "ship, learn, rebuild better" pattern demonstrates mature engineering practice - the team identified through systematic research that their initial intuition was wrong, then rebuilt with production-grade architecture.</p>
+<hr />
+<h3>Section 3: Impact on News Operations</h3>
+<p><strong>Journalism Capabilities Unlocked:</strong></p>
+<ol>
+<li>
+<p><strong>Comprehensive Morning Briefings:</strong> Instead of manually checking 7 news websites, journalists receive a synthesized summary with hyperlinks to all relevant articles from the past 48 hours. The system organizes content by topic and flags stories unique to specific outlets.</p>
+</li>
+<li>
+<p><strong>Email Intelligence Integration:</strong> Press releases from government agencies, newsletters from community organizations, and Google Alerts are now searchable alongside published articles. The 68x improvement in email query results (from 0 to 342+ with extractable URLs) transformed email from a broken feature to a valuable intelligence source.</p>
+</li>
+<li>
+<p><strong>Source Relationship Continuity:</strong> When a new press contact takes over at a city agency, organization-level memories about how that agency operates persist. The system remembers FOIL request procedures, preferred communication channels, and historical interaction patterns even through staff turnover.</p>
+</li>
+<li>
+<p><strong>Automated Event Pipeline:</strong> Calendar events extracted from emails flow into structured records with title, date, location, and description. What was a manual transcription process becomes a review-and-approve workflow.</p>
+</li>
+</ol>
+<p><strong>The Memory Advantage:</strong></p>
+<p>Institutional memory matters for local news because community journalism depends on accumulated knowledge. When a journalist leaves, they take years of source relationships and procedural knowledge with them. The 4-level scope hierarchy captures this knowledge at the appropriate level:</p>
+<ul>
+<li><strong>Global:</strong> "Route all advertising inquiries to the business team"</li>
+<li><strong>Organization:</strong> "Community Board 4 meetings are held on the second Wednesday monthly"</li>
+<li><strong>Project:</strong> "The Bushwick rezoning investigation has been ongoing since 2024; these 5 stakeholders are connected"</li>
+<li><strong>Sender:</strong> "Maria at CB4 prefers text for urgent matters and addresses informal email correspondence as 'Hey'"</li>
+</ul>
+<p>This memory layer means new journalists can draft appropriate responses to established sources because the system surfaces relevant context automatically.</p>
+<p><strong>The Reflection Advantage:</strong></p>
+<p>Self-assessment matters for quality journalism because AI assistance must improve over time without degrading accuracy. The quality gate prevents several documented failure modes:</p>
+<ul>
+<li><strong>Noise pollution:</strong> Minor typo fixes don't become "preferences" that the system tries to replicate</li>
+<li><strong>Debounce protection:</strong> Rapid-fire edits to the same email don't create duplicate or conflicting memories</li>
+<li><strong>Magnitude filtering:</strong> Only edits that change 10%+ of content pass the gate, ensuring the signal represents meaningful preference change</li>
+</ul>
+<p>The effectiveness tracker then validates whether stored memories actually improve outcomes. A memory about "use formal tone with government contacts" that consistently leads to approved drafts strengthens; one that leads to rejections weakens.</p>
+<p><strong>Workflow Integration:</strong></p>
+<p>Journalists interact with the system through multiple interfaces:</p>
+<ol>
+<li><strong>CLI Commands:</strong> <code>ea memory list</code>, <code>ea memory build-profile &lt;email&gt;</code>, <code>ea memory org --create</code> for direct memory management</li>
+<li><strong>Web Dashboard:</strong> Real-time SSE progress tracking during story extraction workflows</li>
+<li><strong>HITL Review:</strong> Click-to-select interface for approving extracted stories and pitches with visual feedback</li>
+<li><strong>Publishing Pipeline:</strong> Structured JSON output compatible with existing WordPress workflow</li>
+</ol>
+<p>The system integrates into the <code>update_emails_v2.sh</code> pipeline as Steps 5-7 (story extraction, LangChain agent processing, entity extraction), running automatically after new emails are processed.</p>
+<p><strong>Mission Alignment:</strong></p>
+<p>The NYCNewsScanner &amp; Publisher System embodies the values of good local journalism while making it sustainable:</p>
+<ul>
+<li><strong>Breadth without burnout:</strong> Automated monitoring of 7 outlets plus email plus Reddit means comprehensive coverage without requiring staff to manually check dozens of sources daily</li>
+<li><strong>Depth through memory:</strong> Accumulated institutional knowledge about sources, organizations, and ongoing projects enables the kind of contextual reporting that distinguishes local journalism from wire service aggregation</li>
+<li><strong>Quality through gates:</strong> Reflection systems that learn from every interaction can accumulate errors; quality gates ensure only high-confidence signals inform future behavior</li>
+<li><strong>Control through HITL:</strong> No story publishes without human approval; no draft sends without editor review; the AI assists rather than replaces editorial judgment</li>
+</ul>
+<p>The system costs approximately $0.15-0.25 per comprehensive research report versus hours of human research time, making capabilities previously available only to well-resourced newsrooms accessible to a small local publication.</p>
+<hr />
+<p><em>Report compiled from 321 commits spanning July 2025 to March 2026</em>
+<em>Sources: Developer Blog, Systems Manifest, Codebase Analysis</em></p>
+        </div>
+    </div>
+</body>
+</html>

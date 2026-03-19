@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Paper — Building an AI-Powered Local Newsroom | Alec Meeker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-primary: #0f0e0c;
+        --bg-secondary: #171614;
+        --bg-card: #1c1b18;
+        --text-primary: #ece6d9;
+        --text-secondary: #a89f8f;
+        --text-muted: #706a5e;
+        --text-bright: #f7f3ea;
+        --accent: #d4a054;
+        --accent-dim: #9a7340;
+        --border: #2a2822;
+        --font-editorial: 'Fraunces', Georgia, serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .back-link {
+        position: fixed;
+        top: 20px;
+        left: 24px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-decoration: none;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(15, 14, 12, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
+    }
+
+    .back-link:hover { background: var(--bg-card); }
+
+    .paper-container {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 100px 32px 80px;
+    }
+
+    .paper-content h1 {
+        font-family: var(--font-editorial);
+        font-size: 2.6rem;
+        font-weight: 900;
+        color: var(--text-bright);
+        line-height: 1.15;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+    }
+
+    .paper-content h2 {
+        font-family: var(--font-editorial);
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-top: 56px;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .paper-content h3 {
+        font-family: var(--font-editorial);
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-top: 36px;
+        margin-bottom: 12px;
+    }
+
+    .paper-content h4 {
+        font-family: var(--font-editorial);
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-top: 28px;
+        margin-bottom: 10px;
+    }
+
+    .paper-content p {
+        margin-bottom: 16px;
+        color: var(--text-secondary);
+    }
+
+    .paper-content strong { color: var(--text-primary); }
+
+    .paper-content ul, .paper-content ol {
+        margin-bottom: 16px;
+        padding-left: 24px;
+        color: var(--text-secondary);
+    }
+
+    .paper-content li { margin-bottom: 6px; }
+
+    .paper-content code {
+        font-family: var(--font-mono);
+        font-size: 0.88em;
+        background: var(--bg-card);
+        padding: 2px 6px;
+        border-radius: 3px;
+    }
+
+    .paper-content pre {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        overflow-x: auto;
+        margin-bottom: 20px;
+        white-space: pre;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        line-height: 1.5;
+        color: var(--text-secondary);
+    }
+
+    .paper-content pre code {
+        background: none;
+        padding: 0;
+        font-size: 0.82rem;
+        line-height: 1.6;
+    }
+
+    .paper-content blockquote {
+        border-left: 3px solid var(--accent-dim);
+        padding-left: 20px;
+        margin: 20px 0;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    .paper-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .paper-content th, .paper-content td {
+        padding: 10px 14px;
+        border: 1px solid var(--border);
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    .paper-content th {
+        background: var(--bg-card);
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .paper-content td { color: var(--text-secondary); }
+
+    .paper-content hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 40px 0;
+    }
+
+    .paper-content a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .paper-content a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+        .paper-container { padding: 80px 20px 60px; }
+        .paper-content h1 { font-size: 1.8rem; }
+        .paper-content h2 { font-size: 1.3rem; }
+        .paper-content pre { font-size: 0.7rem; }
+    }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">&#8592; Back to site</a>
+    <div class="paper-container">
+        <div class="paper-content">
+<h1 id="building-an-ai-powered-local-newsroom">Building an AI-Powered Local Newsroom</h1>
+<h2 id="a-technical-white-paper-on-the-bushwick-daily-system">A Technical White Paper on the Bushwick Daily System</h2>
+<h3 id="author">Author</h3>
+<p><strong>Alec Meeker</strong>
+Publisher, Bushwick Daily</p>
+<h3 id="march-2026">March 2026</h3>
+<hr />
+<h2 id="abstract">Abstract</h2>
+<p>The local news crisis has left communities across America without reliable journalism coverage. While national outlets consolidate and local newsrooms collapse, AI has emerged as a potential force multiplier that could enable small newsrooms to punch above their weight. This white paper documents the nine-month development of a comprehensive AI infrastructure built by Bushwick Daily, a hyperlocal Brooklyn publication. The system encompasses 255 GB of structured data including 1.79 million scraped news articles from 75+ outlets, 218,000 processed emails with participant intelligence, and 8 million searchable semantic chunks. The architecture integrates multiple AI subsystems: an intelligent news scanner that monitors NYC media and extracts stories from email intelligence, an adaptive memory system that learns editorial preferences through human feedback, and an email assistant that triages correspondence and generates voice-accurate draft responses. The human-in-the-loop design philosophy ensures AI augments rather than replaces editorial judgment, with explicit checkpoints requiring human approval before any automated action. Development proceeded through deliberate iteration, with significant architectural pivots driven by production experience rather than theoretical assumptions. The resulting system demonstrates that sophisticated AI infrastructure is achievable for small newsrooms, potentially transforming the economics of local journalism by enabling one-person operations to maintain coverage depth traditionally requiring dedicated research staff.</p>
+<hr />
+<h2 id="1-introduction-the-local-news-crisis-and-an-ai-response">1. Introduction: The Local News Crisis and an AI Response</h2>
+<h3 id="11-the-challenge">1.1 The Challenge</h3>
+<p>The collapse of local journalism represents one of the most significant information gaps in American civic life. Since 2004, over 2,500 newspapers have closed. The remaining local outlets operate with skeleton staffs, unable to provide the coverage depth that community accountability requires. Hyperlocal publications face an impossible equation: the reporting workload of a full newsroom with the resources of a small business.</p>
+<p>For Bushwick Daily, this tension manifested in concrete operational challenges. Monitoring 75+ NYC news outlets for relevant coverage required hours of daily manual checking. An inbox processing 200+ emails daily created a triage bottleneck where important community communications were lost in promotional noise. Institutional knowledge about sources, organizations, and ongoing stories existed only in the publisher's memory, vulnerable to the cognitive limitations of a single operator.</p>
+<h3 id="12-the-hypothesis">1.2 The Hypothesis</h3>
+<p>The hypothesis driving this project was straightforward: AI could serve as a force multiplier for small newsrooms rather than a replacement for journalists. The goal was not automated content generation but automated information processing, freeing editorial attention for judgment and writing while AI handled collection, organization, and routine correspondence.</p>
+<p>This required building AI infrastructure from scratch rather than adopting off-the-shelf solutions. Commercial AI tools optimize for general use cases; a newsroom requires domain-specific capabilities around source management, editorial voice preservation, and journalistic accuracy standards.</p>
+<h3 id="13-the-approach">1.3 The Approach</h3>
+<p>Development proceeded through direct engagement with production requirements. The publisher, without formal engineering training, built the system iteratively using AI-assisted development tools, treating each failure as a learning opportunity and each success as a foundation for expansion.</p>
+<p>The approach prioritized:
+- <strong>Human-in-the-loop design</strong>: AI proposes, humans approve. No automated actions without explicit human checkpoints.
+- <strong>Editorial integrity</strong>: Voice preservation, source attribution, and accuracy verification built into system architecture.
+- <strong>Practical utility</strong>: Features driven by real workflow pain points rather than theoretical capabilities.
+- <strong>Sustainable architecture</strong>: Production-grade reliability over prototype impressiveness.</p>
+<h3 id="14-scope-of-this-paper">1.4 Scope of This Paper</h3>
+<p>This paper covers the complete technical architecture of the Bushwick Daily AI newsroom system as of March 2026, including:</p>
+<ul>
+<li><strong>Data Infrastructure</strong>: PostgreSQL 17 with pgvector for unified article and email storage with semantic search</li>
+<li><strong>NYCNewsScanner</strong>: Multi-agent news monitoring and story extraction from both published articles and email intelligence</li>
+<li><strong>Email Assistant</strong>: Intelligent triage, context-aware response generation, and task orchestration with skill-based automation</li>
+<li><strong>Memory System</strong>: Adaptive learning architecture that improves through human feedback</li>
+<li><strong>Integration Layer</strong>: How these components communicate and share context</li>
+</ul>
+<p>The development journey itself is documented, including architectural pivots, failed approaches, and lessons learned from nine months of iteration.</p>
+<hr />
+<h2 id="2-system-architecture-overview">2. System Architecture Overview</h2>
+<h3 id="21-design-philosophy">2.1 Design Philosophy</h3>
+<p>Five principles guided architectural decisions:</p>
+<p><strong>1. Human-in-the-Loop by Default</strong>
+Every automated action passes through human approval. The system proposes; humans decide. This applies to email responses, story extraction approvals, form submissions, and content publication. AI handles the mechanical work of drafting, organizing, and retrieving; humans retain editorial judgment.</p>
+<p><strong>2. Editorial Integrity as Architecture</strong>
+Voice preservation is not a feature but a requirement. The system learns from human corrections rather than overriding editorial preferences. When AI-generated content is edited before sending, those edits become training data for future improvements.</p>
+<p><strong>3. Practical Over Impressive</strong>
+Features address documented workflow problems rather than theoretical capabilities. The incremental crawling system exists because daily news monitoring was consuming hours; the email triage system exists because 200+ daily emails were unmanageable manually.</p>
+<p><strong>4. Production Reliability</strong>
+Graceful degradation over brittle perfection. When individual articles cause parsing errors, the system logs and skips rather than crashing. When API calls fail, retry logic with exponential backoff ensures eventual completion. Background processing through Celery workers ensures main operations remain responsive.</p>
+<p><strong>5. Sustainable Operations</strong>
+Infrastructure must run on available hardware within realistic budgets. The system operates on a Mac with an external SSD for PostgreSQL data, using commodity cloud APIs with cost tracking. AI operations are optimized for cost efficiency without sacrificing capability.</p>
+<h3 id="22-high-level-architecture">2.2 High-Level Architecture</h3>
+<div class="codehilite"><pre><span></span><code>                    ┌──────────────────────────────────────────────────────┐
+                    │                  <span class="nv">DATA</span> <span class="nv">SOURCES</span>                         │
+                    │  <span class="mi">75</span><span class="o">+</span> <span class="nv">News</span> <span class="nv">Outlets</span>    <span class="nv">Gmail</span> <span class="nv">Inbox</span>    <span class="nv">Reddit</span><span class="o">/</span><span class="nv">Web</span>        │
+                    └────────────┬─────────────┬────────────┬──────────────┘
+                                 │             │            │
+                    ┌────────────▼─────────────▼────────────▼──────────────┐
+                    │              <span class="nv">INGESTION</span> <span class="nv">LAYER</span>                          │
+                    │  <span class="nv">Scrapy</span> <span class="nv">Spider</span>    <span class="nv">Gmail</span> <span class="nv">API</span>    <span class="nv">Web</span> <span class="nv">Scraper</span>            │
+                    │  <span class="nv">URL</span> <span class="nv">Cache</span>        <span class="nv">Deduplication</span>  <span class="nv">Rate</span> <span class="nv">Limiting</span>        │
+                    └────────────┬─────────────┬────────────┬──────────────┘
+                                 │             │            │
+                    ┌────────────▼─────────────▼────────────▼──────────────┐
+                    │           <span class="nv">PROCESSING</span> <span class="nv">LAYER</span>                            │
+                    │  <span class="nv">Article</span> <span class="nv">Extraction</span>    <span class="nv">Email</span> <span class="nv">Classification</span>           │
+                    │  <span class="nv">Entity</span> <span class="nv">Extraction</span>     <span class="nv">Participant</span> <span class="nv">Intelligence</span>       │
+                    │  <span class="nv">Chunking</span>              <span class="nv">Embedding</span> <span class="nv">Generation</span>           │
+                    └────────────┬─────────────┬────────────┬──────────────┘
+                                 │             │            │
+                    ┌────────────▼─────────────▼────────────▼──────────────┐
+                    │              <span class="nv">DATA</span> <span class="nv">WAREHOUSE</span>                           │
+                    │         <span class="nv">PostgreSQL</span> <span class="mi">17</span> <span class="o">+</span> <span class="nv">pgvector</span>                      │
+                    │  <span class="mi">1</span>.<span class="mi">79</span><span class="nv">M</span> <span class="nv">Articles</span>   <span class="mi">218</span><span class="nv">K</span> <span class="nv">Emails</span>   <span class="mi">8</span><span class="nv">M</span><span class="o">+</span> <span class="nv">Chunks</span>            │
+                    │  <span class="mi">453</span><span class="nv">K</span> <span class="nv">Participants</span>   <span class="mi">10</span><span class="nv">K</span> <span class="nv">Sender</span> <span class="nv">Profiles</span>              │
+                    │            <span class="nv">HNSW</span> <span class="nv">Vector</span> <span class="nv">Indexes</span>                        │
+                    └────────────┬─────────────┬────────────┬──────────────┘
+                                 │             │            │
+          ┌──────────────────────┼─────────────┼────────────┼──────────────────────┐
+          │                      │             │            │                      │
+          ▼                      ▼             ▼            ▼                      ▼
+   ┌─────────────┐     ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+   │   <span class="nv">RAG</span>       │     │ <span class="nv">NYCNews</span>     │   │   <span class="nv">Email</span>     │   │  <span class="nv">Memory</span>     │   │  <span class="nv">Publish</span>    │
+   │  <span class="nv">Chatbot</span>    │     │  <span class="nv">Scanner</span>    │   │  <span class="nv">Assistant</span>  │   │  <span class="nv">System</span>     │   │  <span class="nv">Pipeline</span>   │
+   │             │     │             │   │             │   │             │   │             │
+   │ <span class="nv">Semantic</span>    │     │ <span class="nv">Multi</span><span class="o">-</span><span class="nv">Agent</span> │   │ <span class="nv">Triage</span>      │   │ <span class="nv">Adaptive</span>    │   │ <span class="nv">WordPress</span>   │
+   │ <span class="nv">Search</span>      │     │ <span class="nv">Research</span>    │   │ <span class="nv">Drafting</span>    │   │ <span class="nv">Learning</span>    │   │ <span class="nv">Integration</span> │
+   │ <span class="nv">Q</span><span class="o">&amp;</span><span class="nv">A</span>         │     │ <span class="nv">Story</span>       │   │ <span class="nv">Task</span>        │   │ <span class="nv">Feedback</span>    │   │ <span class="nv">SEO</span> <span class="nv">Gen</span>     │
+   │             │     │ <span class="nv">Extraction</span>  │   │ <span class="nv">Orchestr</span>.   │   │ <span class="k">Loop</span>        │   │ <span class="nv">Image</span> <span class="nv">AI</span>    │
+   └─────────────┘     └─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘
+          │                      │             │            │                      │
+          └──────────────────────┼─────────────┼────────────┼──────────────────────┘
+                                 │             │            │
+                    ┌────────────▼─────────────▼────────────▼──────────────┐
+                    │               <span class="nv">HUMAN</span> <span class="nv">INTERFACE</span>                         │
+                    │  <span class="nv">CLI</span> <span class="nv">Commands</span>    <span class="nv">Web</span> <span class="nv">Dashboard</span>    <span class="nv">API</span> <span class="nv">Endpoints</span>       │
+                    │              <span class="nv">Human</span><span class="o">-</span><span class="nv">in</span><span class="o">-</span><span class="nv">the</span><span class="o">-</span><span class="k">Loop</span> <span class="nv">Review</span>                 │
+                    └──────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<h3 id="23-technology-stack-summary">2.3 Technology Stack Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technologies</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data Storage</strong></td>
+<td>PostgreSQL 17, pgvector, Redis</td>
+<td>Unified SQL + vector search; HNSW indexes enable sub-100ms similarity queries across millions of chunks</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Python 3.11, FastAPI, Celery</td>
+<td>Async processing with background tasks for compute-intensive embedding generation</td>
+</tr>
+<tr>
+<td><strong>Scraping</strong></td>
+<td>Scrapy, BeautifulSoup, Readability</td>
+<td>Intelligent heuristic spider with fallback extraction chains</td>
+</tr>
+<tr>
+<td><strong>AI/LLM</strong></td>
+<td>Claude (Anthropic), Gemini (Google), GPT-4 (OpenAI)</td>
+<td>Multi-model strategy: Claude for generation quality, Gemini Flash for cost-efficient classification, GPT-4 for specialized tasks</td>
+</tr>
+<tr>
+<td><strong>Embeddings</strong></td>
+<td>SentenceTransformers (all-MiniLM-L6-v2)</td>
+<td>384-dimensional vectors; lightweight model runs locally without GPU</td>
+</tr>
+<tr>
+<td><strong>Browser Automation</strong></td>
+<td>Playwright</td>
+<td>RSVP form filling, screenshot capture, web interaction</td>
+</tr>
+<tr>
+<td><strong>Workflow Engine</strong></td>
+<td>LangGraph</td>
+<td>Multi-agent orchestration with state persistence</td>
+</tr>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>React, Streamlit</td>
+<td>Development speed with Streamlit; production UI with React</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>macOS, Homebrew, External SSD</td>
+<td>Commodity hardware sufficient for production workloads</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-data-infrastructure">3. Data Infrastructure</h2>
+<h3 id="31-data-warehouse-architecture">3.1 Data Warehouse Architecture</h3>
+<p>The data warehouse centers on PostgreSQL 17 with the pgvector extension, providing unified storage for both structured metadata and high-dimensional vector embeddings. This architecture eliminates the complexity of maintaining separate vector stores while enabling joins between semantic search results and relational data.</p>
+<p><strong>Primary Entity Clusters:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- Article Storage</span>
+<span class="n">outlets</span><span class="w"> </span><span class="p">(</span><span class="mi">75</span><span class="w"> </span><span class="n">active</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">└──</span><span class="w"> </span><span class="n">articles</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">79</span><span class="n">M</span><span class="w"> </span><span class="n">records</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="err">└──</span><span class="w"> </span><span class="n">article_content</span><span class="w"> </span><span class="p">(</span><span class="k">full</span><span class="w"> </span><span class="n">HTML</span><span class="o">/</span><span class="nb">text</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">tsvector</span><span class="w"> </span><span class="k">search</span><span class="p">)</span><span class="w"></span>
+<span class="w">              </span><span class="err">└──</span><span class="w"> </span><span class="n">article_chunks</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">.</span><span class="mi">56</span><span class="n">M</span><span class="w"> </span><span class="n">chunks</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="mi">384</span><span class="o">-</span><span class="n">dim</span><span class="w"> </span><span class="n">embeddings</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">-- Email Storage</span>
+<span class="n">classified_emails</span><span class="w"> </span><span class="p">(</span><span class="mi">218</span><span class="n">K</span><span class="w"> </span><span class="n">records</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="n">columns</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">├──</span><span class="w"> </span><span class="n">email_chunks</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">58</span><span class="n">M</span><span class="w"> </span><span class="n">chunks</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">embeddings</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">├──</span><span class="w"> </span><span class="n">email_participants</span><span class="w"> </span><span class="p">(</span><span class="mi">453</span><span class="n">K</span><span class="w"> </span><span class="n">relationship</span><span class="w"> </span><span class="n">records</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">│</span><span class="w">     </span><span class="err">└──</span><span class="w"> </span><span class="n">sender_profiles</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="n">K</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">communication</span><span class="w"> </span><span class="n">patterns</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">├──</span><span class="w"> </span><span class="n">email_attachments</span><span class="w"> </span><span class="p">(</span><span class="n">Google</span><span class="w"> </span><span class="n">Drive</span><span class="w"> </span><span class="n">links</span><span class="p">,</span><span class="w"> </span><span class="n">SHA</span><span class="o">-</span><span class="mi">256</span><span class="w"> </span><span class="n">dedup</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">└──</span><span class="w"> </span><span class="n">email_events</span><span class="w"> </span><span class="p">(</span><span class="n">ICS</span><span class="w"> </span><span class="n">calendar</span><span class="w"> </span><span class="n">extraction</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">-- Entity Intelligence</span>
+<span class="n">entities_v2</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">580</span><span class="o">+</span><span class="w"> </span><span class="n">entities</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="err">└──</span><span class="w"> </span><span class="n">entity_mentions_v2</span><span class="w"> </span><span class="p">(</span><span class="k">cross</span><span class="o">-</span><span class="n">corpus</span><span class="w"> </span><span class="n">tracking</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="err">└──</span><span class="w"> </span><span class="n">entity_aliases_v2</span><span class="w"> </span><span class="p">(</span><span class="n">disambiguation</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Vector Indexing Strategy:</strong></p>
+<p>HNSW (Hierarchical Navigable Small World) indexes provide approximate nearest neighbor search with sub-100ms query times across millions of vectors:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_email_chunks_embedding_hnsw</span><span class="w"></span>
+<span class="k">ON</span><span class="w"> </span><span class="n">email_chunks</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="n">hnsw</span><span class="w"> </span><span class="p">(</span><span class="n">embedding</span><span class="w"> </span><span class="n">vector_cosine_ops</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">-- Index size: 5.8 GB for 3.58M email chunks</span>
+<span class="c1">-- Query time: ~27ms average (verified December 2024)</span>
+</code></pre></div>
+
+<p>The choice of <code>vector_cosine_ops</code> reflects the semantic nature of the search: cosine similarity captures meaning alignment regardless of vector magnitude, which is appropriate for text embeddings where we care about semantic direction rather than intensity.</p>
+<h3 id="32-article-ingestion-pipeline">3.2 Article Ingestion Pipeline</h3>
+<p>The article scraping system achieves 95% automation through intelligent heuristics, requiring manual configuration only for exceptional sites.</p>
+<p><strong>Article Detection Cascade:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">triage_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Multi-stage article detection.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Stage 1: OpenGraph metadata</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;meta[property=&quot;og:type&quot;][content=&quot;article&quot;]&#39;</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_article</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Stage 2: Semantic container analysis</span>
+    <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;article&#39;</span><span class="p">,</span> <span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;div[role=&quot;main&quot;]&#39;</span><span class="p">]:</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">container</span><span class="p">:</span>
+            <span class="n">text_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">container</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s2">&quot;::text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getall</span><span class="p">())</span>
+            <span class="n">html_content</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+            <span class="c1"># Text-to-markup ratio filter</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text_content</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">html_content</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.6</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text_content</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">250</span><span class="p">:</span>
+                    <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_article</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+                    <span class="k">return</span>
+</code></pre></div>
+
+<p><strong>Incremental Crawling:</strong></p>
+<p>The UrlCacheMiddleware eliminates redundant network requests by loading all existing URLs at spider startup:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">UrlCacheMiddleware</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">spider_opened</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="n">urls</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT url FROM articles WHERE outlet_id = :id&quot;</span><span class="p">),</span>
+                <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">outlet_id</span><span class="p">}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scraped_urls</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize_url</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">process_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_url</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scraped_urls</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IgnoreRequest</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Already scraped: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+
+<p>This reduces network traffic by approximately 90% on subsequent crawls, enabling hourly news checks without server overload.</p>
+<p><strong>Site Override System:</strong></p>
+<p>For sites that defeat heuristic detection, YAML configuration provides escape hatches:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">hellgatenyc.com</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">article_url_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/[a-z0-9-]+/$&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">body_fallback_chain</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;article.post-content&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;div.entry-content&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;div.article-body&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<h3 id="33-email-ingestion-pipeline">3.3 Email Ingestion Pipeline</h3>
+<p>Email processing follows a seven-step pipeline orchestrated by <code>update_emails_v2.sh</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">Step</span> <span class="mi">1</span>:   <span class="nv">Gmail</span> <span class="nv">API</span> <span class="nv">extraction</span> <span class="nv">with</span> <span class="nv">service</span> <span class="nv">account</span> <span class="nv">delegation</span>
+<span class="nv">Step</span> <span class="mi">1</span>.<span class="mi">1</span>: <span class="nv">URL</span> <span class="nv">extraction</span> <span class="nv">from</span> <span class="nv">email</span> <span class="nv">content</span>
+<span class="nv">Step</span> <span class="mi">1</span>.<span class="mi">25</span>: <span class="nv">Deterministic</span> <span class="nv">triage</span> <span class="ss">(</span><span class="nv">email</span><span class="o">/</span><span class="nv">notify</span><span class="o">/</span><span class="nv">no</span><span class="o">/</span><span class="nv">spam</span><span class="ss">)</span>
+<span class="nv">Step</span> <span class="mi">1</span>.<span class="mi">5</span>: <span class="nv">Attachment</span> <span class="nv">extraction</span> → <span class="nv">Google</span> <span class="nv">Drive</span> <span class="nv">with</span> <span class="nv">SHA</span><span class="o">-</span><span class="mi">256</span> <span class="nv">dedup</span>
+<span class="nv">Step</span> <span class="mi">2</span>:   <span class="nv">Semantic</span> <span class="nv">chunking</span> <span class="nv">with</span> <span class="mi">500</span><span class="o">-</span><span class="nv">char</span> <span class="nv">segments</span>
+<span class="nv">Step</span> <span class="mi">3</span>:   <span class="nv">Gemini</span> <span class="nv">Flash</span> <span class="nv">classification</span> <span class="ss">(</span><span class="mi">16</span> <span class="nv">categories</span><span class="ss">)</span>
+<span class="nv">Step</span> <span class="mi">3</span>.<span class="mi">5</span>: <span class="nv">Structured</span> <span class="nv">event</span> <span class="nv">extraction</span> <span class="ss">(</span><span class="nv">ICS</span> <span class="nv">parsing</span><span class="ss">)</span>
+<span class="nv">Step</span> <span class="mi">4</span>:   <span class="nv">Participant</span> <span class="nv">intelligence</span> <span class="ss">(</span><span class="nv">role</span> <span class="nv">extraction</span>, <span class="nv">fingerprinting</span><span class="ss">)</span>
+<span class="nv">Step</span> <span class="mi">5</span>:   <span class="nv">Story</span> <span class="nv">extraction</span> <span class="k">for</span> <span class="nv">journalism</span> <span class="nv">workflow</span>
+<span class="nv">Step</span> <span class="mi">6</span>:   <span class="nv">LangChain</span> <span class="nv">agent</span> <span class="nv">processing</span>
+<span class="nv">Step</span> <span class="mi">7</span>:   <span class="nv">Entity</span> <span class="nv">extraction</span> <span class="ss">(</span><span class="nv">SpaCy</span> <span class="nv">NER</span><span class="ss">)</span>
+</code></pre></div>
+
+<p><strong>Hybrid Classification System:</strong></p>
+<p>Deterministic rules handle predictable patterns before invoking LLM classification:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DeterministicFilter</span><span class="p">:</span>
+    <span class="c1"># Spam TLDs with &gt;95% spam rate</span>
+    <span class="n">SPAM_TLDS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;.xyz&#39;</span><span class="p">,</span> <span class="s1">&#39;.top&#39;</span><span class="p">,</span> <span class="s1">&#39;.gdn&#39;</span><span class="p">,</span> <span class="s1">&#39;.click&#39;</span><span class="p">,</span> <span class="s1">&#39;.loan&#39;</span><span class="p">}</span>
+
+    <span class="c1"># Known newsletter domains</span>
+    <span class="n">NEWSLETTER_DOMAINS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mailchimp.com&#39;</span><span class="p">,</span> <span class="s1">&#39;substack.com&#39;</span><span class="p">,</span> <span class="s1">&#39;constantcontact.com&#39;</span><span class="p">}</span>
+
+    <span class="c1"># Financial transaction patterns</span>
+    <span class="n">FINANCIAL_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;paypal.*receipt&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;venmo.*paid&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># Check spam indicators</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">email</span><span class="o">.</span><span class="n">sender</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">tld</span><span class="p">)</span> <span class="k">for</span> <span class="n">tld</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPAM_TLDS</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;spam&#39;</span>
+
+        <span class="c1"># Check newsletter patterns</span>
+        <span class="n">sender_domain</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">sender</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sender_domain</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NEWSLETTER_DOMAINS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;marketing_newsletter&#39;</span>
+
+        <span class="c1"># ... additional rules</span>
+        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Fall through to LLM classification</span>
+</code></pre></div>
+
+<p>This hybrid approach preserves LLM capacity for nuanced decisions while handling obvious cases instantly, achieving approximately 10x throughput improvement over LLM-only classification.</p>
+<h3 id="34-data-quality-framework">3.4 Data Quality Framework</h3>
+<p><strong>Deduplication:</strong></p>
+<p>Content fingerprinting using SHA-256 prevents duplicate storage:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">generate_fingerprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
+    <span class="c1"># Normalize content</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_tracking_params</span><span class="p">(</span><span class="n">email</span><span class="o">.</span><span class="n">body_text</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_whitespace</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="c1"># Generate hash</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Referential Integrity:</strong></p>
+<p>CASCADE deletes maintain consistency:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">article_chunks</span><span class="w"></span>
+<span class="k">ADD</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_article</span><span class="w"></span>
+<span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">articles</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Encoding Safety:</strong></p>
+<p>UTF-8 sanitization prevents PostgreSQL errors from null bytes:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">clean_text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="n">clean_text</span> <span class="o">=</span> <span class="n">clean_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Remove null bytes</span>
+</code></pre></div>
+
+<h3 id="35-key-technical-achievements">3.5 Key Technical Achievements</h3>
+<ul>
+<li><strong>~27ms vector similarity queries</strong> across 3.58M email chunks</li>
+<li><strong>~90% network reduction</strong> via URL cache middleware</li>
+<li><strong>4.56M article chunks</strong> and <strong>3.58M email chunks</strong> with HNSW indexes</li>
+<li><strong>92.7% profile linkage</strong> for emails to enhanced sender profiles</li>
+<li><strong>INSERT-only mode</strong> for articles prevents data loss from paywalled content changes</li>
+</ul>
+<hr />
+<h2 id="4-nycnewsscanner-intelligent-news-discovery">4. NYCNewsScanner: Intelligent News Discovery</h2>
+<h3 id="41-scanning-architecture">4.1 Scanning Architecture</h3>
+<p>The NYCNewsScanner employs a multi-agent architecture using the Claude Agent SDK to parallelize news research across diverse source types.</p>
+<div class="codehilite"><pre><span></span><code>                         ┌─────────────────────┐
+                         │  News Coordinator   │
+                         │  (Orchestrator)     │
+                         └──────────┬──────────┘
+            ┌───────────────────────┼───────────────────────┐
+            ▼                       ▼                       ▼
+ ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+ │  DB Researcher   │    │  Email Researcher │    │  Web Researcher  │
+ │  (7 outlets)     │    │  (Press/News)     │    │  (Reddit/Web)    │
+ └────────┬─────────┘    └────────┬─────────┘    └────────┬─────────┘
+          │                       │                       │
+          └───────────────────────┴───────────────────────┘
+                                  ▼
+                       ┌──────────────────────┐
+                       │  Story Extractor     │
+                       │  (5W Analysis)       │
+                       └──────────┬───────────┘
+                                  ▼
+                       ┌──────────────────────┐
+                       │  Memory Integration  │←─── Quality Gate
+                       │  (4-Level Scope)     │←─── Feedback Parser
+                       └──────────┬───────────┘
+                                  ▼
+                       ┌──────────────────────┐
+                       │  Pitch Generation    │
+                       │  + Human Review      │
+                       └──────────────────────┘
+</code></pre></div>
+
+<p><strong>Source Coverage:</strong></p>
+<ul>
+<li><strong>Database Researcher</strong>: Queries 7 major NYC outlets (Gothamist, Hell Gate, QNS, THE CITY, Bklyner, Brooklyn Paper, amNY) using deterministic SQL against the 1.79M article corpus</li>
+<li><strong>Email Researcher</strong>: Scans 215+ newsletters and 122+ press releases classified via Gemini Flash</li>
+<li><strong>Web Researcher</strong>: Monitors r/Bushwick and conducts targeted web searches for hyperlocal content not yet in the scraping pipeline</li>
+</ul>
+<h3 id="42-relevance-scoring-prioritization">4.2 Relevance Scoring &amp; Prioritization</h3>
+<p>Each extracted story receives a newsworthiness score based on multiple factors:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_newsworthiness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">story</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="n">email_context</span><span class="p">):</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Geographic proximity to Bushwick</span>
+    <span class="n">bushwick_entities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Bushwick&#39;</span><span class="p">,</span> <span class="s1">&#39;Community Board 4&#39;</span><span class="p">,</span> <span class="s1">&#39;BK90&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">bushwick_entities</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.3</span>
+
+    <span class="c1"># Known community figures</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_db</span><span class="o">.</span><span class="n">is_known_figure</span><span class="p">(</span><span class="n">story</span><span class="o">.</span><span class="n">who</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.2</span>
+
+    <span class="c1"># Temporal urgency</span>
+    <span class="k">if</span> <span class="n">story</span><span class="o">.</span><span class="n">when</span> <span class="ow">and</span> <span class="n">story</span><span class="o">.</span><span class="n">when</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.2</span>
+
+    <span class="c1"># Source credibility</span>
+    <span class="k">if</span> <span class="n">email_context</span><span class="o">.</span><span class="n">sender_profile</span><span class="o">.</span><span class="n">is_government</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.15</span>
+    <span class="k">elif</span> <span class="n">email_context</span><span class="o">.</span><span class="n">sender_profile</span><span class="o">.</span><span class="n">is_journalist</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.1</span>
+
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Stories scoring below threshold are filtered before human review, focusing editorial attention on genuinely newsworthy content.</p>
+<h3 id="43-memory-system">4.3 Memory System</h3>
+<p>The memory system implements a four-level scope hierarchy based on research into production memory architectures (Mem0, Letta/MemGPT, academic literature):</p>
+<p><strong>Scope Levels:</strong></p>
+<ol>
+<li><strong>Global</strong>: Applies across all contexts ("Route advertising inquiries to business team")</li>
+<li><strong>Organization</strong>: Persists through staff turnover ("CB4 meets second Wednesday monthly")</li>
+<li><strong>Project</strong>: Tracks ongoing investigations ("Bushwick rezoning - these stakeholders are connected")</li>
+<li><strong>Sender</strong>: Individual preferences ("Maria prefers informal tone")</li>
+</ol>
+<p><strong>Memory Storage:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">am_memories</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">SERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">scope_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">scope_type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;org&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;project&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sender&#39;</span><span class="p">)),</span><span class="w"></span>
+<span class="w">    </span><span class="n">scope_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w">  </span><span class="c1">-- NULL for global, email for sender, org_id for org</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">embedding</span><span class="w"> </span><span class="n">VECTOR</span><span class="p">(</span><span class="mi">384</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">memory_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w">  </span><span class="c1">-- &#39;preference&#39;, &#39;fact&#39;, &#39;procedure&#39;, &#39;relationship&#39;</span>
+<span class="w">    </span><span class="n">confidence</span><span class="w"> </span><span class="nb">FLOAT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">times_applied</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">times_led_to_acceptance</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">NOW</span><span class="p">(),</span><span class="w"></span>
+<span class="w">    </span><span class="n">last_accessed</span><span class="w"> </span><span class="n">TIMESTAMPTZ</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Memory Retrieval:</strong></p>
+<p>Hybrid search using Reciprocal Rank Fusion combines vector similarity with full-text matching:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">search_memories</span><span class="p">(</span><span class="n">query_text</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">query_embedding</span><span class="w"> </span><span class="n">VECTOR</span><span class="p">,</span><span class="w"> </span><span class="n">scope_filter</span><span class="w"> </span><span class="n">JSONB</span><span class="p">)</span><span class="w"></span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">(</span><span class="n">memory_id</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span><span class="w"></span>
+<span class="w">    </span><span class="c1">-- Vector similarity component</span>
+<span class="w">    </span><span class="k">WITH</span><span class="w"> </span><span class="n">vector_results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">embedding</span><span class="w"> </span><span class="o">&lt;=&gt;</span><span class="w"> </span><span class="n">query_embedding</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">vscore</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">embedding</span><span class="w"> </span><span class="o">&lt;=&gt;</span><span class="w"> </span><span class="n">query_embedding</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">vrank</span><span class="w"></span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">am_memories</span><span class="w"></span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">scope_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ANY</span><span class="p">(</span><span class="n">scope_filter</span><span class="o">-&gt;</span><span class="s1">&#39;scopes&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="c1">-- Full-text component</span>
+<span class="w">    </span><span class="n">text_results</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">ts_rank</span><span class="p">(</span><span class="n">search_vector</span><span class="p">,</span><span class="w"> </span><span class="n">plainto_tsquery</span><span class="p">(</span><span class="n">query_text</span><span class="p">))</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">tscore</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">ts_rank</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">trank</span><span class="w"></span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">am_memories</span><span class="w"></span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">search_vector</span><span class="w"> </span><span class="o">@@</span><span class="w"> </span><span class="n">plainto_tsquery</span><span class="p">(</span><span class="n">query_text</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">-- RRF combination</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="p">),</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">content</span><span class="p">),</span><span class="w"></span>
+<span class="w">           </span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">vrank</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">trank</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)))</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">rrf_score</span><span class="w"></span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">vector_results</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">FULL</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">text_results</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="w"></span>
+<span class="w">    </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">rrf_score</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span><span class="w"></span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">sql</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<h4 id="431-memory-formation">4.3.1 Memory Formation</h4>
+<p>New memories form through the AUDN (Add/Update/Delete/Noop) cycle in <code>reconciler.py</code>:</p>
+<ol>
+<li><strong>Trigger</strong>: Human edits an AI-generated draft</li>
+<li><strong>Parse</strong>: <code>FeedbackParser</code> classifies edit type (tone, factual, intent, structural)</li>
+<li><strong>Gate</strong>: <code>QualityGate</code> filters noise (minimum 10% magnitude, 60% confidence, 5-minute debounce)</li>
+<li><strong>Extract</strong>: LLM extracts learnable preference from qualified signal</li>
+<li><strong>Reconcile</strong>: Compare to existing memories; AUDN determines action</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">QualityGate</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">should_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">FeedbackSignal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># Minimum edit magnitude</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="o">.</span><span class="n">edit_ratio</span> <span class="o">&lt;</span> <span class="mf">0.10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Confidence threshold</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&lt;</span> <span class="mf">0.60</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Debounce rapid edits</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="o">.</span><span class="n">seconds_since_last</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+
+<h4 id="432-memory-retrieval">4.3.2 Memory Retrieval</h4>
+<p>When generating content or responses, the system retrieves relevant memories using scope-based boosting:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">retrieve_memories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="n">base_memories</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_memories</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="c1"># Apply scope boosting</span>
+    <span class="k">for</span> <span class="n">memory</span> <span class="ow">in</span> <span class="n">base_memories</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">memory</span><span class="o">.</span><span class="n">scope_type</span> <span class="o">==</span> <span class="s1">&#39;sender&#39;</span> <span class="ow">and</span> <span class="n">memory</span><span class="o">.</span><span class="n">scope_id</span> <span class="o">==</span> <span class="n">context</span><span class="o">.</span><span class="n">sender</span><span class="p">:</span>
+            <span class="n">memory</span><span class="o">.</span><span class="n">score</span> <span class="o">*=</span> <span class="mf">1.3</span>  <span class="c1"># Sender memories most relevant</span>
+        <span class="k">elif</span> <span class="n">memory</span><span class="o">.</span><span class="n">scope_type</span> <span class="o">==</span> <span class="s1">&#39;org&#39;</span> <span class="ow">and</span> <span class="n">memory</span><span class="o">.</span><span class="n">scope_id</span> <span class="o">==</span> <span class="n">context</span><span class="o">.</span><span class="n">org</span><span class="p">:</span>
+            <span class="n">memory</span><span class="o">.</span><span class="n">score</span> <span class="o">*=</span> <span class="mf">1.2</span>
+        <span class="k">elif</span> <span class="n">memory</span><span class="o">.</span><span class="n">scope_type</span> <span class="o">==</span> <span class="s1">&#39;project&#39;</span> <span class="ow">and</span> <span class="n">memory</span><span class="o">.</span><span class="n">scope_id</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">projects</span><span class="p">:</span>
+            <span class="n">memory</span><span class="o">.</span><span class="n">score</span> <span class="o">*=</span> <span class="mf">1.1</span>
+        <span class="c1"># Global memories use base score</span>
+
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">base_memories</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</code></pre></div>
+
+<h4 id="433-memory-decay-consolidation">4.3.3 Memory Decay &amp; Consolidation</h4>
+<p>The effectiveness tracker implements decay for underperforming memories:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_effectiveness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">memory</span><span class="o">.</span><span class="n">times_applied</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.5</span>  <span class="c1"># Neutral default</span>
+
+    <span class="n">acceptance_rate</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">times_led_to_acceptance</span> <span class="o">/</span> <span class="n">memory</span><span class="o">.</span><span class="n">times_applied</span>
+    <span class="n">edit_ratio</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">total_edit_distance</span> <span class="o">/</span> <span class="n">memory</span><span class="o">.</span><span class="n">total_output_length</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="k">return</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">acceptance_rate</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">edit_ratio</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Memories with effectiveness below threshold become candidates for automatic pruning via the <code>ea memory prune</code> CLI command.</p>
+<h3 id="44-reflection-engine">4.4 Reflection Engine</h3>
+<p>The reflection system was redesigned after research revealed that "reflection without external feedback degrades performance." The current architecture uses deterministic parsing BEFORE any LLM involvement:</p>
+<p><strong>The Anti-Pattern (Avoided):</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># DON&#39;T: Send raw edits directly to LLM for reflection</span>
+<span class="k">def</span> <span class="nf">learn_from_edit</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">edited</span><span class="p">):</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;What preference does this edit reveal?</span><span class="se">\n</span><span class="s2">Original: </span><span class="si">{</span><span class="n">original</span><span class="si">}</span><span class="se">\n</span><span class="s2">Edited: </span><span class="si">{</span><span class="n">edited</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">llm</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>  <span class="c1"># Degrades over time</span>
+</code></pre></div>
+
+<p><strong>The Implemented Pattern:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># DO: Deterministic parsing, quality gate, then targeted LLM extraction</span>
+<span class="k">def</span> <span class="nf">learn_from_edit</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">edited</span><span class="p">):</span>
+    <span class="c1"># Step 1: Deterministic classification</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">SequenceMatcher</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">original</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">edited</span><span class="p">)</span>
+    <span class="n">edit_type</span> <span class="o">=</span> <span class="n">classify_edit_type</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>  <span class="c1"># tone, factual, intent, etc.</span>
+
+    <span class="c1"># Step 2: Quality gate</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quality_gate</span><span class="o">.</span><span class="n">should_process</span><span class="p">(</span><span class="n">edit_type</span><span class="p">,</span> <span class="n">diff</span><span class="o">.</span><span class="n">ratio</span><span class="p">()):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Step 3: Targeted LLM extraction (only for qualified signals)</span>
+    <span class="k">return</span> <span class="n">extract_learnable_preference</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">edited</span><span class="p">,</span> <span class="n">edit_type</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The quality gate prevents several documented failure modes:
+- <strong>Noise pollution</strong>: Typo fixes don't become "preferences"
+- <strong>Debounce protection</strong>: Rapid-fire edits don't create duplicate memories
+- <strong>Magnitude filtering</strong>: Only edits changing 10%+ of content pass</p>
+<h3 id="45-publisher-integration">4.5 Publisher Integration</h3>
+<p>The pitch generation system produces structured outputs for editorial review:</p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EditorPitch</span><span class="p">:</span>
+    <span class="n">pitch_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">headline</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">key_facts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">source_attribution</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source_email_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">newsworthiness_score</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">suggested_angle</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">related_articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>  <span class="c1"># IDs of existing coverage</span>
+</code></pre></div>
+
+<p>The HITL review interface displays pitches with full context:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────────────────┐</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="nl">PITCH</span><span class="p">:</span><span class="w"> </span><span class="n">City</span><span class="w"> </span><span class="n">Announces</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="n">Affordable</span><span class="w"> </span><span class="n">Housing</span><span class="w"> </span><span class="n">Lottery</span><span class="w">       </span><span class="err">│</span><span class="w"></span>
+<span class="err">├─────────────────────────────────────────────────────────────┤</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="nl">Source</span><span class="p">:</span><span class="w"> </span><span class="n">HPD</span><span class="w"> </span><span class="n">Press</span><span class="w"> </span><span class="k">Release</span><span class="w"> </span><span class="p">(</span><span class="n">maria</span><span class="p">.</span><span class="n">torres</span><span class="nv">@nyc</span><span class="p">.</span><span class="n">gov</span><span class="p">)</span><span class="w">           </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="nl">Score</span><span class="p">:</span><span class="w"> </span><span class="mf">0.87</span><span class="w"> </span><span class="p">(</span><span class="n">HIGH</span><span class="p">)</span><span class="w">                                          </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="nl">FACTS</span><span class="p">:</span><span class="w">                                                  </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="err">•</span><span class="w"> </span><span class="mi">150</span><span class="w"> </span><span class="n">units</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="mi">1234</span><span class="w"> </span><span class="n">Bushwick</span><span class="w"> </span><span class="n">Ave</span><span class="w">                           </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="err">•</span><span class="w"> </span><span class="n">Income</span><span class="w"> </span><span class="nl">bands</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="o">%</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="o">%</span><span class="w"> </span><span class="n">AMI</span><span class="w">                          </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="err">•</span><span class="w"> </span><span class="n">Applications</span><span class="w"> </span><span class="k">open</span><span class="w"> </span><span class="n">March</span><span class="w"> </span><span class="mi">20</span><span class="w">                                </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">RELATED</span><span class="w"> </span><span class="nl">COVERAGE</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">prior</span><span class="w"> </span><span class="n">articles</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">development</span><span class="w">     </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="o">[</span><span class="n">a</span><span class="o">]</span><span class="n">pprove</span><span class="w">  </span><span class="o">[</span><span class="n">r</span><span class="o">]</span><span class="n">eject</span><span class="w">  </span><span class="o">[</span><span class="n">e</span><span class="o">]</span><span class="n">dit</span><span class="w">  </span><span class="o">[</span><span class="n">n</span><span class="o">]</span><span class="n">ext</span><span class="w">  </span><span class="o">[</span><span class="n">q</span><span class="o">]</span><span class="n">uit</span><span class="w">                </span><span class="err">│</span><span class="w"></span>
+<span class="err">└─────────────────────────────────────────────────────────────┘</span><span class="w"></span>
+</code></pre></div>
+
+<hr />
+<h2 id="5-email-assistant">5. Email Assistant</h2>
+<h3 id="51-processing-pipeline">5.1 Processing Pipeline</h3>
+<p>The Email Assistant implements a complete email processing and response generation system:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">Gmail</span> <span class="nv">API</span> → <span class="nv">Triage</span> → <span class="nv">HITL</span> <span class="nv">Review</span> → <span class="nv">Orchestrator</span> → <span class="nv">Skills</span> → <span class="nv">Draft</span> <span class="nv">Review</span> → <span class="k">Send</span>
+                ↓
+        <span class="nv">Deterministic</span>    <span class="nv">Pre</span><span class="o">-</span><span class="nv">orchestrator</span>     <span class="nv">Task</span>           <span class="nv">Skill</span>         <span class="nv">Human</span>
+        <span class="nv">Filter</span>           <span class="nv">checkpoint</span>           <span class="nv">Extraction</span>     <span class="nv">Dispatch</span>      <span class="nv">Approval</span>
+</code></pre></div>
+
+<p><strong>Triage System:</strong></p>
+<p>Four-tier classification replaces the initial binary (YES/NO) approach:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td>Requires response from publisher</td>
+<td>→ Orchestrator</td>
+</tr>
+<tr>
+<td><code>notify</code></td>
+<td>Awareness-only (press releases, FYI)</td>
+<td>→ Notification</td>
+</tr>
+<tr>
+<td><code>no</code></td>
+<td>Not relevant to newsroom</td>
+<td>→ Archive</td>
+</tr>
+<tr>
+<td><code>spam</code></td>
+<td>Blocked, flagged for filter learning</td>
+<td>→ Spam folder</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pre-Orchestrator HITL:</strong></p>
+<p>A filtering checkpoint before expensive LLM calls:</p>
+<div class="codehilite"><pre><span></span><code>$ ea hitl review --limit <span class="m">50</span>
+
+Thread: Re: Interview Request - Community Garden
+From: reporter@brooklyneagle.com
+Triage: EMAIL <span class="o">(</span>needs response<span class="o">)</span>
+Preview: Hi Alec, I<span class="err">&#39;</span>m working on a story about...
+
+Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[</span>m<span class="o">]</span>mute <span class="o">[</span>o<span class="o">]</span>rchestrator <span class="o">[</span>n<span class="o">]</span>ext <span class="o">[</span>q<span class="o">]</span>uit
+</code></pre></div>
+
+<p>Each spam email caught here saves 3-5 LLM calls (task extraction, classification, skill dispatch, draft generation).</p>
+<h3 id="52-context-aware-response-generation">5.2 Context-Aware Response Generation</h3>
+<p>Draft responses leverage multiple context sources:</p>
+<p><strong>Sender Profile:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">profile</span> <span class="o">=</span> <span class="n">sender_profiles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sender_email</span><span class="p">)</span>
+<span class="c1"># Returns: organization, role, is_journalist, is_government,</span>
+<span class="c1">#          communication_history, preferred_tone, last_interaction</span>
+</code></pre></div>
+
+<p><strong>Thread Context:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">thread</span> <span class="o">=</span> <span class="n">email_threads</span><span class="o">.</span><span class="n">get_full_thread</span><span class="p">(</span><span class="n">thread_id</span><span class="p">)</span>
+<span class="c1"># Returns: all messages in thread, participants, subject evolution</span>
+</code></pre></div>
+
+<p><strong>Adaptive Memories:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">memories</span> <span class="o">=</span> <span class="n">memory_store</span><span class="o">.</span><span class="n">retrieve_for_context</span><span class="p">(</span>
+    <span class="n">sender</span><span class="o">=</span><span class="n">sender_email</span><span class="p">,</span>
+    <span class="n">org</span><span class="o">=</span><span class="n">profile</span><span class="o">.</span><span class="n">organization</span><span class="p">,</span>
+    <span class="n">projects</span><span class="o">=</span><span class="n">active_projects</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="n">email_subject</span>
+<span class="p">)</span>
+<span class="c1"># Returns: ranked preferences, facts, procedures relevant to this email</span>
+</code></pre></div>
+
+<p><strong>Few-Shot Examples:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">examples</span> <span class="o">=</span> <span class="n">few_shot_retriever</span><span class="o">.</span><span class="n">get_similar_responses</span><span class="p">(</span>
+    <span class="n">email_type</span><span class="o">=</span><span class="n">classification</span><span class="p">,</span>
+    <span class="n">sender_type</span><span class="o">=</span><span class="n">profile</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+<span class="c1"># Returns: successful past responses to similar emails</span>
+</code></pre></div>
+
+<p>The draft generation prompt assembles these contexts:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">You are drafting a response for Alec Meeker, publisher of Bushwick Daily.</span>
+
+<span class="s2">SENDER CONTEXT:</span>
+<span class="si">{</span><span class="n">sender_profile_summary</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">THREAD CONTEXT:</span>
+<span class="si">{</span><span class="n">thread_history</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">RELEVANT MEMORIES:</span>
+<span class="si">{</span><span class="n">format_memories</span><span class="p">(</span><span class="n">memories</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">SIMILAR PAST RESPONSES:</span>
+<span class="si">{</span><span class="n">format_examples</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">WRITING GUIDELINES:</span>
+<span class="s2">- Warm but direct tone</span>
+<span class="s2">- Business development orientation</span>
+<span class="s2">- NO em-dashes, NO &quot;I hope this finds you well&quot;</span>
+<span class="s2">- Be specific about next steps</span>
+
+<span class="s2">EMAIL TO RESPOND TO:</span>
+<span class="si">{</span><span class="n">current_email</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">Draft a response:</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</code></pre></div>
+
+<h3 id="53-human-oversight-design">5.3 Human Oversight Design</h3>
+<p><strong>Draft Review Interface:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────────────────┐</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">DRAFT</span><span class="w"> </span><span class="n">RESPONSE</span><span class="w">                                              </span><span class="err">│</span><span class="w"></span>
+<span class="err">├─────────────────────────────────────────────────────────────┤</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">maria</span><span class="p">.</span><span class="n">torres</span><span class="nv">@nyc</span><span class="p">.</span><span class="n">gov</span><span class="w">                                    </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="nl">Subject</span><span class="p">:</span><span class="w"> </span><span class="nl">Re</span><span class="p">:</span><span class="w"> </span><span class="n">Press</span><span class="w"> </span><span class="n">Credential</span><span class="w"> </span><span class="n">Application</span><span class="w">                   </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">Hi</span><span class="w"> </span><span class="n">Maria</span><span class="p">,</span><span class="w">                                                   </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">Thanks</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">credential</span><span class="w"> </span><span class="n">application</span><span class="p">.</span><span class="w">      </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">I</span><span class="err">&#39;</span><span class="n">ve</span><span class="w"> </span><span class="n">attached</span><span class="w"> </span><span class="n">our</span><span class="w"> </span><span class="n">updated</span><span class="w"> </span><span class="n">circulation</span><span class="w"> </span><span class="n">numbers</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">added</span><span class="w">     </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">publication</span><span class="w"> </span><span class="n">schedule</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">requested</span><span class="p">.</span><span class="w">                     </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">Let</span><span class="w"> </span><span class="n">me</span><span class="w"> </span><span class="n">know</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">need</span><span class="w"> </span><span class="n">anything</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">review</span><span class="p">.</span><span class="w">       </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">Best</span><span class="p">,</span><span class="w">                                                       </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="n">Alec</span><span class="w">                                                        </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                             </span><span class="err">│</span><span class="w"></span>
+<span class="err">│</span><span class="w"> </span><span class="o">[</span><span class="n">s</span><span class="o">]</span><span class="k">end</span><span class="w"> </span><span class="o">[</span><span class="n">e</span><span class="o">]</span><span class="n">dit</span><span class="w"> </span><span class="o">[</span><span class="n">r</span><span class="o">]</span><span class="n">evise</span><span class="w"> </span><span class="o">[</span><span class="n">a</span><span class="o">]</span><span class="n">nswer</span><span class="w"> </span><span class="o">[</span><span class="n">d</span><span class="o">]</span><span class="n">iscard</span><span class="w"> </span><span class="o">[</span><span class="n">n</span><span class="o">]</span><span class="n">ext</span><span class="w"> </span><span class="o">[</span><span class="n">q</span><span class="o">]</span><span class="n">uit</span><span class="w">    </span><span class="err">│</span><span class="w"></span>
+<span class="err">└─────────────────────────────────────────────────────────────┘</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Action Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Effect</th>
+<th>Learning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Send</td>
+<td>Send as-is</td>
+<td>Positive signal: draft was perfect</td>
+</tr>
+<tr>
+<td>Edit</td>
+<td>Open in editor, send after</td>
+<td>Diff triggers memory extraction</td>
+</tr>
+<tr>
+<td>Revise</td>
+<td>Regenerate with notes</td>
+<td>Notes inform next attempt</td>
+</tr>
+<tr>
+<td>Answer</td>
+<td>Continue multi-turn</td>
+<td>Clarification needed</td>
+</tr>
+<tr>
+<td>Discard</td>
+<td>Reject draft</td>
+<td>Strong negative signal</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Two-Phase HITL for Automation:</strong></p>
+<p>For actions like form filling, the system implements two-phase approval:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">Phase</span> <span class="mi">1</span>: <span class="nv">Analyze</span> <span class="nv">form</span> → <span class="k">Show</span> <span class="nv">proposed</span> <span class="nv">values</span> → <span class="nv">Await</span> <span class="nv">approval</span>
+<span class="nv">Phase</span> <span class="mi">2</span>: <span class="nv">Fill</span> <span class="nv">form</span> → <span class="nv">Capture</span> <span class="nv">screenshot</span> → <span class="nv">Confirm</span> <span class="nv">submission</span>
+</code></pre></div>
+
+<p>This prevents automated form submission with incorrect data while reducing manual data entry.</p>
+<hr />
+<h2 id="6-integration-orchestration">6. Integration &amp; Orchestration</h2>
+<h3 id="61-system-interoperability">6.1 System Interoperability</h3>
+<p>Components communicate through shared PostgreSQL tables and well-defined interfaces:</p>
+<p><strong>Shared Data Structures:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># All components use consistent email representation</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EmailContext</span><span class="p">:</span>
+    <span class="n">email_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">thread_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">sender_email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">sender_profile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SenderProfile</span><span class="p">]</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">body_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">body_html</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">received_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">classification</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">participant_roles</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="n">attachments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Attachment</span><span class="p">]</span>
+</code></pre></div>
+
+<p><strong>Event-Driven Updates:</strong></p>
+<p>Content lineage tracking creates audit trails across all operations:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">content_lineage_events</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">SERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">content_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w">  </span><span class="c1">-- email, story, pitch, article, queue_item</span>
+<span class="w">    </span><span class="n">content_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">event_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w">    </span><span class="c1">-- extracted, approved, rejected, published</span>
+<span class="w">    </span><span class="n">actor_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w">    </span><span class="c1">-- system, human</span>
+<span class="w">    </span><span class="n">actor_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">parent_content_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">parent_content_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">metadata</span><span class="w"> </span><span class="n">JSONB</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">NOW</span><span class="p">()</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</code></pre></div>
+
+<h3 id="62-state-management">6.2 State Management</h3>
+<p>Complex workflow state persists to PostgreSQL rather than memory:</p>
+<p><strong>Session Persistence:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">SessionStore</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">save_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="c1"># Write-through: every update persists immediately</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cur</span><span class="p">:</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                INSERT INTO nycnews_agent_sessions (session_id, state, updated_at)</span>
+<span class="s2">                VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, NOW())</span>
+<span class="s2">                ON CONFLICT (session_id) DO UPDATE SET state = </span><span class="si">%s</span><span class="s2">, updated_at = NOW()</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">session_id</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state</span><span class="p">),</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">load_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">):</span>
+        <span class="c1"># Read-through: database fallback when not in memory</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cur</span><span class="p">:</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">&quot;SELECT state FROM nycnews_agent_sessions WHERE session_id = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">session_id</span><span class="p">,)</span>
+            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">result</span> <span class="k">else</span> <span class="kc">None</span>
+</code></pre></div>
+
+<p><strong>Bidirectional Task-Draft Linking:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- Draft knows its generating task</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ea_email_drafts</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">source_task_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">ea_tasks</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">-- Task knows its output draft</span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ea_tasks</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">generated_draft_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">ea_email_drafts</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+
+<p>This enables atomic state synchronization:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">sync_task_draft_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">draft_id</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Atomic status update for linked task and draft.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cur</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s1">&#39;send&#39;</span><span class="p">:</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                UPDATE ea_tasks SET status = &#39;completed&#39;, completed_at = NOW()</span>
+<span class="s2">                WHERE id = </span><span class="si">%s</span><span class="s2">;</span>
+<span class="s2">                UPDATE ea_email_drafts SET status = &#39;sent&#39;, sent_at = NOW()</span>
+<span class="s2">                WHERE id = </span><span class="si">%s</span><span class="s2">;</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">draft_id</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s1">&#39;reject&#39;</span><span class="p">:</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                UPDATE ea_tasks SET status = &#39;cancelled&#39;</span>
+<span class="s2">                WHERE id = </span><span class="si">%s</span><span class="s2">;</span>
+<span class="s2">                UPDATE ea_email_drafts SET status = &#39;rejected&#39;</span>
+<span class="s2">                WHERE id = </span><span class="si">%s</span><span class="s2">;</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">draft_id</span><span class="p">))</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="63-error-handling-recovery">6.3 Error Handling &amp; Recovery</h3>
+<p><strong>Graceful Degradation:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">process_email_with_fallbacks</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Primary path: full context enrichment</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">get_sender_profile</span><span class="p">(</span><span class="n">email</span><span class="o">.</span><span class="n">sender</span><span class="p">)</span>
+        <span class="n">memories</span> <span class="o">=</span> <span class="n">get_relevant_memories</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+        <span class="n">examples</span> <span class="o">=</span> <span class="n">get_few_shot_examples</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ProfileServiceError</span><span class="p">:</span>
+        <span class="c1"># Fallback: basic context only</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">memories</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">examples</span> <span class="o">=</span> <span class="n">get_generic_examples</span><span class="p">(</span><span class="n">email</span><span class="o">.</span><span class="n">classification</span><span class="p">)</span>
+
+    <span class="c1"># Always proceed with available context</span>
+    <span class="k">return</span> <span class="n">generate_draft</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">memories</span><span class="p">,</span> <span class="n">examples</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Retry Logic:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@celery</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">default_retry_delay</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">generate_embeddings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">article_id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Embedding generation</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="n">chunk_article</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+        <span class="n">store_embeddings</span><span class="p">(</span><span class="n">article_id</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">TransientError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Retry for transient failures</span>
+        <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">exc</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">retries</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">PermanentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Log and skip for permanent failures</span>
+        <span class="n">log_problematic_article</span><span class="p">(</span><span class="n">article_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+
+<p><strong>Recovery Scripts:</strong></p>
+<p>When issues occur at scale, recovery scripts identify and fix discrepancies:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">recover_missing_embeddings</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Find and regenerate embeddings that failed to persist.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cur</span><span class="p">:</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT ce.id FROM classified_emails ce</span>
+<span class="s2">            LEFT JOIN email_chunks ec ON ce.id = ec.email_id</span>
+<span class="s2">            WHERE ec.email_id IS NULL</span>
+<span class="s2">            AND ce.processed_at IS NOT NULL</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">email_id</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="n">regenerate_embeddings</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">email_id</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="7-development-journey-lessons-learned">7. Development Journey &amp; Lessons Learned</h2>
+<h3 id="71-the-learning-curve">7.1 The Learning Curve</h3>
+<p>This system was built by a publisher without formal engineering training, using AI-assisted development tools. The commit history reveals the authentic learning journey:</p>
+<p><strong>Week 1 (July 2025): Foundation and First Failures</strong></p>
+<p>The initial commit established an ambitious architecture: Scrapy spider, PostgreSQL with pgvector, Celery background tasks. Within 48 hours, production reality intervened:</p>
+<blockquote>
+<p>Commit b6cce11: "lots of updates" - Connection pool exhaustion and protocol corruption under real-world load</p>
+<p>Commit a98e976: "pooling set to 1" - Defensive retreat, implementing <code>log_problematic_article()</code> for graceful failure handling</p>
+</blockquote>
+<p>The solution emerged in commit 2b52729:</p>
+<blockquote>
+<p>"celery workers are stable and sql alchemy has been used to implement"</p>
+</blockquote>
+<p><strong>Lesson</strong>: Production stability often requires abandoning clever solutions for boring, proven ones. SQLAlchemy's connection pooling solved problems that took days to debug with manual psycopg3 management.</p>
+<p><strong>Month 2 (August 2025): Email Intelligence Integration</strong></p>
+<p>Adding email processing to the RAG system revealed deeper architectural challenges:</p>
+<blockquote>
+<p>Commit 2b1155a: "email embedding system is now working with real data and is merged with Rag"</p>
+</blockquote>
+<p>This required HNSW index rebuilding (6+ hours) and careful handling of the embedding dimension matching between article and email chunks.</p>
+<p><strong>Key Insight</strong>: Unifying data models early (same embedding dimension, same chunk size) enables system-wide search without constant adaptation layers.</p>
+<p><strong>Month 4 (October 2025): The Entity System</strong></p>
+<p>Building entity extraction revealed the complexity of real-world names:</p>
+<blockquote>
+<p>Commit 382acca: "entity extraction system created"</p>
+</blockquote>
+<p>The three-hash architecture (SHA-256 for exact match, MD5-16 for fast lookup, Double Metaphone for fuzzy matching) emerged from production requirements: "Johnn Smith" needs to match "John Smith" without false positives.</p>
+<p><strong>Month 6 (December 2025): Memory System Pivot</strong></p>
+<p>The initial reflection system sent raw edit diffs to Claude for preference extraction. Research revealed this approach degrades over time:</p>
+<blockquote>
+<p>From research notes: "Reflection without external feedback degrades performance. When you see a reflection system that works, you're almost always looking at a verification system in disguise."</p>
+</blockquote>
+<p>The redesign implemented deterministic parsing BEFORE LLM involvement, with quality gates preventing noise accumulation.</p>
+<p><strong>Lesson</strong>: Academic research is worth reading. The Mem0 and MemGPT papers predicted exactly the failure mode we encountered.</p>
+<h3 id="72-iterative-development">7.2 Iterative Development</h3>
+<p>Features evolved based on real editorial needs rather than theoretical requirements:</p>
+<p><strong>Email Triage Evolution:</strong></p>
+<ol>
+<li>Initial: Binary YES/NO classification</li>
+<li>Week 2: User feedback demanded distinguishing "notify" from "no action"</li>
+<li>Week 4: Four-tier classification with deterministic pre-filtering</li>
+<li>Month 2: Backlog mode for efficient catchup processing</li>
+</ol>
+<p><strong>Draft Generation Evolution:</strong></p>
+<ol>
+<li>Initial: Static prompts with generic voice</li>
+<li>Week 3: Few-shot retrieval added after inconsistent voice matching</li>
+<li>Month 2: Memory integration for learned preferences</li>
+<li>Month 4: Task orchestration for action extraction</li>
+</ol>
+<p>Each iteration addressed a specific user complaint rather than anticipated requirements.</p>
+<h3 id="73-key-technical-insights">7.3 Key Technical Insights</h3>
+<p><strong>1. Incremental Processing is Essential</strong></p>
+<p>Systems processing 200K+ items need incremental operation. The URL cache middleware (articles) and <code>attachments_extracted</code> flag (emails) enable processing only new content.</p>
+<p><strong>2. Cost Tracking Enables Optimization</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Token usage tracking revealed opportunities</span>
+<span class="c1"># Initial: ~10 seconds per email (subprocess per email)</span>
+<span class="c1"># After single-session batch: ~6 seconds per email</span>
+<span class="c1"># Savings: 100+ hours on 182K email backlog</span>
+</code></pre></div>
+
+<p><strong>3. Database Joins Beat Application Logic</strong></p>
+<p>The email classification bug that returned 0 results for newsletter queries was a JOIN issue (<code>classified_emails.classification</code> was always 'unclassified'; the real data was in <code>email_pipeline_routes.pipeline_type</code>). Fixing the JOIN unlocked 337 emails instantly.</p>
+<p><strong>4. Human-in-the-Loop Reduces Risk</strong></p>
+<p>Every automated action we considered implementing eventually got a HITL checkpoint. The two-phase form filling pattern emerged from a near-miss where test data would have been submitted to a real form.</p>
+<p><strong>5. Checkpoint Commits Enable Recovery</strong></p>
+<p>The commit messages "pre changes before X" and "pre-refactor" represent deliberate checkpoints before risky changes. When refactors go wrong, these enable clean rollback.</p>
+<h3 id="74-what-worked-what-didnt">7.4 What Worked, What Didn't</h3>
+<p><strong>Worked Well:</strong></p>
+<ul>
+<li><strong>PostgreSQL as universal store</strong>: Unifying relational data, vector embeddings, and full-text search in one database simplified operations dramatically</li>
+<li><strong>Hybrid classification</strong>: Deterministic rules for obvious cases, LLM for nuanced decisions</li>
+<li><strong>Few-shot learning</strong>: Historical examples ground generation better than abstract instructions</li>
+<li><strong>Quality gates</strong>: Preventing noise accumulation in learning systems</li>
+</ul>
+<p><strong>Didn't Work:</strong></p>
+<ul>
+<li><strong>Initial psycopg3 pooling</strong>: Manual connection management was fragile; SQLAlchemy's abstractions proved more robust</li>
+<li><strong>Raw reflection</strong>: Sending edit diffs directly to LLM for preference extraction degraded over time</li>
+<li><strong>Subprocess-per-email</strong>: Creating new processes for each email was 10x slower than batch processing</li>
+<li><strong>S3 direct upload</strong>: Bypassing WordPress's media handling created silent failures</li>
+</ul>
+<p><strong>Still Evolving:</strong></p>
+<ul>
+<li><strong>Entity disambiguation</strong>: The "John Smith problem" remains challenging at scale</li>
+<li><strong>Memory consolidation</strong>: When to merge vs. keep separate related memories</li>
+<li><strong>Multi-model orchestration</strong>: Balancing cost, quality, and latency across Claude/Gemini/GPT-4</li>
+</ul>
+<hr />
+<h2 id="8-impact-results">8. Impact &amp; Results</h2>
+<h3 id="81-operational-improvements">8.1 Operational Improvements</h3>
+<p><strong>Quantitative Metrics:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>News source monitoring</td>
+<td>2-3 hours/day</td>
+<td>15 minutes/day</td>
+<td>90% reduction</td>
+</tr>
+<tr>
+<td>Email triage time</td>
+<td>1-2 hours/day</td>
+<td>20 minutes/day</td>
+<td>80% reduction</td>
+</tr>
+<tr>
+<td>Article research time</td>
+<td>30-60 min/story</td>
+<td>5-10 min/story</td>
+<td>80% reduction</td>
+</tr>
+<tr>
+<td>Response drafting</td>
+<td>10-15 min/email</td>
+<td>2-3 min/email</td>
+<td>80% reduction</td>
+</tr>
+<tr>
+<td>Event calendar updates</td>
+<td>Manual entry</td>
+<td>Semi-automated</td>
+<td>Hours saved weekly</td>
+</tr>
+</tbody>
+</table>
+<p><strong>System Scale:</strong></p>
+<ul>
+<li><strong>1.79M articles</strong> searchable across 75+ NYC news outlets</li>
+<li><strong>218K emails</strong> processed with 16-category classification</li>
+<li><strong>8M+ semantic chunks</strong> indexed for sub-100ms search</li>
+<li><strong>10K sender profiles</strong> with communication pattern analysis</li>
+<li><strong>453K participant records</strong> for relationship intelligence</li>
+</ul>
+<h3 id="82-editorial-capabilities">8.2 Editorial Capabilities</h3>
+<p>The system enables capabilities previously unavailable to a small newsroom:</p>
+<p><strong>Comprehensive Competitive Intelligence:</strong>
+- Query "what have other outlets published about Bushwick rezoning?" and receive semantically ranked results across 1.79M articles
+- Identify coverage gaps by comparing topic presence across outlets
+- Track breaking stories across sources in near-real-time</p>
+<p><strong>Institutional Memory:</strong>
+- Search all prior communications with any source: "show me all emails with this council member"
+- Surface historical context for breaking stories automatically
+- Preserve knowledge through staff transitions via organization-level memories</p>
+<p><strong>Source Relationship Management:</strong>
+- Track 10K sender profiles with communication patterns
+- Identify who provides information about which topics
+- Detect relationship networks (who gets mentioned together)</p>
+<p><strong>Automated Event Tracking:</strong>
+- Calendar events extracted from emails with structured data
+- ICS attachments parsed into database records
+- Event flyers uploaded to Google Drive with database tracking</p>
+<h3 id="83-sustainability-implications">8.3 Sustainability Implications</h3>
+<p>For local news sustainability, the implications are significant:</p>
+<p><strong>Cost Structure:</strong>
+- AI API costs: ~$50-100/month for full system operation
+- Infrastructure: Commodity Mac + external SSD
+- No specialized engineering staff required for maintenance</p>
+<p><strong>Scalability:</strong>
+- Architecture supports adding outlets to scraping pipeline with config changes
+- Email volume can increase without architectural changes
+- Memory system improves with use rather than requiring retraining</p>
+<p><strong>Replicability:</strong>
+- All components use standard open-source technologies
+- No proprietary systems or vendor lock-in
+- Documentation enables adoption by other small newsrooms</p>
+<hr />
+<h2 id="9-ethical-considerations">9. Ethical Considerations</h2>
+<h3 id="91-ai-in-journalism">9.1 AI in Journalism</h3>
+<p>The use of AI in journalism raises legitimate concerns that this system addresses through architectural choices:</p>
+<p><strong>Human Judgment Preserved:</strong>
+- AI proposes; humans decide. No content publishes without human approval.
+- Draft responses require explicit send action after review.
+- Story pitches require editorial approval before article generation.</p>
+<p><strong>Accuracy Safeguards:</strong>
+- The <code>Question</code> tool lets the model ask for information rather than guess
+- Date awareness prevents responses to stale emails
+- Quality gates prevent learning from spurious signals</p>
+<p><strong>Voice Authenticity:</strong>
+- Few-shot learning from actual publisher responses
+- Anti-patterns explicitly blocked in writing instructions
+- Continuous learning from human corrections</p>
+<p><strong>Transparency:</strong>
+- All AI-generated content is reviewed before sending
+- No automated social media posting
+- Editorial decisions remain with humans</p>
+<h3 id="92-data-privacy">9.2 Data Privacy</h3>
+<p><strong>Email Privacy:</strong>
+- All email data remains on local infrastructure (no cloud processing of content)
+- Service account authentication isolates Gmail access
+- Sender profiles aggregate patterns without storing personal data</p>
+<p><strong>Source Protection:</strong>
+- Participant intelligence tracks relationships but not conversation content
+- Entity extraction identifies public figures, not private individuals
+- Memory system stores preferences, not sensitive information</p>
+<h3 id="93-transparency">9.3 Transparency</h3>
+<p><strong>AI Assistance Disclosure:</strong>
+- Generated drafts are reviewed and edited by humans
+- The publisher retains full editorial responsibility
+- AI serves as research and drafting assistance, not authorship</p>
+<hr />
+<h2 id="10-future-directions">10. Future Directions</h2>
+<h3 id="101-planned-enhancements">10.1 Planned Enhancements</h3>
+<p><strong>Short-term (2026 Q2):</strong>
+- Expanded RSVP automation for additional form types
+- Enhanced entity disambiguation using co-occurrence patterns
+- Mobile-friendly review interfaces for on-the-go approval</p>
+<p><strong>Medium-term (2026 H2):</strong>
+- Voice assistant integration for hands-free email triage
+- Automated source relationship cultivation reminders
+- Cross-publication collaboration features</p>
+<p><strong>Long-term:</strong>
+- Multi-newsroom knowledge sharing (privacy-preserving)
+- Investigative research automation
+- Community engagement intelligence</p>
+<h3 id="102-scaling-considerations">10.2 Scaling Considerations</h3>
+<p>The architecture supports scaling in several dimensions:</p>
+<p><strong>Horizontal Scaling:</strong>
+- Database-backed session management enables multiple workers
+- Celery task distribution scales embedding generation
+- Stateless API design supports load balancing</p>
+<p><strong>Multi-Newsroom:</strong>
+- Tenant isolation through database partitioning
+- Shared entity knowledge with newsroom-specific memories
+- Cost sharing for infrastructure while preserving editorial independence</p>
+<p><strong>Data Growth:</strong>
+- HNSW indexes scale sub-linearly with data size
+- Incremental processing prevents full-corpus reprocessing
+- Archival strategies for historical data management</p>
+<h3 id="103-open-questions">10.3 Open Questions</h3>
+<p><strong>Technical:</strong>
+- Optimal memory consolidation strategies for long-running systems
+- Entity disambiguation at scale (millions of mentions)
+- Multi-model orchestration for cost/quality optimization</p>
+<p><strong>Editorial:</strong>
+- Appropriate boundaries for AI drafting vs. human writing
+- Community transparency expectations for AI-assisted journalism
+- Source relationship implications of AI-mediated communication</p>
+<p><strong>Sustainability:</strong>
+- Economic models for AI infrastructure in local news
+- Skills development for non-technical journalists
+- Maintenance burden for sophisticated systems</p>
+<hr />
+<h2 id="11-conclusion">11. Conclusion</h2>
+<p>This white paper documents nine months of building AI infrastructure for a hyperlocal newsroom. The resulting system demonstrates that sophisticated AI capabilities are achievable for small news operations, potentially transforming the economics of local journalism.</p>
+<p>The technical achievement is significant: 255 GB of structured news and email data, 8 million searchable semantic chunks, sub-100ms query performance, and integrated AI agents that monitor, extract, draft, and orchestrate across diverse information sources.</p>
+<p>But the more important achievement is the design philosophy embedded in the architecture: human-in-the-loop by default, editorial integrity as requirement, practical utility over impressive capabilities. AI serves as force multiplier, not replacement. The system proposes; humans decide.</p>
+<p>For local journalism, the implications extend beyond individual newsroom efficiency. If AI can enable one publisher to maintain coverage depth previously requiring dedicated staff, similar systems could revive local news coverage in communities currently without any journalism presence. The technology is replicable, the costs are manageable, and the architecture is documented.</p>
+<p>The local news crisis is real and deepening. This system represents one response: building tools that make small newsrooms more capable rather than waiting for business models that may never materialize. AI infrastructure won't solve every problem facing local journalism, but it can address the operational bottlenecks that consume editorial attention and prevent the deep community engagement that local news requires.</p>
+<p>The code exists. The documentation exists. The path forward is clearer than it was nine months ago.</p>
+<hr />
+<h2 id="appendices">Appendices</h2>
+<h3 id="a-technology-reference">A. Technology Reference</h3>
+<p><strong>Core Technologies:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Technology</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database</td>
+<td>PostgreSQL</td>
+<td>17</td>
+<td>Primary data store</td>
+</tr>
+<tr>
+<td>Vector Search</td>
+<td>pgvector</td>
+<td>0.7.0</td>
+<td>Embedding storage and similarity search</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td>Redis</td>
+<td>7.x</td>
+<td>Task queue broker, session cache</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Python</td>
+<td>3.11</td>
+<td>Primary language</td>
+</tr>
+<tr>
+<td>Web Framework</td>
+<td>FastAPI</td>
+<td>0.128.0</td>
+<td>API endpoints</td>
+</tr>
+<tr>
+<td>Task Queue</td>
+<td>Celery</td>
+<td>5.x</td>
+<td>Background processing</td>
+</tr>
+<tr>
+<td>Scraping</td>
+<td>Scrapy</td>
+<td>2.x</td>
+<td>Web scraping framework</td>
+</tr>
+<tr>
+<td>Browser Automation</td>
+<td>Playwright</td>
+<td>1.x</td>
+<td>Form filling, screenshots</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>LangGraph</td>
+<td>0.x</td>
+<td>Multi-agent orchestration</td>
+</tr>
+<tr>
+<td>ML/NLP</td>
+<td>SpaCy</td>
+<td>3.x</td>
+<td>Named entity recognition</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>SentenceTransformers</td>
+<td>2.x</td>
+<td>all-MiniLM-L6-v2 model</td>
+</tr>
+</tbody>
+</table>
+<p><strong>LLM APIs:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Model</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anthropic</td>
+<td>Claude Sonnet 4</td>
+<td>Draft generation, content analysis</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Claude Haiku</td>
+<td>Image analysis, fast classification</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Gemini 2.0 Flash Lite</td>
+<td>Email classification (cost-efficient)</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-4</td>
+<td>Specialized tasks, comparison</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Infrastructure:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hardware</td>
+<td>Mac Mini M2 / MacBook Pro</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Samsung T7 SSD (1TB) for PostgreSQL data</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>macOS 14.x</td>
+</tr>
+<tr>
+<td>Package Manager</td>
+<td>Homebrew</td>
+</tr>
+<tr>
+<td>Python Environment</td>
+<td>venv</td>
+</tr>
+</tbody>
+</table>
+<h3 id="b-repository-structure">B. Repository Structure</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Master</span><span class="o">-</span><span class="n">Scrape</span><span class="o">-</span><span class="n">Rag</span><span class="o">-</span><span class="n">Pipe</span><span class="o">/</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">news_scraper_project</span><span class="o">/</span><span class="w">           </span><span class="c1"># Article ingestion</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">spiders</span><span class="o">/</span><span class="n">article_spider</span><span class="o">.</span><span class="n">py</span><span class="w">   </span><span class="c1"># Intelligent heuristic spider</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">pipelines</span><span class="o">.</span><span class="n">py</span><span class="w">                </span><span class="c1"># PostgreSQL atomic writes</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">tasks</span><span class="o">.</span><span class="n">py</span><span class="w">                    </span><span class="c1"># Celery embedding tasks</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">middlewares</span><span class="o">.</span><span class="n">py</span><span class="w">              </span><span class="c1"># URL cache middleware</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">email_assistant</span><span class="o">/</span><span class="w">                </span><span class="c1"># Email processing CLI</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">cli</span><span class="o">.</span><span class="n">py</span><span class="w">                      </span><span class="c1"># Main entry point</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">orchestration</span><span class="o">/</span><span class="w">              </span><span class="c1"># Task extraction &amp; routing</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">orchestrator</span><span class="o">.</span><span class="n">py</span><span class="w">         </span><span class="c1"># Central dispatcher</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">task_extractor</span><span class="o">.</span><span class="n">py</span><span class="w">       </span><span class="c1"># LLM-based extraction</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">task_classifier</span><span class="o">.</span><span class="n">py</span><span class="w">      </span><span class="c1"># Capability-aware matching</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">drafting</span><span class="o">/</span><span class="w">                   </span><span class="c1"># Response generation</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">draft_response</span><span class="o">.</span><span class="n">py</span><span class="w">       </span><span class="c1"># Context-enriched drafting</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">context_enrichment</span><span class="o">.</span><span class="n">py</span><span class="w">   </span><span class="c1"># RAG context injection</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">memory</span><span class="o">/</span><span class="w">                     </span><span class="c1"># Adaptive learning</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">py</span><span class="w">                </span><span class="c1"># Memory persistence</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">feedback_parser</span><span class="o">.</span><span class="n">py</span><span class="w">      </span><span class="c1"># Deterministic parsing</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">quality_gate</span><span class="o">.</span><span class="n">py</span><span class="w">         </span><span class="c1"># Signal validation</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">skills</span><span class="o">/</span><span class="w">                     </span><span class="c1"># Automation capabilities</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">rsvp_skill</span><span class="o">.</span><span class="n">py</span><span class="w">           </span><span class="c1"># Form filling</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">calendar_skill</span><span class="o">.</span><span class="n">py</span><span class="w">       </span><span class="c1"># Event management</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">smart_form_skill</span><span class="o">.</span><span class="n">py</span><span class="w">     </span><span class="c1"># Intelligent form analysis</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">rsvp</span><span class="o">/</span><span class="w">                       </span><span class="c1"># Browser automation</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">└──</span><span class="w"> </span><span class="n">playwright_controller</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">rag_chatbot</span><span class="o">/</span><span class="w">                    </span><span class="c1"># RAG interface</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">app</span><span class="o">.</span><span class="n">py</span><span class="w">                      </span><span class="c1"># FastAPI application</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">ai_generator</span><span class="o">.</span><span class="n">py</span><span class="w">             </span><span class="c1"># Claude API integration</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">vector_store_pg</span><span class="o">.</span><span class="n">py</span><span class="w">          </span><span class="c1"># pgvector search</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">NYCNewsAgent</span><span class="o">/</span><span class="w">               </span><span class="c1"># Research agent system</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">research_agent</span><span class="o">/</span><span class="w">         </span><span class="c1"># Multi-agent research</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">agent</span><span class="o">.</span><span class="n">py</span><span class="w">            </span><span class="c1"># Claude Agent SDK</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">email_story_extractor</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">publish_pipeline</span><span class="o">/</span><span class="w">       </span><span class="c1"># WordPress integration</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">metadata_extractor</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">seo_generator</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">image_analyzer</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">└──</span><span class="w"> </span><span class="n">api</span><span class="o">/</span><span class="w">                    </span><span class="c1"># Workflow APIs</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="err">├──</span><span class="w"> </span><span class="n">workflow_api</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="err">└──</span><span class="w"> </span><span class="n">lineage</span><span class="o">/</span><span class="w">            </span><span class="c1"># Content traceability</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">entity_extraction</span><span class="o">/</span><span class="w">              </span><span class="c1"># Entity intelligence</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">spacy_entity_pipeline</span><span class="o">.</span><span class="n">py</span><span class="w">    </span><span class="c1"># NER pipeline</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">entity_disambiguation</span><span class="o">.</span><span class="n">py</span><span class="w">    </span><span class="c1"># Alias management</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">attachment_extraction</span><span class="o">/</span><span class="w">          </span><span class="c1"># Email attachments</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">drive_uploader</span><span class="o">.</span><span class="n">py</span><span class="w">           </span><span class="c1"># Google Drive streaming</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">calendar_parser</span><span class="o">.</span><span class="n">py</span><span class="w">          </span><span class="c1"># ICS parsing</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">event_extraction</span><span class="o">/</span><span class="w">               </span><span class="c1"># Calendar events</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">extract_events_from_emails</span><span class="o">.</span><span class="n">py</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">migrations</span><span class="o">/</span><span class="w">                     </span><span class="c1"># Database schemas</span><span class="w"></span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="mi">001</span><span class="o">-</span><span class="mi">068</span><span class="n">_</span><span class="o">*.</span><span class="n">sql</span><span class="w"></span>
+<span class="err">│</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">update_emails_v2</span><span class="o">.</span><span class="n">sh</span><span class="w">             </span><span class="c1"># Email pipeline orchestrator</span><span class="w"></span>
+<span class="err">├──</span><span class="w"> </span><span class="n">run_crawls</span><span class="o">.</span><span class="n">py</span><span class="w">                   </span><span class="c1"># Article scraping orchestrator</span><span class="w"></span>
+<span class="err">└──</span><span class="w"> </span><span class="n">CLAUDE</span><span class="o">.</span><span class="n">md</span><span class="w">                       </span><span class="c1"># AI assistant instructions</span><span class="w"></span>
+</code></pre></div>
+
+<h3 id="c-commit-statistics">C. Commit Statistics</h3>
+<ul>
+<li><strong>Total commits:</strong> 321</li>
+<li><strong>Development period:</strong> July 1, 2025 - March 16, 2026 (9 months)</li>
+<li><strong>First commit:</strong> 73aae77 - "initial commit"</li>
+<li><strong>Latest commit:</strong> 8fbdf9a - "feat(hitl): add archive action and show full email body in review"</li>
+</ul>
+<p><strong>Development Phases:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Period</th>
+<th>Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foundation</td>
+<td>July 2025</td>
+<td>Scrapy, PostgreSQL, Celery stabilization</td>
+</tr>
+<tr>
+<td>Email Intelligence</td>
+<td>Aug-Sep 2025</td>
+<td>Gmail integration, entity extraction, participant tracking</td>
+</tr>
+<tr>
+<td>Advanced Features</td>
+<td>Oct-Dec 2025</td>
+<td>LangGraph workflows, memory system, reflection</td>
+</tr>
+<tr>
+<td>Production Polish</td>
+<td>Jan-Mar 2026</td>
+<td>HITL review, task orchestration, publishing pipeline</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Database Scale:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Records</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>articles</td>
+<td>1.79M</td>
+<td>15 GB</td>
+</tr>
+<tr>
+<td>article_chunks</td>
+<td>4.56M</td>
+<td>45 GB</td>
+</tr>
+<tr>
+<td>classified_emails</td>
+<td>218K</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>email_chunks</td>
+<td>3.58M</td>
+<td>35 GB</td>
+</tr>
+<tr>
+<td>sender_profiles</td>
+<td>10K</td>
+<td>200 MB</td>
+</tr>
+<tr>
+<td>email_participants</td>
+<td>453K</td>
+<td>2 GB</td>
+</tr>
+<tr>
+<td>HNSW indexes</td>
+<td>3</td>
+<td>20 GB</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>~255 GB</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="d-glossary">D. Glossary</h3>
+<p><strong>AUDN</strong>: Add/Update/Delete/Noop - memory reconciliation operations determining how new learning integrates with existing memories</p>
+<p><strong>Chunk</strong>: A semantic segment of text (typically 500 characters) with associated vector embedding for similarity search</p>
+<p><strong>Deterministic Filter</strong>: Rule-based classification that handles obvious cases without LLM invocation, preserving AI capacity for nuanced decisions</p>
+<p><strong>Few-Shot Learning</strong>: Providing examples of desired outputs in prompts to guide model behavior toward publication-specific patterns</p>
+<p><strong>HITL</strong>: Human-in-the-Loop - design pattern ensuring human approval before automated actions</p>
+<p><strong>HNSW</strong>: Hierarchical Navigable Small World - approximate nearest neighbor algorithm enabling fast vector similarity search</p>
+<p><strong>Memory Scope</strong>: The hierarchical level at which a learned preference applies (global, organization, project, sender)</p>
+<p><strong>Participant Intelligence</strong>: System for tracking email participants across the corpus, enabling relationship mapping and communication pattern analysis</p>
+<p><strong>pgvector</strong>: PostgreSQL extension adding vector data type and similarity search operators</p>
+<p><strong>Quality Gate</strong>: Validation layer that filters low-quality signals before they can influence learning systems</p>
+<p><strong>RAG</strong>: Retrieval-Augmented Generation - pattern combining information retrieval with LLM generation</p>
+<p><strong>RRF</strong>: Reciprocal Rank Fusion - technique for combining multiple ranking signals (e.g., vector similarity + text search)</p>
+<p><strong>Sender Profile</strong>: Aggregated intelligence about an email sender including organization, role, communication patterns, and relationship history</p>
+<p><strong>Semantic Search</strong>: Finding content by meaning rather than exact keyword matching, enabled by vector embeddings</p>
+<p><strong>tsvector</strong>: PostgreSQL's full-text search data type for efficient text matching</p>
+<hr />
+<p><em>White paper compiled from 321 commits over 9 months of development</em>
+<em>Data warehouse: 255 GB (1.79M articles, 218K emails, 8M+ chunks)</em>
+<em>Last updated: March 2026</em></p>
+<hr />
+<p><em>For questions about this system or potential collaboration, contact:</em>
+<em>Alec Meeker, Publisher</em>
+<em>Bushwick Daily</em>
+<em>alec@bushwickdaily.com</em></p>
+        </div>
+    </div>
+</body>
+</html>

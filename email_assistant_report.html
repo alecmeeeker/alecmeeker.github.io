@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Assistant | Alec Meeker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-primary: #0f0e0c;
+        --bg-secondary: #171614;
+        --bg-card: #1c1b18;
+        --text-primary: #ece6d9;
+        --text-secondary: #a89f8f;
+        --text-muted: #706a5e;
+        --text-bright: #f7f3ea;
+        --accent: #d4a054;
+        --accent-dim: #9a7340;
+        --border: #2a2822;
+        --font-editorial: 'Fraunces', Georgia, serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+    }
+    .back-link {
+        position: fixed;
+        top: 20px; left: 24px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-decoration: none;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(15, 14, 12, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
+    }
+    .back-link:hover { background: var(--bg-card); }
+    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
+    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
+    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
+    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
+    .paper-content strong { color: var(--text-primary); }
+    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
+    .paper-content li { margin-bottom: 6px; }
+    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
+    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
+    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
+    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
+    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
+    .paper-content td { color: var(--text-secondary); }
+    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    .paper-content a { color: var(--accent); text-decoration: none; }
+    .paper-content a:hover { text-decoration: underline; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">&#8592; Back</a>
+    <div class="paper-container">
+        <div class="paper-content">
+<h1>Email Assistant System</h1>
+<h2>Bushwick Daily AI Newsroom</h2>
+<h3>Executive Summary</h3>
+<p>The Email Assistant is an intelligent email processing and response generation system that transforms the publisher's inbox from a time-consuming bottleneck into an automated workflow engine. Built on Claude AI with Playwright browser automation, it handles the complete lifecycle of email communication: triaging 174K+ emails with 4-tier classification, generating contextually-aware draft responses using few-shot learning from 11,332 historical examples, and executing automated actions like RSVP form filling and calendar management. The system's adaptive memory architecture learns from every human edit, continuously improving its understanding of communication preferences, sender relationships, and organizational knowledge. For a single-person newsroom, this represents the difference between drowning in email and having capacity for journalism.</p>
+<hr />
+<h3>Section 1: Technical Architecture</h3>
+<p><strong>System Overview:</strong></p>
+<p>The Email Assistant operates as a multi-stage pipeline where emails flow through classification, task extraction, context enrichment, response generation, and human approval before any action is taken. The architecture enforces human-in-the-loop (HITL) gates at critical decision points while automating the mechanical work of drafting and form filling.</p>
+<p><strong>Core Technologies:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email Ingestion</td>
+<td>Gmail API + Service Account</td>
+<td>Extract emails with streaming attachment upload to Google Drive</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Gemini 2.0 Flash Lite</td>
+<td>Fast 4-tier triage (email/notify/no/spam) at ~10x throughput</td>
+</tr>
+<tr>
+<td>Deterministic Filter</td>
+<td>Regex + Domain Lists</td>
+<td>Pre-filter spam before LLM calls, blocks scam TLDs</td>
+</tr>
+<tr>
+<td>Response Generation</td>
+<td>Claude Sonnet 4</td>
+<td>Draft emails with tool calling for structured outputs</td>
+</tr>
+<tr>
+<td>Context Retrieval</td>
+<td>pgvector HNSW</td>
+<td>Semantic search across 3.6M email chunks</td>
+</tr>
+<tr>
+<td>Browser Automation</td>
+<td>Playwright</td>
+<td>Form filling, RSVP completion, screenshot capture</td>
+</tr>
+<tr>
+<td>Task Orchestration</td>
+<td>Custom Python</td>
+<td>Route tasks to skills, track lifecycle, handle retries</td>
+</tr>
+<tr>
+<td>Memory System</td>
+<td>PostgreSQL + SentenceTransformer</td>
+<td>Adaptive learning with 4-level scope hierarchy</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Email Processing Pipeline:</strong></p>
+<ol>
+<li>
+<p><strong>Ingestion:</strong> Gmail API extraction via <code>gmail_service_account_extractor_with_dedup.py</code> pulls new emails, computes SHA-256 fingerprints for deduplication, and streams attachments to Google Drive. ICS calendar attachments are automatically parsed into <code>email_events</code> records.</p>
+</li>
+<li>
+<p><strong>Classification:</strong> The triage system operates in two phases. First, <code>deterministic_filter.py</code> applies rule-based spam detection (scam TLDs, known spam domains, newsletter patterns) to block obvious noise before any LLM calls. Remaining emails go to Gemini Flash for 4-tier classification:</p>
+</li>
+<li><code>email</code>: Requires response from publisher</li>
+<li><code>notify</code>: Awareness-only (press releases, FYI items)</li>
+<li><code>no</code>: Not relevant to newsroom operations</li>
+<li>
+<p><code>spam</code>: Blocked and flagged for filter learning</p>
+</li>
+<li>
+<p><strong>Entity Extraction:</strong> SpaCy NER identifies people, organizations, and locations. The participant intelligence system (<code>extract_email_participants.py</code>) builds relationship maps showing who communicates with whom, role classifications (sender/recipient/CC/BCC), and communication frequency patterns across 453K+ participant records.</p>
+</li>
+<li>
+<p><strong>Context Retrieval:</strong> When generating a response, <code>context_enrichment.py</code> retrieves:</p>
+</li>
+<li>Sender profile from <code>sender_profiles</code> (organization, role, communication history)</li>
+<li>Prior thread messages with bidirectional history</li>
+<li>Adaptive memories from the 4-level scope hierarchy</li>
+<li>Similar historical responses via few-shot retrieval</li>
+<li>
+<p>Relevant RSVP URLs detected in email content</p>
+</li>
+<li>
+<p><strong>Response Generation:</strong> Claude Sonnet 4 receives a comprehensive prompt including writing instructions, sender context, few-shot examples, and learned preferences. The model uses tool calling to produce structured outputs (<code>ResponseEmailDraft</code>, <code>NewEmailDraft</code>, <code>Question</code>, <code>MeetingAssistant</code>). Calendar and RSVP actions are extracted as tasks rather than executed inline.</p>
+</li>
+<li>
+<p><strong>Human Review:</strong> The CLI (<code>email_assistant/cli.py</code>) presents drafts for approval with full context. Reviewers can:</p>
+</li>
+<li>Send as-is (immediate feedback: draft worked perfectly)</li>
+<li>Edit and send (triggers memory extraction from diff)</li>
+<li>Revise with notes (regenerate with additional instructions)</li>
+<li>Answer questions (continue multi-turn conversation)</li>
+<li>Skip or discard</li>
+</ol>
+<p><strong>Integration Points:</strong></p>
+<ul>
+<li>
+<p><strong>Data Warehouse:</strong> All email metadata, classifications, drafts, and task state persist to PostgreSQL with full audit trails. The <code>ea_thread_triage</code>, <code>ea_email_drafts</code>, and <code>ea_tasks</code> tables track the complete lifecycle.</p>
+</li>
+<li>
+<p><strong>Memory System:</strong> The adaptive memory architecture (<code>email_assistant/memory/</code>) integrates with draft generation via <code>ContextEnricher</code>. Memories are scoped to sender, organization, project, or global levels and are retrieved using RRF (Reciprocal Rank Fusion) scoring.</p>
+</li>
+<li>
+<p><strong>Skill Registry:</strong> The <code>TaskOrchestrator</code> dispatches extracted tasks to registered skills including <code>RSVPSkill</code> (form filling), <code>SmartFormSkill</code> (intelligent form analysis), <code>CalendarSkill</code>, and <code>DraftingSkill</code>.</p>
+</li>
+</ul>
+<p><strong>Key Technical Achievements:</strong></p>
+<ul>
+<li><strong>10x throughput improvement</strong> via deterministic pre-filtering and Gemini Flash migration</li>
+<li><strong>Adaptive memory with effectiveness tracking</strong> - memories that lead to rejected drafts get decayed</li>
+<li><strong>Two-phase HITL for browser automation</strong> - analyze form, show preview, await approval, then execute</li>
+</ul>
+<hr />
+<h3>Section 2: Features &amp; Standards</h3>
+<p><strong>Core Capabilities:</strong></p>
+<ol>
+<li>
+<p><strong>Intelligent Triage:</strong> Processes 174K+ emails with 4-tier classification. Deterministic rules handle obvious cases (newsletters, spam TLDs), preserving LLM capacity for nuanced decisions. Backlog mode skips financial/social notifications for efficient catchup processing.</p>
+</li>
+<li>
+<p><strong>Voice-Accurate Drafting:</strong> Generates responses in the publisher's voice using few-shot learning. The system retrieves successful past responses to similar email types (press inquiries, event invitations, collaboration requests) and includes them in the prompt as style examples.</p>
+</li>
+<li>
+<p><strong>Task Extraction &amp; Orchestration:</strong> Parses emails for actionable items (RSVPs, calendar events, form submissions) and routes them through a skill-based execution system with retry logic and failure escalation.</p>
+</li>
+<li>
+<p><strong>Automated Form Filling:</strong> The <code>SmartFormSkill</code> uses Claude Vision to analyze any web form, compose appropriate values from organization memory, and present a preview for human approval before submission. Captures screenshots as evidence at each stage.</p>
+</li>
+<li>
+<p><strong>Adaptive Memory:</strong> Learns from human edits to improve future drafts. The pipeline: parse edit diff deterministically, pass quality gate, extract memory via LLM, reconcile with existing memories using AUDN (Add/Update/Delete/Noop) operations, track effectiveness based on subsequent acceptance rates.</p>
+</li>
+</ol>
+<p><strong>Standards &amp; Best Practices:</strong></p>
+<ul>
+<li>
+<p><strong>Privacy &amp; Security:</strong> Emails remain in PostgreSQL on local infrastructure. Service account authentication isolates Gmail access. Sensitive fields (API keys, service account JSON) live in <code>.env</code> outside version control. Attachment uploads go to organization-owned Google Drive.</p>
+</li>
+<li>
+<p><strong>Tone Matching:</strong> Writing instructions encode the publisher's voice: warm, direct, business-development oriented. Anti-patterns are explicitly blocked (no em-dashes, no "I hope this email finds you well", no corporate jargon). Few-shot examples ground generation in proven successful responses.</p>
+</li>
+<li>
+<p><strong>Accuracy Safeguards:</strong> The <code>Question</code> tool lets the model ask for information rather than guess. Date awareness prevents embarrassing "looking forward to your event" responses for past events. The quality gate blocks memory extraction from trivial edits (typo fixes, whitespace changes) that would pollute the learned preference corpus.</p>
+</li>
+</ul>
+<p><strong>Evolution:</strong></p>
+<p>The Email Assistant began as a simple binary triage system in October 2025, classifying emails as "needs response" or "no action." Within weeks, user feedback drove expansion to 4-tier classification to distinguish "notification-only" emails from true no-action items.</p>
+<p>The drafting system shipped in November 2025, initially using static prompts. Few-shot retrieval was added in December after observing inconsistent voice matching. The breakthrough came when historical response data was processed to create a consolidated corpus of 1,417 high-quality examples (reduced from 11,332 via outcome-aware ranking).</p>
+<p>January 2026 saw the reflection system - an attempt to learn from human edits by sending raw diffs to Claude for preference extraction. Research revealed this approach degrades over time without verification. The reflection system was replaced in February 2026 with the current adaptive memory architecture based on deterministic feedback parsing and effectiveness tracking.</p>
+<p>Browser automation matured through March 2026, evolving from simple RSVP filling to the <code>SmartFormSkill</code> that can handle organizational information forms, surveys, and grant applications by composing appropriate responses from memory.</p>
+<hr />
+<h3>Section 3: Impact on News Operations</h3>
+<p><strong>Time Savings:</strong></p>
+<p>The Email Assistant eliminates the most repetitive aspects of inbox management:
+- <strong>Triage:</strong> What previously required scanning every email (2-3 hours/day) is now pre-classified. The reviewer sees actionable items first, notifications separately, and never sees spam.
+- <strong>Response drafting:</strong> Common email types (press releases, event invitations, collaboration inquiries) get complete draft responses in seconds rather than requiring composition from scratch.
+- <strong>Form filling:</strong> Event RSVPs that took 5-10 minutes each (navigate, fill fields, submit) are now handled in under a minute with human approval.</p>
+<p><strong>Quality Improvements:</strong></p>
+<p>AI-assisted drafting produces more consistent communication than human-only workflows:
+- <strong>No missed follow-ups:</strong> Every actionable email gets a draft response queued
+- <strong>Consistent routing:</strong> Press releases always get routed to editorial AND pitched for advertising
+- <strong>Historical context:</strong> The system knows the full communication history with each sender, preventing duplicate asks or inconsistent responses
+- <strong>Deadline awareness:</strong> Date-aware prompting prevents embarrassing responses to stale emails</p>
+<p><strong>Relationship Management:</strong></p>
+<p>The sender profile system (<code>sender_profiles</code> with 10K records) provides instant context on any email sender:
+- Organization and role classification
+- Communication frequency and patterns
+- Prior response history
+- Network connections (who else they communicate with)</p>
+<p>This context flows into draft generation, ensuring responses acknowledge existing relationships rather than treating every email as a cold contact.</p>
+<p><strong>Mission Alignment:</strong></p>
+<p>For a single-person newsroom, email management is existential. Without automation, the publisher's time is consumed by administrative correspondence rather than journalism. The Email Assistant inverts this equation: AI handles the mechanical work (classification, drafting, form filling) while humans retain control over final communication decisions.</p>
+<p>The system explicitly supports the publisher's business development role - responses to promotional content automatically include advertising pitches alongside editorial routing. This dual-track approach ensures no business opportunity is missed while maintaining editorial credibility.</p>
+<p>The adaptive memory system means the assistant gets better over time. Every edit teaches it something new about communication preferences. After six months of operation, the system requires fewer human corrections because it has learned the nuances of when to be formal versus casual, which senders prefer brief responses, and how to handle recurring request types.</p>
+<hr />
+<p><em>Report compiled from 321 commits spanning July 2025 to March 2026</em>
+<em>Primary source files: email_assistant/ (56 Python modules across cli, orchestration, drafting, skills, memory, rsvp)</em></p>
+        </div>
+    </div>
+</body>
+</html>

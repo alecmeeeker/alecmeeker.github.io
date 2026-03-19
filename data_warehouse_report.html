@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Warehouse & Ingestion Pipeline | Alec Meeker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-primary: #0f0e0c;
+        --bg-secondary: #171614;
+        --bg-card: #1c1b18;
+        --text-primary: #ece6d9;
+        --text-secondary: #a89f8f;
+        --text-muted: #706a5e;
+        --text-bright: #f7f3ea;
+        --accent: #d4a054;
+        --accent-dim: #9a7340;
+        --border: #2a2822;
+        --font-editorial: 'Fraunces', Georgia, serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+    }
+    .back-link {
+        position: fixed;
+        top: 20px; left: 24px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-decoration: none;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(15, 14, 12, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
+    }
+    .back-link:hover { background: var(--bg-card); }
+    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
+    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
+    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
+    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
+    .paper-content strong { color: var(--text-primary); }
+    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
+    .paper-content li { margin-bottom: 6px; }
+    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
+    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
+    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
+    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
+    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
+    .paper-content td { color: var(--text-secondary); }
+    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    .paper-content a { color: var(--accent); text-decoration: none; }
+    .paper-content a:hover { text-decoration: underline; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">&#8592; Back</a>
+    <div class="paper-container">
+        <div class="paper-content">
+<h1>Data Warehouse &amp; Ingestion Pipeline</h1>
+<h2>Bushwick Daily AI Newsroom</h2>
+<h3>Executive Summary</h3>
+<p>The Data Warehouse and Ingestion Pipeline forms the foundational infrastructure of the Bushwick Daily AI newsroom, combining PostgreSQL 17 with pgvector for unified storage of 1.52 million news articles and 212,000+ emails with semantic search capabilities. The system automates 95% of news article extraction from websites using intelligent heuristics while processing the complete editorial inbox through a multi-stage pipeline. This infrastructure transforms the local newsroom from manual information gathering into a searchable, AI-ready knowledge base that enables journalists to surface relevant context in milliseconds rather than hours.</p>
+<hr />
+<h3>Section 1: Technical Architecture</h3>
+<p><strong>System Overview:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="w">                    </span><span class="n">ARTICLE</span><span class="w"> </span><span class="n">INGESTION</span><span class="w">                           </span><span class="n">EMAIL</span><span class="w"> </span><span class="n">INGESTION</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                            </span><span class="o">|</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="mi">75</span><span class="w"> </span><span class="n">News</span><span class="w"> </span><span class="n">Outlets</span><span class="p">]</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">Scrapy</span><span class="w"> </span><span class="n">Spider</span><span class="w">                   </span><span class="n">Gmail</span><span class="w"> </span><span class="n">API</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="kr">Service</span><span class="w"> </span><span class="n">Account</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                            </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">URL</span><span class="w"> </span><span class="n">Cache</span><span class="w"> </span><span class="n">Check</span><span class="w">                        </span><span class="n">Deduplication</span><span class="w"> </span><span class="n">Check</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                            </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">Heuristic</span><span class="w"> </span><span class="n">Triage</span><span class="w">                       </span><span class="n">Gemini</span><span class="w"> </span><span class="n">Classification</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                            </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">PostgresPipeline</span><span class="w">                       </span><span class="n">Batch</span><span class="w"> </span><span class="n">Processing</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                            </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="o">+-----+-----+</span><span class="w">                          </span><span class="o">+-----+-----+</span><span class="w"></span>
+<span class="w">                    </span><span class="o">|</span><span class="w">           </span><span class="o">|</span><span class="w">                          </span><span class="o">|</span><span class="w">           </span><span class="o">|</span><span class="w"></span>
+<span class="w">              </span><span class="n">articles</span><span class="w">    </span><span class="n">article_content</span><span class="w">            </span><span class="n">classified</span><span class="w">    </span><span class="n">email_chunks</span><span class="w"></span>
+<span class="w">                    </span><span class="o">|</span><span class="w">           </span><span class="o">|</span><span class="w">                    </span><span class="n">_emails</span><span class="w">            </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="o">+-----+-----+</span><span class="w">                          </span><span class="o">+-----+-----+</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                      </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">Celery</span><span class="w"> </span><span class="n">Task</span><span class="w">                            </span><span class="n">Celery</span><span class="w"> </span><span class="n">Task</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                      </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">article_chunks</span><span class="w">                     </span><span class="n">enhanced_email_embeddings</span><span class="w"></span>
+<span class="w">                          </span><span class="o">|</span><span class="w">                                      </span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="o">+-----+-----------------------------------+--+</span><span class="w"></span>
+<span class="w">                                          </span><span class="o">|</span><span class="w"></span>
+<span class="w">                              </span><span class="n">PostgreSQL</span><span class="w"> </span><span class="mi">17</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pgvector</span><span class="w"></span>
+<span class="w">                              </span><span class="p">(</span><span class="n">HNSW</span><span class="w"> </span><span class="n">Vector</span><span class="w"> </span><span class="n">Indexes</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                          </span><span class="o">|</span><span class="w"></span>
+<span class="w">                              </span><span class="n">RAG</span><span class="w"> </span><span class="n">Chatbot</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Search</span><span class="w"> </span><span class="n">API</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>Core Technologies:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database</td>
+<td>PostgreSQL 17 + pgvector</td>
+<td>Unified storage with vector similarity search</td>
+</tr>
+<tr>
+<td>Article Scraping</td>
+<td>Scrapy CrawlSpider</td>
+<td>Intelligent heuristic-based news extraction</td>
+</tr>
+<tr>
+<td>Task Queue</td>
+<td>Celery + Redis</td>
+<td>Background embedding generation</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>SentenceTransformers (all-MiniLM-L6-v2)</td>
+<td>384-dimensional semantic vectors</td>
+</tr>
+<tr>
+<td>Email Extraction</td>
+<td>Gmail API + Service Account</td>
+<td>Domain-wide email retrieval</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Gemini 1.5 Flash + Heuristics</td>
+<td>Hybrid AI/rule-based categorization</td>
+</tr>
+<tr>
+<td>Vector Index</td>
+<td>HNSW (vector_cosine_ops)</td>
+<td>Sub-100ms similarity search at scale</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Data Models &amp; Schema:</strong></p>
+<p>The warehouse centers on six primary entity clusters:
+- <strong>Articles</strong>: <code>outlets</code> -&gt; <code>articles</code> -&gt; <code>article_content</code> -&gt; <code>article_chunks</code> (4.56M chunks with embeddings)
+- <strong>Emails</strong>: <code>classified_emails</code> -&gt; <code>email_chunks</code> (3.58M chunks) -&gt; <code>enhanced_email_embeddings</code>
+- <strong>Participants</strong>: <code>email_participants</code> -&gt; <code>sender_profiles</code> (453K relationship records)
+- <strong>Events</strong>: <code>email_events</code> (calendar extraction) -&gt; <code>event_flyers</code>
+- <strong>Entities</strong>: <code>entities_v2</code> -&gt; <code>entity_mentions_v2</code> (cross-corpus entity tracking)
+- <strong>Attachments</strong>: <code>email_attachments</code> -&gt; Google Drive (streaming upload with SHA-256 dedup)</p>
+<p>Key design decisions include CASCADE deletes for referential integrity, JSONB columns for flexible metadata, and explicit ON CONFLICT handling for idempotent upserts.</p>
+<p><strong>Ingestion Pipeline Stages:</strong></p>
+<ol>
+<li><strong>Source Acquisition:</strong></li>
+<li>Articles: Scrapy LinkExtractor with domain-constrained crawling, respects robots.txt</li>
+<li>
+<p>Emails: Gmail API with service account delegation, incremental sync via message ID tracking</p>
+</li>
+<li>
+<p><strong>Cleaning &amp; Validation:</strong></p>
+</li>
+<li>UTF-8 sanitization removing null bytes PostgreSQL rejects</li>
+<li>URL normalization (lowercase, fragment removal, trailing slash handling)</li>
+<li>
+<p>Content fingerprinting for deduplication</p>
+</li>
+<li>
+<p><strong>Transformation:</strong></p>
+</li>
+<li>OpenGraph metadata extraction for article identification</li>
+<li>Readability-lxml for main content extraction with fallback chains</li>
+<li>
+<p>RecursiveCharacterTextSplitter: 500-char chunks with 50-char overlap</p>
+</li>
+<li>
+<p><strong>Loading:</strong></p>
+</li>
+<li>SQLAlchemy QueuePool with pool_pre_ping for stale connection detection</li>
+<li>Atomic transactions via <code>engine.begin()</code> context managers</li>
+<li>
+<p>INSERT-only mode for articles prevents data loss from paywalled/deleted content</p>
+</li>
+<li>
+<p><strong>Indexing &amp; Optimization:</strong></p>
+</li>
+<li>HNSW indexes on embedding columns (~6-7GB each) for approximate nearest neighbor</li>
+<li>GIN indexes on tsvector columns for full-text search</li>
+<li>URL hash indexes for O(1) deduplication checks</li>
+</ol>
+<p><strong>Key Technical Achievements:</strong>
+- <strong>~27ms vector similarity queries</strong> across 3.58M email chunks (verified December 2024)
+- <strong>~90% network reduction</strong> via URL cache middleware that skips already-scraped articles before HTTP requests
+- <strong>0.001 false positive rate</strong> Bloom filter option for memory-constrained environments
+- <strong>Background processing at scale</strong>: 500 emails/batch with model loaded once per session</p>
+<p><strong>Code Architecture Highlights:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Heuristic article detection using OpenGraph and semantic containers</span>
+<span class="k">def</span> <span class="nf">triage_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Heuristically decides if a page is an article.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;meta[property=&quot;og:type&quot;][content=&quot;article&quot;]&#39;</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_article</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEMANTIC_CONTAINER_TAGS</span><span class="p">:</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="n">selector</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">container_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">container</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s2">&quot;::text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getall</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">container_text</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">MIN_TEXT_LENGTH</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">container_text</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">container_html</span><span class="p">))</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEXT_TO_MARKUP_RATIO</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_article</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">pre_validated_container</span><span class="o">=</span><span class="n">container</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h3>Section 2: Features &amp; Standards</h3>
+<p><strong>Core Capabilities:</strong></p>
+<ol>
+<li>
+<p><strong>Incremental Crawling System:</strong> The UrlCacheMiddleware loads all existing URLs at spider startup and rejects requests for known content before making HTTP calls. This transforms daily news monitoring from hours-long full crawls into efficient delta operations.</p>
+</li>
+<li>
+<p><strong>Hybrid Classification Engine:</strong> Deterministic rules handle predictable emails (financial alerts, PR wire services, marketing) instantly, while Gemini 1.5 Flash processes nuanced cases. This achieves both cost efficiency and accuracy across 16 classification categories.</p>
+</li>
+<li>
+<p><strong>Context-Enriched Embeddings:</strong> Email embeddings include sender history, thread context, pipeline classification, and related article references. A search for "housing crisis" surfaces emails where the sender has previously contributed housing stories.</p>
+</li>
+<li>
+<p><strong>Participant Intelligence System:</strong> The <code>email_participants</code> table tracks 453K relationship records with MD5 fingerprints for cross-email linking, enabling queries like "show all communications from this person regardless of email address variations."</p>
+</li>
+</ol>
+<p><strong>Standards &amp; Best Practices Implemented:</strong></p>
+<ul>
+<li><strong>Data Quality:</strong> COALESCE wrappers on all joined columns prevent NULL propagation; content fingerprinting with SHA-256 ensures deduplication accuracy</li>
+<li><strong>Scalability:</strong> Bloom filters support probabilistic URL filtering at minimal memory cost; batch processing with single model load eliminates subprocess overhead</li>
+<li><strong>Maintainability:</strong> Archived scripts directory with manifest preserves historical context; comprehensive logging at each pipeline step enables operational debugging</li>
+<li><strong>Security:</strong> Sandboxed iframe rendering for HTML emails; service account delegation with scoped permissions; no inline credentials</li>
+</ul>
+<p><strong>Evolution Over Time:</strong></p>
+<p>The developer blog documents a clear progression from ambitious initial architecture to production hardening:</p>
+<ul>
+<li>
+<p><strong>Week 1 (July 1-8, 2025):</strong> Initial Scrapy pipeline encountered connection pool exhaustion and protocol corruption. Rebuilt on SQLAlchemy with pool_pre_ping after days of debugging psycopg3 edge cases.</p>
+</li>
+<li>
+<p><strong>Weeks 2-3:</strong> RAG system launch with vector search, followed by Gmail integration. Discovered that foreign key violations crashed the pipeline when emails were referenced before commit - added pre-validation patterns.</p>
+</li>
+<li>
+<p><strong>Month 2:</strong> Batch classification infrastructure emerged. The shift from subprocess-per-email to single-session processing reduced per-email time from 10 seconds to 6 seconds, saving 100+ hours on the 182K email backlog.</p>
+</li>
+<li>
+<p><strong>Month 3+:</strong> Operational maturity with monitoring dashboards, archive manifests, and graceful degradation patterns. The system learned to skip problematic articles after repeated failures rather than crashing entirely.</p>
+</li>
+</ul>
+<hr />
+<h3>Section 3: Impact on News Operations</h3>
+<p><strong>Journalism Problems Solved:</strong></p>
+<ol>
+<li>
+<p><strong>Competitive Intelligence Blind Spots:</strong> Previously, monitoring 75 NYC news outlets required manual checking. Now, journalists query "what have other outlets published about Bushwick rezoning?" and receive semantically-ranked results in milliseconds.</p>
+</li>
+<li>
+<p><strong>Lost Institutional Memory:</strong> Email threads with sources were siloed in individual inboxes. The participant intelligence system now tracks every interaction across 453K records, enabling "show me all communications with this city council member" queries.</p>
+</li>
+<li>
+<p><strong>Event Calendar Bottleneck:</strong> Community board newsletters containing multiple events required manual transcription. The extraction pipeline identifies events, extracts structured data, and queues them for calendar publication with minimal human intervention.</p>
+</li>
+</ol>
+<p><strong>Operational Improvements:</strong></p>
+<ul>
+<li><strong>Speed:</strong> Vector search returns relevant results in &lt;100ms across 8.14M total chunks (articles + emails combined)</li>
+<li><strong>Depth:</strong> Journalists can surface historical context across 1.52M articles spanning years of coverage</li>
+<li><strong>Accuracy:</strong> Deduplication prevents the same content from fragmenting search results; 92.7% of emails link to enriched sender profiles</li>
+<li><strong>Scale:</strong> The system processes the entire editorial inbox automatically, classifying 200K+ emails with hybrid AI/rule engine</li>
+</ul>
+<p><strong>Mission Alignment:</strong></p>
+<p>Sustainable local journalism requires operational efficiency that large newsrooms take for granted. This data warehouse transforms a one-person newsroom's research capabilities, enabling the depth of coverage typically requiring a dedicated research staff. When a breaking story emerges, the journalist can instantly surface every prior article, email thread, and source interaction related to that topic.</p>
+<p><strong>Future Potential:</strong></p>
+<p>The HNSW-indexed vector architecture supports additional embedding models without schema changes. The participant intelligence system creates the foundation for automated source relationship management. The event extraction pipeline can extend to any structured data type (meeting agendas, budget documents, permit applications) using the same AI-extraction patterns.</p>
+<hr />
+<p><em>Report compiled from 321 commits spanning July 2025 to March 2026. Core infrastructure files: <code>/news_scraper_project/news_scraper_project/pipelines.py</code>, <code>/news_scraper_project/news_scraper_project/spiders/article_spider.py</code>, <code>/news_scraper_project/news_scraper_project/tasks.py</code>, <code>/news_scraper_project/news_scraper_project/middlewares.py</code>, <code>/news_scraper_project/scripts/create_chunks_table.py</code>.</em></p>
+        </div>
+    </div>
+</body>
+</html>
