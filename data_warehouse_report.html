@@ -67,15 +67,53 @@
     .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
     .paper-content a { color: var(--accent); text-decoration: none; }
     .paper-content a:hover { text-decoration: underline; }
-    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+
+    /* Document Navigation */
+    .doc-nav { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 32px 0; }
+    .doc-nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .doc-nav-header h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin: 0; }
+    .doc-nav-header span { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .doc-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .doc-nav-item { display: block; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; text-decoration: none; transition: all 0.2s; }
+    .doc-nav-item:hover { border-color: var(--accent-dim); background: rgba(212, 160, 84, 0.05); text-decoration: none; }
+    .doc-nav-item .nav-section { font-family: var(--font-mono); font-size: 0.62rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .doc-nav-item .nav-title { font-family: var(--font-editorial); font-size: 0.88rem; font-weight: 600; color: var(--text-bright); line-height: 1.3; }
+    .doc-nav-current { opacity: 0.5; pointer-events: none; border-style: dashed; }
+    .parent-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); text-decoration: none; margin-bottom: 8px; }
+    .parent-link:hover { text-decoration: underline; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } .doc-nav-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <a class="back-link" href="index.html">&#8592; Back</a>
     <div class="paper-container">
         <div class="paper-content">
+<a href="white_paper.html" class="parent-link">&#8592; Part of: Building an AI-Powered Local Newsroom</a>
 <h1>Data Warehouse &amp; Ingestion Pipeline</h1>
-<h2>Bushwick Daily AI Newsroom</h2>
+<h2>Bushwick Daily AI Newsroom &mdash; Technical Deep Dive</h2>
+
+<!-- Related Documents Navigation -->
+<div class="doc-nav">
+    <div class="doc-nav-header">
+        <h4>Related Documentation</h4>
+        <span>This is Section 3 of the White Paper</span>
+    </div>
+    <div class="doc-nav-grid">
+        <a href="white_paper.html" class="doc-nav-item">
+            <div class="nav-section">Main Document</div>
+            <div class="nav-title">White Paper: Building an AI-Powered Local Newsroom</div>
+        </a>
+        <a href="news_scanner_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 4</div>
+            <div class="nav-title">NYCNewsScanner &amp; Publisher</div>
+        </a>
+        <a href="email_assistant_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 5</div>
+            <div class="nav-title">Email Assistant</div>
+        </a>
+    </div>
+</div>
+
 <h3>Executive Summary</h3>
 <p>The Data Warehouse and Ingestion Pipeline forms the foundational infrastructure of the Bushwick Daily AI newsroom, combining PostgreSQL 17 with pgvector for unified storage of 1.52 million news articles and 212,000+ emails with semantic search capabilities. The system automates 95% of news article extraction from websites using intelligent heuristics while processing the complete editorial inbox through a multi-stage pipeline. This infrastructure transforms the local newsroom from manual information gathering into a searchable, AI-ready knowledge base that enables journalists to surface relevant context in milliseconds rather than hours.</p>
 <hr />
@@ -293,6 +331,29 @@
 <p>Sustainable local journalism requires operational efficiency that large newsrooms take for granted. This data warehouse transforms a one-person newsroom's research capabilities, enabling the depth of coverage typically requiring a dedicated research staff. When a breaking story emerges, the journalist can instantly surface every prior article, email thread, and source interaction related to that topic.</p>
 <p><strong>Future Potential:</strong></p>
 <p>The HNSW-indexed vector architecture supports additional embedding models without schema changes. The participant intelligence system creates the foundation for automated source relationship management. The event extraction pipeline can extend to any structured data type (meeting agendas, budget documents, permit applications) using the same AI-extraction patterns.</p>
+
+<!-- Continue Reading Navigation -->
+<div class="doc-nav" style="margin-top: 48px;">
+    <div class="doc-nav-header">
+        <h4>Continue Reading</h4>
+        <span>Other technical deep dives</span>
+    </div>
+    <div class="doc-nav-grid">
+        <a href="white_paper.html" class="doc-nav-item">
+            <div class="nav-section">Main Document</div>
+            <div class="nav-title">White Paper: Building an AI-Powered Local Newsroom</div>
+        </a>
+        <a href="news_scanner_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 4</div>
+            <div class="nav-title">NYCNewsScanner &amp; Publisher</div>
+        </a>
+        <a href="email_assistant_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 5</div>
+            <div class="nav-title">Email Assistant</div>
+        </a>
+    </div>
+</div>
+
 <hr />
 <p><em>Report compiled from 321 commits spanning July 2025 to March 2026. Core infrastructure files: <code>/news_scraper_project/news_scraper_project/pipelines.py</code>, <code>/news_scraper_project/news_scraper_project/spiders/article_spider.py</code>, <code>/news_scraper_project/news_scraper_project/tasks.py</code>, <code>/news_scraper_project/news_scraper_project/middlewares.py</code>, <code>/news_scraper_project/scripts/create_chunks_table.py</code>.</em></p>
         </div>

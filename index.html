@@ -209,6 +209,50 @@
         color: var(--accent); letter-spacing: 0.03em;
     }
 
+    /* Breakout section - connects white paper to technical deep dives */
+    .breakout-section {
+        position: relative;
+        margin-top: 48px;
+        padding-top: 32px;
+    }
+    .breakout-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 24px;
+        background: linear-gradient(to bottom, var(--accent-dim), transparent);
+    }
+    .breakout-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding: 16px 24px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+    }
+    .breakout-icon {
+        font-size: 1.4rem;
+        color: var(--accent);
+    }
+    .breakout-header-text h4 {
+        font-family: var(--font-editorial);
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-bottom: 4px;
+    }
+    .breakout-header-text p {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        letter-spacing: 0.03em;
+    }
+
     /* Dev blog card — full width */
     .blog-card {
         padding: 28px 36px; background: var(--bg-card);
@@ -437,26 +481,35 @@
                 </div>
             </a>
 
-            <!-- Application reports -->
-            <div class="reports-grid fade-in">
-                <a class="report-card" href="data_warehouse_report.html">
-                    <span class="report-tag">System Report</span>
+            <!-- Technical Deep Dives - breakout sections from the white paper -->
+            <div class="breakout-section fade-in">
+                <div class="breakout-header">
+                    <span class="breakout-icon">&#9662;</span>
+                    <div class="breakout-header-text">
+                        <h4>Technical Deep Dives</h4>
+                        <p>Detailed breakouts from the white paper covering each system component</p>
+                    </div>
+                </div>
+                <div class="reports-grid">
+                    <a class="report-card" href="data_warehouse_report.html">
+                        <span class="report-tag">Deep Dive &mdash; Section 3</span>
                     <h4>Data Warehouse &amp; Ingestion Pipeline</h4>
                     <p>PostgreSQL 17 + pgvector architecture, Scrapy-based article ingestion, Gmail API email extraction, and the 8M+ chunk semantic search system with HNSW vector indexes.</p>
                     <span class="read-link">Read report &#8594;</span>
                 </a>
                 <a class="report-card" href="news_scanner_report.html">
-                    <span class="report-tag">System Report</span>
-                    <h4>NYCNewsScanner &amp; Publisher</h4>
+                        <span class="report-tag">Deep Dive &mdash; Section 4</span>
+                        <h4>NYCNewsScanner &amp; Publisher</h4>
                     <p>Multi-agent news scanning with Claude Agent SDK and LangGraph. Parallel researcher agents, structured 5W story extraction, and adaptive memory with human feedback loops.</p>
                     <span class="read-link">Read report &#8594;</span>
                 </a>
                 <a class="report-card" href="email_assistant_report.html">
-                    <span class="report-tag">System Report</span>
-                    <h4>Email Assistant</h4>
+                        <span class="report-tag">Deep Dive &mdash; Section 5</span>
+                        <h4>Email Assistant</h4>
                     <p>AI-powered email processing for 200+ daily emails. Intelligent triage, voice-accurate drafting from 11K+ examples, Playwright browser automation, and skill-based task handling.</p>
                     <span class="read-link">Read report &#8594;</span>
-                </a>
+                    </a>
+                </div>
             </div>
 
             <!-- Dev blog -->

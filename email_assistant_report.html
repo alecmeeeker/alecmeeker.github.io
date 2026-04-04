@@ -67,15 +67,53 @@
     .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
     .paper-content a { color: var(--accent); text-decoration: none; }
     .paper-content a:hover { text-decoration: underline; }
-    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+
+    /* Document Navigation */
+    .doc-nav { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 32px 0; }
+    .doc-nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .doc-nav-header h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin: 0; }
+    .doc-nav-header span { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .doc-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .doc-nav-item { display: block; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; text-decoration: none; transition: all 0.2s; }
+    .doc-nav-item:hover { border-color: var(--accent-dim); background: rgba(212, 160, 84, 0.05); text-decoration: none; }
+    .doc-nav-item .nav-section { font-family: var(--font-mono); font-size: 0.62rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .doc-nav-item .nav-title { font-family: var(--font-editorial); font-size: 0.88rem; font-weight: 600; color: var(--text-bright); line-height: 1.3; }
+    .doc-nav-current { opacity: 0.5; pointer-events: none; border-style: dashed; }
+    .parent-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); text-decoration: none; margin-bottom: 8px; }
+    .parent-link:hover { text-decoration: underline; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } .doc-nav-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <a class="back-link" href="index.html">&#8592; Back</a>
     <div class="paper-container">
         <div class="paper-content">
+<a href="white_paper.html" class="parent-link">&#8592; Part of: Building an AI-Powered Local Newsroom</a>
 <h1>Email Assistant System</h1>
-<h2>Bushwick Daily AI Newsroom</h2>
+<h2>Bushwick Daily AI Newsroom &mdash; Technical Deep Dive</h2>
+
+<!-- Related Documents Navigation -->
+<div class="doc-nav">
+    <div class="doc-nav-header">
+        <h4>Related Documentation</h4>
+        <span>This is Section 5 of the White Paper</span>
+    </div>
+    <div class="doc-nav-grid">
+        <a href="white_paper.html" class="doc-nav-item">
+            <div class="nav-section">Main Document</div>
+            <div class="nav-title">White Paper: Building an AI-Powered Local Newsroom</div>
+        </a>
+        <a href="data_warehouse_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 3</div>
+            <div class="nav-title">Data Warehouse &amp; Ingestion Pipeline</div>
+        </a>
+        <a href="news_scanner_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 4</div>
+            <div class="nav-title">NYCNewsScanner &amp; Publisher</div>
+        </a>
+    </div>
+</div>
+
 <h3>Executive Summary</h3>
 <p>The Email Assistant is an intelligent email processing and response generation system that transforms the publisher's inbox from a time-consuming bottleneck into an automated workflow engine. Built on Claude AI with Playwright browser automation, it handles the complete lifecycle of email communication: triaging 174K+ emails with 4-tier classification, generating contextually-aware draft responses using few-shot learning from 11,332 historical examples, and executing automated actions like RSVP form filling and calendar management. The system's adaptive memory architecture learns from every human edit, continuously improving its understanding of communication preferences, sender relationships, and organizational knowledge. For a single-person newsroom, this represents the difference between drowning in email and having capacity for journalism.</p>
 <hr />
@@ -252,6 +290,29 @@
 <p>For a single-person newsroom, email management is existential. Without automation, the publisher's time is consumed by administrative correspondence rather than journalism. The Email Assistant inverts this equation: AI handles the mechanical work (classification, drafting, form filling) while humans retain control over final communication decisions.</p>
 <p>The system explicitly supports the publisher's business development role - responses to promotional content automatically include advertising pitches alongside editorial routing. This dual-track approach ensures no business opportunity is missed while maintaining editorial credibility.</p>
 <p>The adaptive memory system means the assistant gets better over time. Every edit teaches it something new about communication preferences. After six months of operation, the system requires fewer human corrections because it has learned the nuances of when to be formal versus casual, which senders prefer brief responses, and how to handle recurring request types.</p>
+
+<!-- Continue Reading Navigation -->
+<div class="doc-nav" style="margin-top: 48px;">
+    <div class="doc-nav-header">
+        <h4>Continue Reading</h4>
+        <span>Other technical deep dives</span>
+    </div>
+    <div class="doc-nav-grid">
+        <a href="white_paper.html" class="doc-nav-item">
+            <div class="nav-section">Main Document</div>
+            <div class="nav-title">White Paper: Building an AI-Powered Local Newsroom</div>
+        </a>
+        <a href="data_warehouse_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 3</div>
+            <div class="nav-title">Data Warehouse &amp; Ingestion Pipeline</div>
+        </a>
+        <a href="news_scanner_report.html" class="doc-nav-item">
+            <div class="nav-section">Section 4</div>
+            <div class="nav-title">NYCNewsScanner &amp; Publisher</div>
+        </a>
+    </div>
+</div>
+
 <hr />
 <p><em>Report compiled from 321 commits spanning July 2025 to March 2026</em>
 <em>Primary source files: email_assistant/ (56 Python modules across cli, orchestration, drafting, skills, memory, rsvp)</em></p>
