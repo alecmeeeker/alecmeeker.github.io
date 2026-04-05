@@ -191,7 +191,98 @@
         margin-bottom: 24px;
     }
 
-    /* Section Navigation List */
+    /* Table of Contents */
+    .toc {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 28px 32px;
+        margin: 32px 0 48px;
+    }
+    .toc-header {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+    }
+    .toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        columns: 2;
+        column-gap: 32px;
+    }
+    .toc-list li {
+        padding: 6px 0;
+        break-inside: avoid;
+    }
+    .toc-list a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.88rem;
+        line-height: 1.4;
+        display: block;
+        transition: color 0.15s ease;
+    }
+    .toc-list a:hover {
+        color: var(--accent);
+    }
+    .toc-list .toc-num {
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        margin-right: 6px;
+    }
+    @media (max-width: 600px) {
+        .toc-list { columns: 1; }
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        width: 44px;
+        height: 44px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--accent);
+        font-size: 1.1rem;
+        cursor: pointer;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    .back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+    .back-to-top:hover {
+        background: var(--bg-elevated, #28261f);
+        border-color: var(--accent-dim);
+    }
+    @media (max-width: 768px) {
+        .back-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    /* Section Navigation List (for deep dive links) */
     .section-nav {
         background: var(--bg-secondary);
         border: 1px solid var(--border);
@@ -259,15 +350,24 @@
 <p>The local news crisis has left communities across America without reliable journalism coverage. While national outlets consolidate and local newsrooms collapse, AI has emerged as a potential force multiplier that could enable small newsrooms to punch above their weight. This white paper documents the nine-month development of a comprehensive AI infrastructure built by Bushwick Daily, a hyperlocal Brooklyn publication. The system encompasses 255 GB of structured data including 1.79 million scraped news articles from 75+ outlets, 218,000 processed emails with participant intelligence, and 8 million searchable semantic chunks. The architecture integrates multiple AI subsystems: an intelligent news scanner that monitors NYC media and extracts stories from email intelligence, an adaptive memory system that learns editorial preferences through human feedback, and an email assistant that triages correspondence and generates voice-accurate draft responses. The human-in-the-loop design philosophy ensures AI augments rather than replaces editorial judgment, with explicit checkpoints requiring human approval before any automated action. Development proceeded through deliberate iteration, with significant architectural pivots driven by production experience rather than theoretical assumptions. The resulting system demonstrates that sophisticated AI infrastructure is achievable for small newsrooms, potentially transforming the economics of local journalism by enabling one-person operations to maintain coverage depth traditionally requiring dedicated research staff.</p>
 <hr />
 
-<!-- Section Navigation -->
-<div class="section-nav">
-    <h4>Sections</h4>
-    <ol>
-        <li><a href="data_warehouse_report.html">Data Warehouse &amp; Ingestion Pipeline</a></li>
-        <li><a href="news_scanner_report.html">NYCNewsScanner &amp; Publisher</a></li>
-        <li><a href="email_assistant_report.html">Email Assistant</a></li>
+<!-- Table of Contents -->
+<nav class="toc">
+    <div class="toc-header">Contents</div>
+    <ol class="toc-list">
+        <li><a href="#1-introduction-the-local-news-crisis-and-an-ai-response"><span class="toc-num">1.</span> Introduction</a></li>
+        <li><a href="#2-system-architecture-overview"><span class="toc-num">2.</span> System Architecture</a></li>
+        <li><a href="#3-data-infrastructure"><span class="toc-num">3.</span> Data Infrastructure</a></li>
+        <li><a href="#4-nycnewsscanner-intelligent-news-discovery"><span class="toc-num">4.</span> NYCNewsScanner</a></li>
+        <li><a href="#5-email-assistant"><span class="toc-num">5.</span> Email Assistant</a></li>
+        <li><a href="#6-integration-orchestration"><span class="toc-num">6.</span> Integration</a></li>
+        <li><a href="#7-development-journey-lessons-learned"><span class="toc-num">7.</span> Development Journey</a></li>
+        <li><a href="#8-impact-results"><span class="toc-num">8.</span> Impact &amp; Results</a></li>
+        <li><a href="#9-ethical-considerations"><span class="toc-num">9.</span> Ethics</a></li>
+        <li><a href="#10-future-directions"><span class="toc-num">10.</span> Future Directions</a></li>
+        <li><a href="#11-conclusion"><span class="toc-num">11.</span> Conclusion</a></li>
+        <li><a href="#appendices">Appendices</a></li>
     </ol>
-</div>
+</nav>
 
 <h2 id="1-introduction-the-local-news-crisis-and-an-ai-response">1. Introduction: The Local News Crisis and an AI Response</h2>
 <h3 id="11-the-challenge">1.1 The Challenge</h3>
@@ -1783,5 +1883,31 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <em>GitHub: alecmeeeker.github.io</em></p>
         </div>
     </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <script>
+    (function() {
+        const btn = document.getElementById('backToTop');
+        const threshold = 400;
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > threshold) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        btn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    })();
+    </script>
 </body>
 </html>
