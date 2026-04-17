@@ -448,6 +448,7 @@
             <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
             <ul class="nav-links">
                 <li><a href="#papers">Papers</a></li>
+                <li><a href="#open-source">Open Source</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="Alec_Meeker_Resume_26.pdf" target="_blank">Resume</a></li>
             </ul>
@@ -490,6 +491,38 @@
                     <li><span class="section-num">02</span><a href="news_scanner_report.html">NYCNewsScanner &amp; Publisher <span class="read-more">[Read]</span></a></li>
                     <li><span class="section-num">03</span><a href="email_assistant_report.html">Email Assistant <span class="read-more">[Read]</span></a></li>
                 </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPEN SOURCE -->
+    <section id="open-source">
+        <div class="section-inner">
+            <p class="section-label">Open Source</p>
+            <h2 class="section-title">Public Repositories</h2>
+
+            <div class="paper-section">
+                <p class="paper-date">April 2026</p>
+                <a class="paper-title" href="email_warehouse_oss.html">Email Ingestion Data Warehouse <span class="read-more">[Docs]</span></a>
+                <div class="paper-stats">
+                    <div><span class="paper-stat-val">7-Stage</span><br><span class="paper-stat-label">Pipeline</span></div>
+                    <div><span class="paper-stat-val">~2,500</span><br><span class="paper-stat-label">Lines of Code</span></div>
+                    <div><span class="paper-stat-val">30-50%</span><br><span class="paper-stat-label">LLM Cost Savings</span></div>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Production-grade email processing pipeline with multi-hash deduplication, semantic chunking, vector embeddings, and LLM classification. CPU-first ML design for local deployment.</p>
+                <p><a href="https://github.com/alecmeeeker/email-ingestion-data-warehouse" style="color: var(--accent); font-family: var(--font-mono); font-size: 0.85rem;">View on GitHub &#8594;</a></p>
+            </div>
+
+            <div class="paper-section" style="margin-top: 48px;">
+                <p class="paper-date">April 2026</p>
+                <a class="paper-title" href="multiverse_platform_oss.html">Local News Multiverse Agent Platform <span class="read-more">[Docs]</span></a>
+                <div class="paper-stats">
+                    <div><span class="paper-stat-val">30+</span><br><span class="paper-stat-label">Tables</span></div>
+                    <div><span class="paper-stat-val">5</span><br><span class="paper-stat-label">Parallel Paths</span></div>
+                    <div><span class="paper-stat-val">100%</span><br><span class="paper-stat-label">Local</span></div>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents, and complete version control without cloud dependencies.</p>
+                <p><a href="https://github.com/alecmeeeker/local-news-multiverse-agent-platform" style="color: var(--accent); font-family: var(--font-mono); font-size: 0.85rem;">View on GitHub &#8594;</a></p>
             </div>
         </div>
     </section>

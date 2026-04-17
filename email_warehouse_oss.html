@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-TZJB1RJXV6');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Ingestion Data Warehouse | Alec Meeker</title>
+    <meta name="description" content="Open source 7-stage email processing pipeline with PostgreSQL, pgvector, multi-hash deduplication, and LLM classification. CPU-first ML design for local deployment.">
+    <meta name="author" content="Alec Meeker">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Alec Meeker Portfolio">
+    <meta property="og:title" content="Email Ingestion Data Warehouse | Alec Meeker">
+    <meta property="og:description" content="Open source 7-stage email processing pipeline with PostgreSQL, pgvector, multi-hash deduplication, and LLM classification. CPU-first ML design for local deployment.">
+    <meta property="og:url" content="https://alecmeeker.com/email_warehouse_oss.html">
+    <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Email Ingestion Data Warehouse | Alec Meeker">
+    <meta name="twitter:description" content="Open source 7-stage email processing pipeline with PostgreSQL, pgvector, multi-hash deduplication, and LLM classification. CPU-first ML design for local deployment.">
+    <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://alecmeeker.com/email_warehouse_oss.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-primary: #0f0e0c;
+        --bg-secondary: #171614;
+        --bg-card: #1c1b18;
+        --text-primary: #f5f2eb;
+        --text-secondary: #c9c1b3;
+        --text-muted: #8a8275;
+        --text-bright: #fdfcfa;
+        --accent: #e5b366;
+        --accent-dim: #b8874a;
+        --border: #3a3830;
+        --font-editorial: 'Fraunces', Georgia, serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+    }
+    .back-link {
+        position: fixed;
+        top: 20px; left: 24px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-decoration: none;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(15, 14, 12, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
+    }
+    .back-link:hover { background: var(--bg-card); }
+    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
+    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
+    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
+    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
+    .paper-content strong { color: var(--text-primary); }
+    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
+    .paper-content li { margin-bottom: 6px; }
+    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
+    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
+    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
+    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
+    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
+    .paper-content td { color: var(--text-secondary); }
+    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    .paper-content a { color: var(--accent); text-decoration: none; }
+    .paper-content a:hover { text-decoration: underline; }
+
+    .doc-nav { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 32px 0; }
+    .doc-nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .doc-nav-header h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin: 0; }
+    .doc-nav-header span { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .doc-nav-list { list-style: none; padding: 0; margin: 0; }
+    .doc-nav-list li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .doc-nav-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .doc-nav-list li:first-child { padding-top: 0; }
+    .doc-nav-list a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+    .doc-nav-list a:hover { text-decoration: underline; }
+    .doc-nav-list .current { color: var(--text-muted); }
+    .github-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); text-decoration: none; padding: 10px 18px; border: 1px solid var(--accent-dim); border-radius: 4px; margin-top: 8px; }
+    .github-link:hover { background: rgba(229, 179, 102, 0.1); text-decoration: none; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Email Ingestion Data Warehouse",
+      "description": "Open source 7-stage email processing pipeline with PostgreSQL, pgvector, multi-hash deduplication, and LLM classification.",
+      "author": {
+        "@type": "Person",
+        "name": "Alec Meeker",
+        "url": "https://alecmeeker.com/"
+      },
+      "datePublished": "2026-04-17",
+      "publisher": {
+        "@type": "Person",
+        "name": "Alec Meeker"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://alecmeeker.com/email_warehouse_oss.html"
+      },
+      "proficiencyLevel": "Expert",
+      "dependencies": "PostgreSQL, pgvector, sentence-transformers, Google Gemini, Gmail API, Python"
+    }
+    </script>
+</head>
+<body>
+    <a class="back-link" href="index.html">&#8592; Back</a>
+    <div class="paper-container">
+        <div class="paper-content">
+<h1>Email Ingestion Data Warehouse</h1>
+<p><strong>Production-grade email ingestion pipeline with deduplication, semantic chunking, vector embeddings, and LLM classification.</strong></p>
+<p style="margin-top: 16px;"><a href="https://github.com/alecmeeeker/email-ingestion-data-warehouse" class="github-link">View on GitHub &#8594;</a></p>
+
+<p>Originally developed for <a href="https://bushwickdaily.com">Bushwick Daily</a>'s AI-powered newsroom. This system serves as the upstream data source for the <a href="multiverse_platform_oss.html">Local News Multiverse Agent Platform</a>.</p>
+
+<div class="doc-nav">
+    <div class="doc-nav-header">
+        <h4>Open Source Projects</h4>
+    </div>
+    <ul class="doc-nav-list">
+        <li><span class="current">Email Ingestion Data Warehouse</span> (Current)</li>
+        <li><a href="multiverse_platform_oss.html">Multiverse Agent Platform</a></li>
+    </ul>
+</div>
+
+<h2>Why This Exists</h2>
+
+<h3>The Problem</h3>
+<p>Local newsrooms receive hundreds of emails daily: story leads, press releases, event listings, advertising inquiries, and the inevitable flood of newsletters. Manually triaging this volume is unsustainable, yet buried in that noise are the tips and sources that become great stories.</p>
+
+<h3>The Constraints</h3>
+<p>I built this on a MacBook Pro without dedicated ML infrastructure. Every architectural decision reflects this reality:</p>
+<ul>
+<li><strong>CPU-first design</strong>: all-MiniLM-L6-v2 (384-dim) runs fast on CPU without GPU</li>
+<li><strong>PostgreSQL as backbone</strong>: pgvector for embeddings, no external vector database needed</li>
+<li><strong>Local-first philosophy</strong>: Your emails stay on your servers, not in someone else's cloud</li>
+<li><strong>Token efficiency</strong>: Deterministic rules bypass LLM for obvious cases, saving 30-50% on API costs</li>
+</ul>
+
+<h3>The Solution</h3>
+<p>A 7-step pipeline that transforms raw Gmail data into a searchable, classified, relationship-aware knowledge base:</p>
+<pre><code>Gmail API &#8594; Deduplication &#8594; Chunking &#8594; Embedding &#8594; Classification &#8594; Participants &#8594; Profiles</code></pre>
+
+<hr />
+
+<h2>Architecture Overview</h2>
+<pre><code>                        1. EXTRACTION
+                              |
+        [Gmail API] --> [Service Account Auth] --> [Email Extraction] --> [Fingerprint Generation]
+                              |
+                        2. DEDUPLICATION
+                              |
+        [Content Normalization] --> [Multi-Hash Fingerprints] --> [Duplicate Groups]
+                              |
+                        3. PROCESSING
+                              |
+        [Semantic Chunking] --> [Vector Embeddings: all-MiniLM-L6-v2] --> [LLM Classification: Gemini Flash]
+                              |
+                        4. INTELLIGENCE
+                              |
+        [Participant Extraction] --> [Sender Profiles] --> [Relationship Mapping]
+                              |
+                        5. STORAGE
+                              |
+                    [PostgreSQL + pgvector]
+                              |
+                      [HNSW Vector Index]
+                              |
+                        6. CONSUMPTION
+                              |
+        [RAG Search API] | [Multiverse Agents] | [Email Assistant]</code></pre>
+
+<hr />
+
+<h2>Database Schema</h2>
+
+<h3>Core Tables</h3>
+<table>
+<thead>
+<tr><th>Table</th><th>Purpose</th><th>Key Columns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>classified_emails</code></td><td>Primary email storage</td><td>gmail_id, thread_id, body_text, content_fingerprint</td></tr>
+<tr><td><code>email_chunks</code></td><td>Semantic chunks with embeddings</td><td>email_id, text, embedding VECTOR(384)</td></tr>
+<tr><td><code>email_participants</code></td><td>Normalized sender/recipient records</td><td>participant_email, role, fingerprint</td></tr>
+<tr><td><code>sender_profiles</code></td><td>Aggregated sender intelligence</td><td>email, is_journalist, influence_score</td></tr>
+<tr><td><code>email_duplicate_groups</code></td><td>Deduplication clusters</td><td>content_fingerprint, member_count</td></tr>
+<tr><td><code>email_fingerprints_v2</code></td><td>Multi-hash fingerprints</td><td>new_content_hash, structure_hash</td></tr>
+</tbody>
+</table>
+
+<h3>Vector Storage</h3>
+<pre><code>-- email_chunks with HNSW index for fast semantic search
+CREATE TABLE email_chunks (
+    id SERIAL PRIMARY KEY,
+    email_id INTEGER REFERENCES classified_emails(id),
+    chunk_index INTEGER,
+    text TEXT,
+    embedding VECTOR(384),  -- all-MiniLM-L6-v2 output
+    metadata JSONB
+);
+
+-- HNSW index for approximate nearest neighbor search
+CREATE INDEX idx_email_chunks_embedding_hnsw
+    ON email_chunks
+    USING hnsw (embedding vector_cosine_ops)
+    WITH (m = 16, ef_construction = 64);</code></pre>
+
+<h3>Sender Intelligence</h3>
+<pre><code>-- sender_profiles aggregates sender behavior
+CREATE TABLE sender_profiles (
+    fingerprint VARCHAR(32) PRIMARY KEY,  -- MD5 of email
+    email VARCHAR(255) UNIQUE,
+    is_journalist BOOLEAN,
+    is_government BOOLEAN,
+    is_media BOOLEAN,
+    email_count INTEGER,
+    influence_score FLOAT,
+    topics TEXT[],
+    frequent_contacts JSONB
+);</code></pre>
+
+<hr />
+
+<h2>Pipeline Stages</h2>
+
+<h3>Stage 1: Gmail API Extraction</h3>
+<pre><code>python scripts/gmail_extractor.py --max-results 500</code></pre>
+<p>Uses Google Cloud service account with domain-wide delegation to access Gmail. Extracts:</p>
+<ul>
+<li>Full email metadata (headers, labels, size)</li>
+<li>Body content (text and HTML)</li>
+<li>Threading information (message-id, in-reply-to, references)</li>
+<li>Attachment metadata (not content)</li>
+</ul>
+
+<h3>Stage 2: Content Normalization &amp; Fingerprinting</h3>
+<p>The deduplication system uses multi-hash fingerprinting:</p>
+<pre><code># Content normalization replaces URLs and emails with placeholders
+"Check out https://example.com for details"
+&#8594; "check out [URL] for details"
+
+# Multiple hash types for different dedup strategies
+{
+    "new_content_hash": "abc123...",     # Fresh content only
+    "quoted_content_hash": "def456...",  # Quoted text only
+    "full_content_hash": "ghi789...",    # Complete message
+    "structure_hash": "jkl012...",       # Email structure
+}</code></pre>
+
+<p><strong>Gmail Alias Resolution</strong>: The system normalizes email addresses according to provider rules:</p>
+<ul>
+<li>Gmail: Ignores dots, removes plus suffixes (<code>john.doe+test@gmail.com</code> &#8594; <code>johndoe@gmail.com</code>)</li>
+<li>Yahoo: Removes dash suffixes</li>
+<li>ProtonMail: Preserves plus addressing (they use it for unique addresses)</li>
+</ul>
+
+<h3>Stage 3: Semantic Chunking</h3>
+<pre><code>python scripts/batch_chunking.py</code></pre>
+<p>Emails are chunked using a word-based strategy optimized for email content:</p>
+<ul>
+<li>Chunk size: ~500 characters</li>
+<li>Overlap: 50 characters (preserves context)</li>
+<li>Short emails (&lt;50 chars): Combined with subject as single chunk</li>
+<li>Long emails (&gt;50k chars): Truncated with marker</li>
+</ul>
+
+<h3>Stage 4: Vector Embeddings</h3>
+<p>Uses <code>sentence-transformers/all-MiniLM-L6-v2</code>:</p>
+<ul>
+<li><strong>384 dimensions</strong> (efficient for CPU)</li>
+<li><strong>~80ms per embedding</strong> on M1 MacBook</li>
+<li><strong>Cosine similarity</strong> for semantic search</li>
+</ul>
+<p>Why this model? It's the sweet spot for CPU-constrained environments:</p>
+<ul>
+<li>5x smaller than larger models</li>
+<li>2x faster inference</li>
+<li>95% of quality for email-length text</li>
+</ul>
+
+<h3>Stage 5: LLM Classification</h3>
+<pre><code>python scripts/batch_classifier.py --all --batch-size 50</code></pre>
+<p>16 classification categories tuned for newsroom workflows:</p>
+<table>
+<thead>
+<tr><th>Category</th><th>Example</th></tr>
+</thead>
+<tbody>
+<tr><td><code>story_lead_or_tip</code></td><td>Anonymous tips, source referrals</td></tr>
+<tr><td><code>freelance_pitch</code></td><td>Article proposals from writers</td></tr>
+<tr><td><code>press_release</code></td><td>Official announcements</td></tr>
+<tr><td><code>community_event_listing</code></td><td>Local events</td></tr>
+<tr><td><code>sales_or_advertising_inquiry</code></td><td>Ad space requests</td></tr>
+<tr><td><code>financial_admin</code></td><td>Receipts, invoices</td></tr>
+</tbody>
+</table>
+
+<p><strong>Deterministic Pre-filtering</strong>: Obvious cases bypass LLM to save tokens:</p>
+<ul>
+<li><code>@venmo.com</code> &#8594; <code>financial_admin</code> (no LLM needed)</li>
+<li><code>globenewswire.com</code> &#8594; <code>press_release</code> (no LLM needed)</li>
+</ul>
+
+<h3>Stage 6: Participant Extraction</h3>
+<pre><code>python scripts/participant_extractor.py --incremental</code></pre>
+<p>Extracts and normalizes participants from email headers:</p>
+<ul>
+<li><strong>Sender</strong>: Who sent the email</li>
+<li><strong>Recipients</strong>: TO field (tracks primary)</li>
+<li><strong>CC</strong>: Carbon copy (tracks position)</li>
+<li><strong>BCC</strong>: Blind carbon copy</li>
+</ul>
+<p>Each participant gets an MD5 fingerprint enabling cross-email analysis.</p>
+
+<h3>Stage 7: Sender Profile Enrichment</h3>
+<p>Aggregated intelligence about each sender:</p>
+<ul>
+<li><strong>Classification flags</strong>: is_journalist, is_government, is_media</li>
+<li><strong>Volume metrics</strong>: email_count, thread_count, response_rate</li>
+<li><strong>Temporal data</strong>: first_seen, last_seen, days_active</li>
+<li><strong>Network data</strong>: frequent_contacts, communication patterns</li>
+</ul>
+
+<hr />
+
+<h2>Hashing Strategy</h2>
+
+<h3>Why Multiple Hashes?</h3>
+<p>Email deduplication is harder than document deduplication. The same content appears in:</p>
+<ul>
+<li>Direct sends</li>
+<li>Forwards (with "FYI" prefix)</li>
+<li>Replies (with quoted text)</li>
+<li>CC'd copies to different recipients</li>
+</ul>
+
+<h3>Hash Types</h3>
+<table>
+<thead>
+<tr><th>Hash</th><th>Purpose</th><th>Ignores</th></tr>
+</thead>
+<tbody>
+<tr><td><code>full_content_hash</code></td><td>Basic dedup</td><td>Nothing</td></tr>
+<tr><td><code>new_content_hash</code></td><td>Forward detection</td><td>Quoted text</td></tr>
+<tr><td><code>structure_hash</code></td><td>Layout matching</td><td>Content</td></tr>
+<tr><td><code>thread_hash</code></td><td>Conversation grouping</td><td>Message body</td></tr>
+<tr><td><code>recipient_set_hash</code></td><td>Audience matching</td><td>Message body</td></tr>
+</tbody>
+</table>
+
+<h3>Normalization Pipeline</h3>
+<ol>
+<li>Remove tracking parameters (UTM, pixels)</li>
+<li>Replace URLs &#8594; <code>[URL]</code></li>
+<li>Replace emails &#8594; <code>[EMAIL]</code></li>
+<li>Remove zero-width characters</li>
+<li>Normalize whitespace</li>
+<li>Normalize Unicode (smart quotes &#8594; regular)</li>
+</ol>
+
+<hr />
+
+<h2>Integration with Multiverse Platform</h2>
+
+<p>This system serves as the upstream data source for the <a href="multiverse_platform_oss.html">Local News Multiverse Agent Platform</a>.</p>
+
+<h3>Agent Tools</h3>
+<p>The multiverse agents use these tables:</p>
+<pre><code># lookup_sender_entity - queries sender_profiles
+sender = lookup_sender_entity("john@example.com")
+# Returns: is_journalist, influence_score, email_count, topics
+
+# search_emails - vector search on email_chunks
+results = search_emails("city council budget meeting", limit=10)
+# Returns: similar emails with relevance scores</code></pre>
+
+<h3>Required Schema</h3>
+<p>For multiverse compatibility, ensure:</p>
+<ol>
+<li><code>classified_emails</code> has: id, gmail_id, thread_id, sender_email, body_text</li>
+<li><code>email_chunks</code> has: embedding VECTOR(384) with HNSW index</li>
+<li><code>sender_profiles</code> has: fingerprint, is_journalist, is_government, is_media</li>
+</ol>
+
+<hr />
+
+<h2>Quick Start</h2>
+
+<h3>1. Prerequisites</h3>
+<pre><code># PostgreSQL with pgvector
+brew install postgresql@17
+psql -c "CREATE EXTENSION vector;"
+
+# Python 3.10+
+python --version  # Should be 3.10+</code></pre>
+
+<h3>2. Clone and Setup</h3>
+<pre><code>git clone https://github.com/alecmeeeker/email-ingestion-data-warehouse.git
+cd email-ingestion-data-warehouse
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt</code></pre>
+
+<h3>3. Configure Environment</h3>
+<pre><code># Copy example config
+cp .env.example .env
+
+# Edit with your values
+nano .env</code></pre>
+
+<p>Required variables:</p>
+<ul>
+<li><code>GOOGLE_SERVICE_ACCOUNT_FILE</code>: Path to service account JSON</li>
+<li><code>GMAIL_DELEGATE_EMAIL</code>: Email to impersonate</li>
+<li><code>GEMINI_API_KEY</code>: For LLM classification</li>
+</ul>
+
+<h3>4. Run Migrations</h3>
+<pre><code># Create database
+createdb email_warehouse
+
+# Run migrations in order
+for f in migrations/*.sql; do psql -d email_warehouse -f "$f"; done</code></pre>
+
+<h3>5. Run Pipeline</h3>
+<pre><code># Extract emails
+python scripts/gmail_extractor.py --max-results 100
+
+# Create chunks and embeddings
+python scripts/batch_chunking.py
+
+# Classify emails
+python scripts/batch_classifier.py --all
+
+# Extract participants
+python scripts/participant_extractor.py</code></pre>
+
+<hr />
+
+<h2>Configuration Reference</h2>
+
+<h3>Database</h3>
+<table>
+<thead>
+<tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>DB_NAME</code></td><td>email_warehouse</td><td>PostgreSQL database name</td></tr>
+<tr><td><code>DB_USER</code></td><td>postgres</td><td>Database user</td></tr>
+<tr><td><code>DB_HOST</code></td><td>localhost</td><td>Database host</td></tr>
+<tr><td><code>DB_PASSWORD</code></td><td>(empty)</td><td>Database password</td></tr>
+<tr><td><code>DB_PORT</code></td><td>5432</td><td>Database port</td></tr>
+</tbody>
+</table>
+
+<h3>Gmail API</h3>
+<table>
+<thead>
+<tr><th>Variable</th><th>Required</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>GOOGLE_SERVICE_ACCOUNT_FILE</code></td><td>Yes</td><td>Path to service account JSON</td></tr>
+<tr><td><code>GMAIL_DELEGATE_EMAIL</code></td><td>Yes</td><td>Email to impersonate</td></tr>
+</tbody>
+</table>
+
+<h3>LLM</h3>
+<table>
+<thead>
+<tr><th>Variable</th><th>Required</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>GEMINI_API_KEY</code></td><td>Yes</td><td>Google Gemini API key</td></tr>
+</tbody>
+</table>
+
+<h3>Model</h3>
+<table>
+<thead>
+<tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>EMBEDDING_MODEL</code></td><td>sentence-transformers/all-MiniLM-L6-v2</td><td>Embedding model</td></tr>
+<tr><td><code>HF_HUB_OFFLINE</code></td><td>0</td><td>Use cached models only</td></tr>
+<tr><td><code>BATCH_SIZE</code></td><td>200</td><td>Processing batch size</td></tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2>Performance Considerations</h2>
+
+<h3>Why These Choices Work on MacBook</h3>
+<table>
+<thead>
+<tr><th>Choice</th><th>Why</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>all-MiniLM-L6-v2</strong></td><td>384-dim vs 768-dim = 2x faster, 50% memory</td></tr>
+<tr><td><strong>HNSW index</strong></td><td>O(log n) search, no rebuild on insert</td></tr>
+<tr><td><strong>Deterministic rules</strong></td><td>30-50% of emails skip LLM entirely</td></tr>
+<tr><td><strong>Batch commits</strong></td><td>Resume from failure without reprocessing</td></tr>
+<tr><td><strong>Incremental extraction</strong></td><td>Only process new emails</td></tr>
+</tbody>
+</table>
+
+<h3>Benchmarks (M1 MacBook Pro)</h3>
+<table>
+<thead>
+<tr><th>Operation</th><th>Throughput</th></tr>
+</thead>
+<tbody>
+<tr><td>Email extraction</td><td>~100 emails/min</td></tr>
+<tr><td>Chunking + embedding</td><td>~200 emails/min</td></tr>
+<tr><td>LLM classification</td><td>~30 emails/min</td></tr>
+<tr><td>Participant extraction</td><td>~500 emails/min</td></tr>
+</tbody>
+</table>
+
+<h3>Scaling Notes</h3>
+<p>For larger deployments:</p>
+<ol>
+<li>Increase <code>BATCH_SIZE</code> for better throughput</li>
+<li>Use connection pooling (pgbouncer)</li>
+<li>Consider Gemini Flash Lite for classification</li>
+<li>Run embedding and classification in parallel</li>
+</ol>
+
+<hr />
+
+<h2>Contributing</h2>
+<p>Contributions welcome! Please:</p>
+<ol>
+<li>Fork the repository</li>
+<li>Create a feature branch</li>
+<li>Submit a pull request</li>
+</ol>
+
+<p>Areas of interest:</p>
+<ul>
+<li>Additional email providers (Outlook, IMAP)</li>
+<li>Alternative embedding models</li>
+<li>Classification category extensions</li>
+<li>Performance optimizations</li>
+</ul>
+
+<hr />
+
+<div class="doc-nav" style="margin-top: 48px;">
+    <div class="doc-nav-header">
+        <h4>Related Projects</h4>
+    </div>
+    <ul class="doc-nav-list">
+        <li><a href="multiverse_platform_oss.html">Multiverse Agent Platform</a> &mdash; Self-hosted MLOps for agentic AI workflows</li>
+        <li><a href="data_warehouse_report.html">Data Warehouse Report</a> &mdash; The production system this was extracted from</li>
+    </ul>
+</div>
+
+<p style="margin-top: 48px; color: var(--text-muted); font-size: 0.9rem;"><em>Built with care by <a href="https://alecmeeker.com">Alec Meeker</a> for <a href="https://bushwickdaily.com">Bushwick Daily</a>.</em></p>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-TZJB1RJXV6');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local News Multiverse Agent Platform | Alec Meeker</title>
+    <meta name="description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents, and version control.">
+    <meta name="author" content="Alec Meeker">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Alec Meeker Portfolio">
+    <meta property="og:title" content="Local News Multiverse Agent Platform | Alec Meeker">
+    <meta property="og:description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents.">
+    <meta property="og:url" content="https://alecmeeker.com/multiverse_platform_oss.html">
+    <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Local News Multiverse Agent Platform | Alec Meeker">
+    <meta name="twitter:description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents.">
+    <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://alecmeeker.com/multiverse_platform_oss.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-primary: #0f0e0c;
+        --bg-secondary: #171614;
+        --bg-card: #1c1b18;
+        --text-primary: #f5f2eb;
+        --text-secondary: #c9c1b3;
+        --text-muted: #8a8275;
+        --text-bright: #fdfcfa;
+        --accent: #e5b366;
+        --accent-dim: #b8874a;
+        --border: #3a3830;
+        --font-editorial: 'Fraunces', Georgia, serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-body);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+    }
+    .back-link {
+        position: fixed;
+        top: 20px; left: 24px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-decoration: none;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(15, 14, 12, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        backdrop-filter: blur(8px);
+    }
+    .back-link:hover { background: var(--bg-card); }
+    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
+    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
+    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
+    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
+    .paper-content strong { color: var(--text-primary); }
+    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
+    .paper-content li { margin-bottom: 6px; }
+    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
+    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
+    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
+    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
+    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
+    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
+    .paper-content td { color: var(--text-secondary); }
+    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    .paper-content a { color: var(--accent); text-decoration: none; }
+    .paper-content a:hover { text-decoration: underline; }
+
+    .doc-nav { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 32px 0; }
+    .doc-nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .doc-nav-header h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin: 0; }
+    .doc-nav-header span { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .doc-nav-list { list-style: none; padding: 0; margin: 0; }
+    .doc-nav-list li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .doc-nav-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .doc-nav-list li:first-child { padding-top: 0; }
+    .doc-nav-list a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+    .doc-nav-list a:hover { text-decoration: underline; }
+    .doc-nav-list .current { color: var(--text-muted); }
+    .github-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); text-decoration: none; padding: 10px 18px; border: 1px solid var(--accent-dim); border-radius: 4px; margin-top: 8px; }
+    .github-link:hover { background: rgba(229, 179, 102, 0.1); text-decoration: none; }
+    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Local News Multiverse Agent Platform",
+      "description": "Open source self-hosted MLOps platform for agentic AI workflows with LangGraph-compatible persistence, parallel path exploration, and self-evolving agents.",
+      "author": {
+        "@type": "Person",
+        "name": "Alec Meeker",
+        "url": "https://alecmeeker.com/"
+      },
+      "datePublished": "2026-04-17",
+      "publisher": {
+        "@type": "Person",
+        "name": "Alec Meeker"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://alecmeeker.com/multiverse_platform_oss.html"
+      },
+      "proficiencyLevel": "Expert",
+      "dependencies": "Python, FastAPI, LangGraph, PostgreSQL, Streamlit, asyncio"
+    }
+    </script>
+</head>
+<body>
+    <a class="back-link" href="index.html">&#8592; Back</a>
+    <div class="paper-container">
+        <div class="paper-content">
+<h1>Local News Multiverse Agent Platform</h1>
+<p><strong>Self-Hosted LangGraph Alternative with PostgreSQL Persistence</strong></p>
+<p style="margin-top: 16px;"><a href="https://github.com/alecmeeeker/local-news-multiverse-agent-platform" class="github-link">View on GitHub &#8594;</a></p>
+
+<p><strong>A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows&mdash;without cloud dependencies.</strong></p>
+
+<p>Built from scratch by <a href="https://alecmeeker.com">Alec Meeker</a>, CEO and Editor-in-Chief of <a href="https://bushwickdaily.com">Bushwick Daily</a>, as both a learning exercise in distributed systems design and a mission-driven tool to democratize AI workflow development for local news organizations.</p>
+
+<div class="doc-nav">
+    <div class="doc-nav-header">
+        <h4>Open Source Projects</h4>
+    </div>
+    <ul class="doc-nav-list">
+        <li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a></li>
+        <li><span class="current">Multiverse Agent Platform</span> (Current)</li>
+    </ul>
+</div>
+
+<hr />
+
+<h2>The Mission</h2>
+
+<p>Local journalism is dying. Not because people don't care, but because small publications can't compete with the operational efficiency of large media companies. While The New York Times has teams of engineers building AI tools, your local newspaper is still manually sorting through emails and copy-pasting content between platforms.</p>
+
+<p><strong>This platform exists to change that.</strong></p>
+
+<p>The Multiverse Agent Orchestration Platform gives any local publication&mdash;regardless of technical resources&mdash;the same AI workflow infrastructure that billion-dollar media companies are building internally. And because it's 100% local and open-source, your data never leaves your servers, your workflows are yours forever, and you can share what you build with other publications facing the same challenges.</p>
+
+<h3>The Vision: A Cooperative AI Infrastructure for Local News</h3>
+
+<p>The database architecture of this platform wasn't designed just for one publication. Every workflow, prompt, and pipeline is <strong>hashed and versioned</strong> in a portable format. This means:</p>
+
+<ul>
+<li><strong>Pipeline Sharing</strong>: A publication that builds a great "press release classifier" workflow can export it and share it with other users of the platform</li>
+<li><strong>Collective Learning</strong>: Anonymized performance metrics can help the community identify which workflow patterns work best</li>
+<li><strong>Reduced Duplication</strong>: Instead of every local publication reinventing the wheel, successful patterns can propagate</li>
+<li><strong>Federated Evolution</strong>: Improvements made by one publication can benefit all</li>
+</ul>
+
+<p>This is cooperative infrastructure for an industry that desperately needs it.</p>
+
+<hr />
+
+<h2>Why I Built This From Scratch</h2>
+
+<h3>The Problem with LangGraph Cloud</h3>
+
+<p>LangGraph is excellent software. But LangGraph Cloud means:</p>
+<ul>
+<li>Your data goes to external servers</li>
+<li>You're locked into a vendor's pricing model</li>
+<li>You can't deeply customize the persistence layer</li>
+<li>You can't share workflows between organizations easily</li>
+</ul>
+
+<p>For a local news publication handling sensitive source communications, tip submissions, and editorial workflows, <strong>cloud dependency is a non-starter</strong>.</p>
+
+<h3>What This Platform Does Differently</h3>
+
+<p>I built this platform to replicate LangGraph's core capabilities&mdash;state machines, checkpointing, human-in-the-loop interrupts&mdash;but with critical additions:</p>
+
+<ol>
+<li><strong>100% Local</strong>: Everything runs on PostgreSQL. No external dependencies. Your data never leaves your infrastructure.</li>
+<li><strong>Multiverse Exploration</strong>: Instead of single-path execution, run up to 5 parallel strategy paths simultaneously and compare results before committing.</li>
+<li><strong>Complete Version Control</strong>: Every prompt, workflow, and agent configuration is immutably versioned. Nothing is ever overwritten. Full rollback capability forever.</li>
+<li><strong>Built-in Hypothesis Testing</strong>: A/B test workflow changes with statistical analysis before deploying to production.</li>
+<li><strong>Self-Evolving Agents</strong>: Automatic performance monitoring with evolution triggers that improve agents based on measured outcomes.</li>
+<li><strong>Portable Pipelines</strong>: Hash-based workflow identification means pipelines can be exported, shared, and imported across installations.</li>
+</ol>
+
+<hr />
+
+<h2>Technical Architecture</h2>
+
+<h3>Design Principles</h3>
+
+<p>This platform is built on several fundamental principles that inform every architectural decision:</p>
+
+<h4>1. Immutability Over Mutation</h4>
+<p>Nothing in this system is ever overwritten. When you change a prompt, a new version is created. When you modify a workflow, a new version is branched. When an agent evolves, the before/after states are both preserved.</p>
+<p><strong>Why?</strong> Because AI systems fail in subtle ways. A prompt that worked yesterday might fail tomorrow due to model updates, data drift, or edge cases you haven't seen yet. When things break, you need to know exactly what changed and when&mdash;and you need to roll back instantly.</p>
+
+<h4>2. Complete Observability</h4>
+<p>Every input to every agent is logged. Every output is captured. Every decision point records the options considered and the choice made. Every execution captures timing, token usage, and error states.</p>
+<p><strong>Why?</strong> Because you can't improve what you can't measure. And when a user reports that "the AI did something weird last Tuesday," you need to be able to replay exactly what happened.</p>
+
+<h4>3. Parallel Exploration Before Commitment</h4>
+<p>Instead of running a workflow and hoping for the best, this platform can explore up to 5 different strategies simultaneously. Each path runs independently, with its own state. You compare results and select the winner&mdash;or merge the best elements from multiple paths.</p>
+<p><strong>Why?</strong> Because the "best" approach often isn't obvious until you've tried alternatives. And in production, you want to test changes on real data before committing to them.</p>
+
+<h4>4. Local-First, Always</h4>
+<p>Every piece of state lives in PostgreSQL. Checkpoints, key-value storage, workflow definitions, execution history&mdash;all local. The platform functions identically whether you're online or offline.</p>
+<p><strong>Why?</strong> Because vendor lock-in kills small organizations. Because network dependencies cause production failures. Because your data is yours.</p>
+
+<h4>5. Clean Architecture with Dependency Injection</h4>
+<p>The codebase follows strict layer separation: Domain (pure business logic) &#8594; Application (orchestration) &#8594; Infrastructure (external systems). All dependencies are injected via a central container.</p>
+<p><strong>Why?</strong> Because testability matters. Because you should be able to swap PostgreSQL for SQLite for testing without changing business logic. Because the codebase should remain maintainable as it grows.</p>
+
+<hr />
+
+<h2>System Architecture</h2>
+
+<pre><code>&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                           PRESENTATION LAYER                                &#9474;
+&#9474;                                                                             &#9474;
+&#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9474;
+&#9474;  &#9474;                    STREAMLIT WORKBENCH (Port 8501)                   &#9474;   &#9474;
+&#9474;  &#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9474;   &#9474;
+&#9474;  &#9474;  &#9474;  Agent Forge &#9474; &#9474;  Workflow   &#9474; &#9474;   Prompt    &#9474; &#9474;    Time    &#9474; &#9474;   &#9474;
+&#9474;  &#9474;  &#9474;              &#9474; &#9474;   Builder    &#9474; &#9474;   Manager   &#9474; &#9474;   Machine  &#9474; &#9474;   &#9474;
+&#9474;  &#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9474;   &#9474;
+&#9474;  &#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9474;   &#9474;
+&#9474;  &#9474;  &#9474;  Laboratory  &#9474; &#9474; Exploration &#9474; &#9474;   HITL      &#9474; &#9474;  Analytics &#9474; &#9474;   &#9474;
+&#9474;  &#9474;  &#9474;   (Testing)  &#9474; &#9474;   Canvas    &#9474; &#9474;   Review    &#9474; &#9474;  Dashboard &#9474; &#9474;   &#9474;
+&#9474;  &#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9474;   &#9474;
+&#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9474;
+&#9474;                                                                             &#9474;
+&#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9474;
+&#9474;  &#9474;                      FastAPI SERVICES                                &#9474;   &#9474;
+&#9474;  &#9474;  Exploration API (8001) | Workflow API (8002) | Prompt API (8003)    &#9474;   &#9474;
+&#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                      &#9474;
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9660;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                           APPLICATION LAYER                                 &#9474;
+&#9474;                                                                             &#9474;
+&#9474;  ORCHESTRATORS: OrchestratorV3, Unified Orchestrator, Exploration Engine   &#9474;
+&#9474;  SERVICES (16): AgentService, PromptService, WorkflowService, etc.         &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                      &#9474;
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9660;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                            DOMAIN LAYER                                     &#9474;
+&#9474;                                                                             &#9474;
+&#9474;  AGENTS (12): BaseAgent, StrategicPlannerAgent, EAIAWorkbenchAdapter, etc. &#9474;
+&#9474;  TOOLS &amp; CAPABILITIES: RAG_SEARCH, DATA_QUERY, ENTITY_LOOKUP, CALCULATION  &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                      &#9474;
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9660;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                        INFRASTRUCTURE LAYER                                 &#9474;
+&#9474;                                                                             &#9474;
+&#9474;  DEPENDENCY INJECTION: Container, lazy initialization, config via env      &#9474;
+&#9474;  REPOSITORIES (17): PromptRepo, WorkflowRepo, AgentRepo, ExecutionRepo...  &#9474;
+&#9474;  PERSISTENCE: PostgreSQLCheckpointer, PostgreSQLStore (LangGraph compat)   &#9474;
+&#9474;  DATABASE: PostgreSQL (18 migrations, 30+ tables)                          &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</code></pre>
+
+<hr />
+
+<h2>Database Architecture</h2>
+
+<p>The database is the foundation of the entire system. It's designed around four core subsystems, each implementing specific capabilities that together create a complete MLOps platform for agentic workflows.</p>
+
+<h3>Subsystem 1: Prompt Version Control</h3>
+<p><strong>Tables</strong>: <code>prompt_templates</code>, <code>prompt_versions</code>, <code>prompt_execution_logs</code></p>
+<ul>
+<li><strong>Immutable Versions</strong>: The version column is auto-incremented and never updated. When you "edit" a prompt, you create version N+1.</li>
+<li><strong>Single Active Version</strong>: Only one version per template can have <code>is_active = TRUE</code>. Switching versions is atomic.</li>
+<li><strong>Complete Execution Logging</strong>: Every single LLM call is logged with full input/output in JSONB for debugging, performance comparison, and cost tracking.</li>
+</ul>
+
+<h3>Subsystem 2: Multiverse Workflow Engine</h3>
+<p><strong>Tables</strong>: <code>mv_workflow_versions</code>, <code>mv_execution_contexts</code>, <code>mv_exploration_paths</code>, <code>mv_path_execution_history</code>, <code>mv_workflow_audit_trail</code></p>
+<ul>
+<li><strong>Git-Like Workflow Versioning</strong>: The <code>parent_version</code> foreign key creates a directed acyclic graph of workflow history. Branch, experiment, and merge.</li>
+<li><strong>UUID-Based Execution Contexts</strong>: Each email processing session gets a UUID-identified context, enabling tracking across service restarts.</li>
+<li><strong>Parallel Path Exploration</strong>: Up to 5 <code>mv_exploration_paths</code> can be active per context, each with independent state.</li>
+<li><strong>Node-Level Granularity</strong>: <code>mv_path_execution_history</code> captures every single node execution for exact replay capability.</li>
+</ul>
+
+<h3>Subsystem 3: Agent Evolution &amp; Intelligence</h3>
+<p><strong>Tables</strong>: <code>mv_intelligent_agents</code>, <code>mv_agent_evolution_history</code>, <code>mv_recognized_patterns</code>, <code>mv_hypothesis_tests</code>, <code>mv_system_capabilities</code></p>
+<ul>
+<li><strong>Self-Describing Agents</strong>: Each agent stores its own schema definitions (<code>input_schema</code>, <code>output_schema</code>) in JSONB for runtime validation.</li>
+<li><strong>Evolution Lineage</strong>: Every agent modification creates a record with before/after snapshots, trigger cause, and performance delta.</li>
+<li><strong>Built-in Hypothesis Testing</strong>: A/B test workflow changes with statistical analysis before deployment.</li>
+</ul>
+
+<h3>Subsystem 4: LangGraph Local Storage</h3>
+<p><strong>Tables</strong>: <code>local_threads</code>, <code>thread_state_history</code>, <code>langgraph_store</code>, <code>thread_interrupts</code></p>
+<ul>
+<li><strong>LangGraph API Compatibility</strong>: Maintains compatibility with LangGraph's thread ID format for easy migration.</li>
+<li><strong>Full Checkpoint History</strong>: Stores every checkpoint for time-travel debugging and audit compliance.</li>
+<li><strong>Hierarchical Key-Value Store</strong>: Uses <code>namespace TEXT[]</code> with GIN index for hierarchical organization.</li>
+</ul>
+
+<hr />
+
+<h2>The Exploration Engine: Parallel Universe Processing</h2>
+
+<p>The exploration engine is the core innovation of this platform. It implements true parallel strategy exploration using Python's asyncio.</p>
+
+<pre><code>class ExplorationSession:
+    def __init__(self, ...):
+        # Parallel execution management
+        self.path_queue: Queue = Queue()
+        self.path_tasks: dict[UUID, Task] = {}
+        self.max_parallel_paths = 5
+        self.exploration_semaphore = Semaphore(self.max_parallel_paths)
+
+        # Data lineage tracking
+        self.data_manifest = DataManifest(email_id=email_id)
+        self.lineage_tracker = DataLineageTracker()</code></pre>
+
+<ol>
+<li><strong>Semaphore-Controlled Parallelism</strong>: Up to 5 paths can execute simultaneously, with asyncio semaphore preventing resource exhaustion.</li>
+<li><strong>Independent State Per Path</strong>: Each ExplorationPath has its own <code>path_state</code> JSONB. Modifications to one path don't affect others.</li>
+<li><strong>Data Lineage Tracking</strong>: Every piece of data is tracked from origin through transformations.</li>
+<li><strong>Intervention Points</strong>: The engine supports 10 types of user interventions mid-execution:
+<pre><code>CONTINUE, MODIFY_INPUT, MODIFY_NODE, ADD_NODE, REMOVE_NODE,
+CHANGE_ROUTE, CREATE_BRANCH, PAUSE, ABANDON, MODIFY_WORKFLOW</code></pre></li>
+</ol>
+
+<hr />
+
+<h2>Why Database-Driven?</h2>
+
+<p><strong>This platform is built for journalists, not engineers.</strong></p>
+
+<p>Every agent definition, workflow configuration, prompt template, and tool parameter lives in PostgreSQL&mdash;not in Python code. This means:</p>
+
+<h3>For Non-Technical Users</h3>
+<ul>
+<li><strong>Create agents through a web UI</strong>: The Streamlit Workbench provides forms, dropdowns, and visual editors. No code required.</li>
+<li><strong>Edit prompts like documents</strong>: Change how your AI behaves by editing text in a browser.</li>
+<li><strong>See your changes instantly</strong>: Click save, and your agent uses the new configuration. No deployment, no restart.</li>
+<li><strong>Roll back mistakes</strong>: Every change is versioned. One click to restore.</li>
+</ul>
+
+<h3>For Technical Users</h3>
+<ul>
+<li><strong>Agents are data, not code</strong>: Export a working agent as JSON. Import it on another server. Share it.</li>
+<li><strong>Schema validation at runtime</strong>: Input/output schemas stored as JSONB are validated when agents execute.</li>
+<li><strong>Full audit trail</strong>: Every modification is logged with timestamp, context, and before/after state.</li>
+</ul>
+
+<hr />
+
+<h2>The Streamlit Workbench</h2>
+
+<p>The UI was designed with a specific user in mind: <strong>a local news editor who is technical enough to understand what AI can do, but doesn't have time to write code.</strong></p>
+
+<h3>Components</h3>
+<ul>
+<li><strong>Agent Forge</strong>: Create and edit intelligent agents with visual schema editors. Define inputs, outputs, capabilities, and model settings without writing code.</li>
+<li><strong>Workflow Builder</strong>: Drag-and-drop workflow construction with real-time Graphviz visualization.</li>
+<li><strong>Prompt Manager</strong>: Full version control UI. See diffs, roll back, compare performance.</li>
+<li><strong>Exploration Canvas</strong>: Watch parallel paths execute in real-time. Pause, modify, branch at any point.</li>
+<li><strong>Tool Manager</strong>: Register new tools that agents can use.</li>
+<li><strong>Time Machine</strong>: Browse any historical state. Replay executions.</li>
+<li><strong>Laboratory</strong>: Test prompts with sample data before deployment.</li>
+<li><strong>Analytics Dashboard</strong>: Performance metrics across all agents, workflows, and prompts.</li>
+</ul>
+
+<hr />
+
+<h2>Quick Start</h2>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Python 3.11+</li>
+<li>PostgreSQL 14+</li>
+<li>OpenAI API key (or Anthropic)</li>
+</ul>
+
+<h3>Installation</h3>
+<pre><code># Clone the repository
+git clone https://github.com/alecmeeeker/local-news-multiverse-agent-platform.git
+cd local-news-multiverse-agent-platform
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy environment template and configure
+cp .env.example .env
+# Edit .env with your API keys and database credentials</code></pre>
+
+<h3>Database Setup</h3>
+<pre><code># Create the database
+createdb agent_db
+
+# Run migrations in order
+for f in migrations/*.sql; do
+    echo "Running $f..."
+    psql -d agent_db -f "$f" 2>&amp;1 | grep -v "already exists"
+done</code></pre>
+
+<p>The migrations will:</p>
+<ol>
+<li>Create the email stub table with sample NYC press releases for testing</li>
+<li>Set up the multiverse schema (agents, workflows, exploration paths)</li>
+<li>Configure LangGraph-compatible storage</li>
+<li>Seed 3 starter agents (EmailTriageAgent, PressReleaseAnalyzer, StoryDraftGenerator)</li>
+<li>Create a sample workflow connecting them</li>
+</ol>
+
+<h3>Start the Platform</h3>
+<pre><code># Start all services (APIs + UI)
+./start_system.sh
+
+# Or start components individually:
+
+# API servers
+python run_production_system.py
+
+# Streamlit UI (separate terminal)
+streamlit run ui/agents_v3_workbench.py --server.port 8501</code></pre>
+
+<h3>Access Points</h3>
+<table>
+<thead>
+<tr><th>Service</th><th>URL</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td>Workbench UI</td><td>http://localhost:8501</td><td>Main interface</td></tr>
+<tr><td>Exploration API</td><td>http://localhost:8001</td><td>Exploration control</td></tr>
+<tr><td>Workflow API</td><td>http://localhost:8002</td><td>Agent/workflow management</td></tr>
+<tr><td>Prompt API</td><td>http://localhost:8003</td><td>Prompt version control</td></tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2>Technology Stack</h2>
+
+<table>
+<thead>
+<tr><th>Category</th><th>Technologies</th></tr>
+</thead>
+<tbody>
+<tr><td>Backend</td><td>Python 3.11, FastAPI, asyncpg, psycopg2</td></tr>
+<tr><td>AI Framework</td><td>LangGraph, LangChain, OpenAI, Anthropic</td></tr>
+<tr><td>Database</td><td>PostgreSQL 14+ (30+ tables, 18 migrations)</td></tr>
+<tr><td>UI</td><td>Streamlit, Graphviz, Plotly, NetworkX</td></tr>
+<tr><td>Architecture</td><td>Clean Architecture, Dependency Injection, Repository Pattern</td></tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2>Future Possibilities</h2>
+
+<h3>Pipeline Marketplace for Local News</h3>
+<p>Because every workflow is hashed and versioned:</p>
+<ul>
+<li>A publication that builds a great "press release classifier" can share it</li>
+<li>Other publications import with one command</li>
+<li>Prompts can be customized for local voice</li>
+<li>Performance improvements can be federated back</li>
+</ul>
+
+<h3>Collective Learning</h3>
+<p>With opt-in anonymized metrics sharing:</p>
+<ul>
+<li>Which workflow patterns perform best across publications?</li>
+<li>What prompt structures have the highest success rates?</li>
+<li>Where are the common failure modes?</li>
+</ul>
+
+<hr />
+
+<h2>Contributing</h2>
+
+<p>This is an open-source project built for the local news community. Contributions are welcome:</p>
+<ol>
+<li><strong>Bug Reports</strong>: Open an issue with reproduction steps</li>
+<li><strong>Feature Requests</strong>: Open an issue describing the use case</li>
+<li><strong>Pull Requests</strong>: Fork, branch, and submit PRs against <code>develop</code></li>
+<li><strong>Documentation</strong>: Help improve docs, examples, tutorials</li>
+</ol>
+
+<hr />
+
+<div class="doc-nav" style="margin-top: 48px;">
+    <div class="doc-nav-header">
+        <h4>Related Projects</h4>
+    </div>
+    <ul class="doc-nav-list">
+        <li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a> &mdash; Upstream data source for this platform</li>
+        <li><a href="news_scanner_report.html">NYCNewsScanner Report</a> &mdash; The production system this was extracted from</li>
+    </ul>
+</div>
+
+<p style="margin-top: 48px; color: var(--text-muted); font-size: 0.9rem;"><em>Built with determination in Brooklyn, NYC.</em></p>
+
+        </div>
+    </div>
+</body>
+</html>
