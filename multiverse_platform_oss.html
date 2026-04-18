@@ -38,82 +38,24 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-    :root {
-        --bg-primary: #0f0e0c;
-        --bg-secondary: #171614;
-        --bg-card: #1c1b18;
-        --text-primary: #f5f2eb;
-        --text-secondary: #c9c1b3;
-        --text-muted: #8a8275;
-        --text-bright: #fdfcfa;
-        --accent: #e5b366;
-        --accent-dim: #b8874a;
-        --border: #3a3830;
-        --font-editorial: 'Fraunces', Georgia, serif;
-        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-        --font-body: 'Source Sans 3', -apple-system, sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; }
-    body {
-        font-family: var(--font-body);
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        line-height: 1.75;
-        -webkit-font-smoothing: antialiased;
-    }
-    .back-link {
-        position: fixed;
-        top: 20px; left: 24px;
-        font-family: var(--font-mono);
-        font-size: 0.78rem;
-        color: var(--accent);
-        text-decoration: none;
-        z-index: 100;
-        padding: 8px 16px;
-        background: rgba(15, 14, 12, 0.9);
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        backdrop-filter: blur(8px);
-    }
-    .back-link:hover { background: var(--bg-card); }
-    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
-    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
-    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
-    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
-    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
-    .paper-content strong { color: var(--text-primary); }
-    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
-    .paper-content li { margin-bottom: 6px; }
-    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
-    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
-    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
-    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
-    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
-    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
-    .paper-content td { color: var(--text-secondary); }
-    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
-    .paper-content a { color: var(--accent); text-decoration: none; }
-    .paper-content a:hover { text-decoration: underline; }
-
-    .doc-nav { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 32px 0; }
-    .doc-nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .doc-nav-header h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin: 0; }
-    .doc-nav-header span { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .doc-nav-list { list-style: none; padding: 0; margin: 0; }
-    .doc-nav-list li { padding: 8px 0; border-bottom: 1px solid var(--border); }
-    .doc-nav-list li:last-child { border-bottom: none; padding-bottom: 0; }
-    .doc-nav-list li:first-child { padding-top: 0; }
-    .doc-nav-list a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
-    .doc-nav-list a:hover { text-decoration: underline; }
-    .doc-nav-list .current { color: var(--text-muted); }
-    .github-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); text-decoration: none; padding: 10px 18px; border: 1px solid var(--accent-dim); border-radius: 4px; margin-top: 8px; }
-    .github-link:hover { background: rgba(229, 179, 102, 0.1); text-decoration: none; }
-    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    /* Page-specific: OSS masthead */
+    .report-masthead { padding-top: calc(var(--nav-h) + 24px); padding-bottom: clamp(48px, 7vw, 88px); border-bottom: 1px solid var(--rule); }
+    .report-masthead__title { font-size: clamp(2.5rem, 6.5vw, 5.5rem); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; color: var(--ink); font-family: var(--font-display); font-variation-settings: "opsz" 144, "SOFT" 30; margin: 24px 0; max-width: 14ch; }
+    .report-masthead__dek { font-size: var(--fs-standfirst); color: var(--ink-2); max-width: 60ch; margin-bottom: 32px; line-height: 1.4; font-variation-settings: "opsz" 36, "SOFT" 40; }
+    .report-masthead__meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    /* Repo meta strip */
+    .repo-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; padding: 24px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 40px; }
+    .repo-meta__item { display: flex; flex-direction: column; gap: 4px; }
+    .repo-meta__label { font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+    .repo-meta__value { font-family: var(--font-mono); font-size: 0.95rem; color: var(--ink); font-weight: 500; }
+    .repo-meta__value a { color: var(--accent-2); }
+    .repo-meta__value a:hover { color: var(--accent); }
+    /* Pre/code blocks */
+    .codehilite { margin: 1.5em 0; }
+    .codehilite pre, .paper-content pre { font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; padding: clamp(16px, 2vw, 24px); background: var(--paper-2); border: 1px solid var(--rule); color: var(--ink); overflow-x: auto; white-space: pre; margin: 1.5em 0; }
     </style>
 
     <script type="application/ld+json">
@@ -142,26 +84,138 @@
     </script>
 </head>
 <body>
-    <a class="back-link" href="index.html">&#8592; Back</a>
-    <div class="paper-container">
-        <div class="paper-content">
-<h1>Local News Multiverse Agent Platform</h1>
-<p><strong>Self-Hosted LangGraph Alternative with PostgreSQL Persistence</strong></p>
-<p style="margin-top: 16px;"><a href="https://github.com/alecmeeeker/local-news-multiverse-agent-platform" class="github-link">View on GitHub &#8594;</a></p>
 
-<p><strong>A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows&mdash;without cloud dependencies.</strong></p>
+<header class="term-header">
+    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta">USER: AJM@NYC-01</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
+    <nav class="term-header__keys">
+        <a class="keycap" href="index.html#theory"><strong>F1</strong>THEORY</a>
+        <a class="keycap" href="index.html#system"><strong>F2</strong>SYSTEM</a>
+        <a class="keycap" href="index.html#code"><strong>F3</strong>CODE</a>
+        <a class="keycap" href="index.html#chronicle"><strong>F4</strong>CHRONICLE</a>
+        <a class="keycap" href="index.html#about"><strong>F5</strong>ABOUT</a>
+        <a class="keycap" href="Alec_Meeker_Resume_26.pdf"><strong>F6</strong>RESUME</a>
+    </nav>
+</header>
+<div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
+    </div>
+</div>
+
+<nav class="nav">
+    <div class="nav__inner">
+        <a class="nav__brand" href="index.html"><strong>BWK</strong>&nbsp;/&nbsp;A.J.MEEKER</a>
+        <ul class="nav__links">
+            <li><a href="index.html#theory">Theory</a></li>
+            <li><a href="index.html#system">System</a></li>
+            <li><a href="index.html#code" class="is-active">Code</a></li>
+            <li><a href="index.html#chronicle">Chronicle</a></li>
+            <li><a href="index.html#about">About</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<main>
+    <div class="wrap-prose">
+        <p class="breadcrumb">
+            <a href="index.html">BWK</a>
+            <span class="breadcrumb__sep">></span>
+            <a href="index.html#code">CODE</a>
+            <span class="breadcrumb__sep">></span>
+            <span class="breadcrumb__current">MULTIVERSE_PLATFORM</span>
+        </p>
+    </div>
+
+    <header class="report-masthead">
+        <div class="wrap-prose">
+            <p class="kicker kicker--accent">OPEN SOURCE · REFERENCE IMPLEMENTATION</p>
+            <h1 class="report-masthead__title">Local News Multiverse Agent Platform</h1>
+            <p class="report-masthead__dek">A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows&mdash;without cloud dependencies. A self-hosted LangGraph alternative with PostgreSQL persistence, parallel path exploration, and self-evolving agents.</p>
+            <div class="report-masthead__meta">
+                <span class="badge badge--oss">Open Source</span>
+                <span class="badge">Python 3.11</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">LangGraph-compatible</span>
+                <span class="badge">PostgreSQL</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="spread">
+        <span class="spread__num">5&times;</span>
+        <span class="spread__caption">PARALLEL EXPLORATION PATHS &mdash; run up to five strategy branches simultaneously, compare results, and commit the winner.</span>
+    </section>
+
+    <div class="wrap-prose">
+        <article class="prose">
+<h1 style="display:none">Local News Multiverse Agent Platform</h1>
+
+<!-- repo metadata strip -->
+<div class="repo-meta">
+    <div class="repo-meta__item">
+        <span class="repo-meta__label">Language</span>
+        <span class="repo-meta__value">Python</span>
+    </div>
+    <div class="repo-meta__item">
+        <span class="repo-meta__label">License</span>
+        <span class="repo-meta__value">MIT</span>
+    </div>
+    <div class="repo-meta__item">
+        <span class="repo-meta__label">Status</span>
+        <span class="repo-meta__value">Active</span>
+    </div>
+    <div class="repo-meta__item">
+        <span class="repo-meta__label">Repository</span>
+        <span class="repo-meta__value"><a href="https://github.com/alecmeeeker/local-news-multiverse-agent-platform">GitHub &rarr;</a></span>
+    </div>
+</div>
 
 <p>Built from scratch by <a href="https://alecmeeker.com">Alec Meeker</a>, CEO and Editor-in-Chief of <a href="https://bushwickdaily.com">Bushwick Daily</a>, as both a learning exercise in distributed systems design and a mission-driven tool to democratize AI workflow development for local news organizations.</p>
 
-<div class="doc-nav">
-    <div class="doc-nav-header">
-        <h4>Open Source Projects</h4>
-    </div>
-    <ul class="doc-nav-list">
-        <li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a></li>
-        <li><span class="current">Multiverse Agent Platform</span> (Current)</li>
-    </ul>
-</div>
+<h3>Related Open Source Projects</h3>
+<ul>
+    <li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a></li>
+    <li><strong>Multiverse Agent Platform</strong> (this document)</li>
+</ul>
 
 <hr />
 
@@ -247,7 +301,7 @@
 
 <h2>System Architecture</h2>
 
-<pre><code>&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+<div class="codehilite"><pre><code>&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
 &#9474;                           PRESENTATION LAYER                                &#9474;
 &#9474;                                                                             &#9474;
 &#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9474;
@@ -289,7 +343,7 @@
 &#9474;  REPOSITORIES (17): PromptRepo, WorkflowRepo, AgentRepo, ExecutionRepo...  &#9474;
 &#9474;  PERSISTENCE: PostgreSQLCheckpointer, PostgreSQLStore (LangGraph compat)   &#9474;
 &#9474;  DATABASE: PostgreSQL (18 migrations, 30+ tables)                          &#9474;
-&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</code></pre>
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</code></pre></div>
 
 <hr />
 
@@ -336,7 +390,7 @@
 
 <p>The exploration engine is the core innovation of this platform. It implements true parallel strategy exploration using Python's asyncio.</p>
 
-<pre><code>class ExplorationSession:
+<div class="codehilite"><pre><code>class ExplorationSession:
     def __init__(self, ...):
         # Parallel execution management
         self.path_queue: Queue = Queue()
@@ -346,15 +400,16 @@
 
         # Data lineage tracking
         self.data_manifest = DataManifest(email_id=email_id)
-        self.lineage_tracker = DataLineageTracker()</code></pre>
+        self.lineage_tracker = DataLineageTracker()</code></pre></div>
 
 <ol>
 <li><strong>Semaphore-Controlled Parallelism</strong>: Up to 5 paths can execute simultaneously, with asyncio semaphore preventing resource exhaustion.</li>
 <li><strong>Independent State Per Path</strong>: Each ExplorationPath has its own <code>path_state</code> JSONB. Modifications to one path don't affect others.</li>
 <li><strong>Data Lineage Tracking</strong>: Every piece of data is tracked from origin through transformations.</li>
 <li><strong>Intervention Points</strong>: The engine supports 10 types of user interventions mid-execution:
-<pre><code>CONTINUE, MODIFY_INPUT, MODIFY_NODE, ADD_NODE, REMOVE_NODE,
-CHANGE_ROUTE, CREATE_BRANCH, PAUSE, ABANDON, MODIFY_WORKFLOW</code></pre></li>
+<div class="codehilite"><pre><code>CONTINUE, MODIFY_INPUT, MODIFY_NODE, ADD_NODE, REMOVE_NODE,
+CHANGE_ROUTE, CREATE_BRANCH, PAUSE, ABANDON, MODIFY_WORKFLOW</code></pre></div>
+</li>
 </ol>
 
 <hr />
@@ -410,7 +465,7 @@ CHANGE_ROUTE, CREATE_BRANCH, PAUSE, ABANDON, MODIFY_WORKFLOW</code></pre></li>
 </ul>
 
 <h3>Installation</h3>
-<pre><code># Clone the repository
+<div class="codehilite"><pre><code># Clone the repository
 git clone https://github.com/alecmeeeker/local-news-multiverse-agent-platform.git
 cd local-news-multiverse-agent-platform
 
@@ -423,17 +478,17 @@ pip install -r requirements.txt
 
 # Copy environment template and configure
 cp .env.example .env
-# Edit .env with your API keys and database credentials</code></pre>
+# Edit .env with your API keys and database credentials</code></pre></div>
 
 <h3>Database Setup</h3>
-<pre><code># Create the database
+<div class="codehilite"><pre><code># Create the database
 createdb agent_db
 
 # Run migrations in order
 for f in migrations/*.sql; do
     echo "Running $f..."
     psql -d agent_db -f "$f" 2>&amp;1 | grep -v "already exists"
-done</code></pre>
+done</code></pre></div>
 
 <p>The migrations will:</p>
 <ol>
@@ -445,7 +500,7 @@ done</code></pre>
 </ol>
 
 <h3>Start the Platform</h3>
-<pre><code># Start all services (APIs + UI)
+<div class="codehilite"><pre><code># Start all services (APIs + UI)
 ./start_system.sh
 
 # Or start components individually:
@@ -454,7 +509,7 @@ done</code></pre>
 python run_production_system.py
 
 # Streamlit UI (separate terminal)
-streamlit run ui/agents_v3_workbench.py --server.port 8501</code></pre>
+streamlit run ui/agents_v3_workbench.py --server.port 8501</code></pre></div>
 
 <h3>Access Points</h3>
 <table>
@@ -521,19 +576,37 @@ streamlit run ui/agents_v3_workbench.py --server.port 8501</code></pre>
 
 <hr />
 
-<div class="doc-nav" style="margin-top: 48px;">
-    <div class="doc-nav-header">
-        <h4>Related Projects</h4>
+<h3>Related Projects</h3>
+<ul>
+<li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a> &mdash; Upstream data source for this platform</li>
+<li><a href="news_scanner_report.html">NYCNewsScanner Report</a> &mdash; The production system this was extracted from</li>
+</ul>
+
+<p><em>Built with determination in Brooklyn, NYC.</em></p>
+
+        </article>
     </div>
-    <ul class="doc-nav-list">
-        <li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a> &mdash; Upstream data source for this platform</li>
-        <li><a href="news_scanner_report.html">NYCNewsScanner Report</a> &mdash; The production system this was extracted from</li>
-    </ul>
-</div>
-
-<p style="margin-top: 48px; color: var(--text-muted); font-size: 0.9rem;"><em>Built with determination in Brooklyn, NYC.</em></p>
-
+    <footer class="footer">
+        <div class="wrap">
+            <div class="footer__grid">
+                <div class="footer__colophon">
+                    <strong>Colophon.</strong> Set in Fraunces and JetBrains Mono. Hand-coded HTML and CSS, no build system. Part of the <a class="link" href="white_paper.html">AI-Powered Local Newsroom</a> portfolio. Open-source reference implementation for production systems.
+                </div>
+                <div class="footer__right">
+                    <div>© 2026 Alec Meeker</div>
+                    <div style="margin-top: 4px;"><a class="link" href="index.html">← Back to portfolio</a></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </footer>
+</main>
+<script>
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        bar.style.width = pct + '%';
+    }, { passive: true });
+</script>
 </body>
 </html>

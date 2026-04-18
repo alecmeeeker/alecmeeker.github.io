@@ -38,83 +38,29 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-    :root {
-        --bg-primary: #0f0e0c;
-        --bg-secondary: #171614;
-        --bg-card: #1c1b18;
-        --text-primary: #f5f2eb;
-        --text-secondary: #c9c1b3;
-        --text-muted: #8a8275;
-        --text-bright: #fdfcfa;
-        --accent: #e5b366;
-        --accent-dim: #b8874a;
-        --border: #3a3830;
-        --font-editorial: 'Fraunces', Georgia, serif;
-        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-        --font-body: 'Source Sans 3', -apple-system, sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; }
-    body {
-        font-family: var(--font-body);
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        line-height: 1.75;
-        -webkit-font-smoothing: antialiased;
-    }
-    .back-link {
-        position: fixed;
-        top: 20px; left: 24px;
-        font-family: var(--font-mono);
-        font-size: 0.78rem;
-        color: var(--accent);
-        text-decoration: none;
-        z-index: 100;
-        padding: 8px 16px;
-        background: rgba(15, 14, 12, 0.9);
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        backdrop-filter: blur(8px);
-    }
-    .back-link:hover { background: var(--bg-card); }
-    .paper-container { max-width: 760px; margin: 0 auto; padding: 100px 32px 80px; }
-    .paper-content h1 { font-family: var(--font-editorial); font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.02em; }
-    .paper-content h2 { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-    .paper-content h3 { font-family: var(--font-editorial); font-size: 1.15rem; font-weight: 600; color: var(--text-bright); margin-top: 32px; margin-bottom: 10px; }
-    .paper-content h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin-top: 24px; margin-bottom: 8px; }
-    .paper-content p { margin-bottom: 14px; color: var(--text-secondary); }
-    .paper-content strong { color: var(--text-primary); }
-    .paper-content ul, .paper-content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); }
-    .paper-content li { margin-bottom: 6px; }
-    .paper-content code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-card); padding: 2px 6px; border-radius: 3px; }
-    .paper-content pre { background: var(--bg-secondary); padding: 20px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 20px; white-space: pre; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); }
-    .paper-content pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.6; }
-    .paper-content blockquote { border-left: 3px solid var(--accent-dim); padding-left: 20px; margin: 20px 0; color: var(--text-muted); font-style: italic; }
-    .paper-content table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    .paper-content th, .paper-content td { padding: 10px 14px; border: 1px solid var(--border); text-align: left; font-size: 0.9rem; }
-    .paper-content th { background: var(--bg-card); font-weight: 600; color: var(--text-primary); }
-    .paper-content td { color: var(--text-secondary); }
-    .paper-content hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
-    .paper-content a { color: var(--accent); text-decoration: none; }
-    .paper-content a:hover { text-decoration: underline; }
-
-    /* Document Navigation */
-    .doc-nav { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 32px 0; }
-    .doc-nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .doc-nav-header h4 { font-family: var(--font-editorial); font-size: 1rem; font-weight: 600; color: var(--text-bright); margin: 0; }
-    .doc-nav-header span { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .report-masthead { padding-top: calc(var(--nav-h) + 24px); padding-bottom: clamp(48px, 7vw, 88px); border-bottom: 1px solid var(--rule); }
+    .report-masthead__title { font-size: clamp(2.5rem, 6.5vw, 5.5rem); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; color: var(--ink); font-family: var(--font-display); font-variation-settings: "opsz" 144, "SOFT" 30; margin: 24px 0; max-width: 14ch; }
+    .report-masthead__dek { font-size: var(--fs-standfirst); color: var(--ink-2); max-width: 60ch; margin-bottom: 32px; line-height: 1.4; font-variation-settings: "opsz" 36, "SOFT" 40; }
+    .report-masthead__meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    .doc-nav { background: var(--paper-2); border: 1px solid var(--rule); padding: clamp(20px, 3vw, 32px); margin: 48px 0; }
+    .doc-nav-header h4 { font-family: var(--font-mono); font-size: var(--fs-meta); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); margin: 0 0 4px; }
+    .doc-nav-header span { font-family: var(--font-mono); font-size: var(--fs-meta-s); color: var(--ink-mute); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 16px; }
     .doc-nav-list { list-style: none; padding: 0; margin: 0; }
-    .doc-nav-list li { padding: 8px 0; border-bottom: 1px solid var(--border); }
-    .doc-nav-list li:last-child { border-bottom: none; padding-bottom: 0; }
-    .doc-nav-list li:first-child { padding-top: 0; }
-    .doc-nav-list a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
-    .doc-nav-list a:hover { text-decoration: underline; }
-    .doc-nav-list .current { color: var(--text-muted); }
-    .parent-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); text-decoration: none; margin-bottom: 8px; }
-    .parent-link:hover { text-decoration: underline; }
-    @media (max-width: 768px) { .paper-container { padding: 80px 20px 60px; } .paper-content h1 { font-size: 1.6rem; } }
+    .doc-nav-list li { padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: var(--fs-body-s); color: var(--ink-2); }
+    .doc-nav-list li:last-child { border-bottom: none; }
+    .doc-nav-list a { color: var(--accent-2); border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+    .doc-nav-list a:hover { color: var(--accent); border-color: var(--accent); }
+    .doc-nav-list .current { color: var(--ink-mute); font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.08em; text-transform: uppercase; }
+    .doc-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .doc-nav-item { display: block; padding: 16px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); transition: border-color 0.15s ease, background 0.15s ease; }
+    .doc-nav-item:hover { border-color: var(--ink); background: var(--paper-2); }
+    .doc-nav-item .nav-section { font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+    .doc-nav-item .nav-title { font-family: var(--font-display); font-size: 1rem; font-weight: 500; line-height: 1.2; color: var(--ink); }
+    .codehilite { margin: 1.5em 0; }
+    .codehilite pre { font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.6; padding: clamp(16px, 2vw, 24px); background: var(--paper-2); border: 1px solid var(--rule); color: var(--ink); overflow-x: auto; white-space: pre; }
     </style>
 
     <!-- JSON-LD Structured Data -->
@@ -144,11 +90,110 @@
     </script>
 </head>
 <body>
-    <a class="back-link" href="index.html">&#8592; Back</a>
-    <div class="paper-container">
-        <div class="paper-content">
-<a href="white_paper.html" class="parent-link">&#8592; Part of: Building an AI-Powered Local Newsroom</a>
-<h1>Email Assistant System</h1>
+
+<header class="term-header">
+    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta">USER: AJM@NYC-01</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
+    <nav class="term-header__keys">
+        <a class="keycap" href="index.html#theory"><strong>F1</strong>THEORY</a>
+        <a class="keycap" href="index.html#system"><strong>F2</strong>SYSTEM</a>
+        <a class="keycap" href="index.html#code"><strong>F3</strong>CODE</a>
+        <a class="keycap" href="index.html#chronicle"><strong>F4</strong>CHRONICLE</a>
+        <a class="keycap" href="index.html#about"><strong>F5</strong>ABOUT</a>
+        <a class="keycap" href="Alec_Meeker_Resume_26.pdf"><strong>F6</strong>RESUME</a>
+    </nav>
+</header>
+<div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
+    </div>
+</div>
+
+<nav class="nav">
+    <div class="nav__inner">
+        <a class="nav__brand" href="index.html"><strong>BWK</strong>&nbsp;/&nbsp;A.J.MEEKER</a>
+        <ul class="nav__links">
+            <li><a href="index.html#theory">Theory</a></li>
+            <li><a href="index.html#system" class="is-active">System</a></li>
+            <li><a href="index.html#code">Code</a></li>
+            <li><a href="index.html#chronicle">Chronicle</a></li>
+            <li><a href="index.html#about">About</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<main>
+    <div class="wrap-prose">
+        <p class="breadcrumb">
+            <a href="index.html">BWK</a>
+            <span class="breadcrumb__sep">></span>
+            <a href="index.html#system">SYSTEM</a>
+            <span class="breadcrumb__sep">></span>
+            <span class="breadcrumb__current">EMAIL_ASSISTANT</span>
+        </p>
+    </div>
+
+    <header class="report-masthead">
+        <div class="wrap-prose">
+            <p class="kicker kicker--accent">SECTION 03 · SUBSYSTEM REPORT</p>
+            <h1 class="report-masthead__title">Email Assistant System</h1>
+            <p class="report-masthead__dek">200+ emails triaged every day. LLM classification with Gemini Flash, a participant intelligence graph across 2,580+ entities, and Playwright RPA for response automation — with end-to-end vector search over the full inbox archive.</p>
+            <div class="report-masthead__meta">
+                <span class="badge badge--shipped">Production</span>
+                <span class="badge">Gemini Flash</span>
+                <span class="badge">Playwright</span>
+                <span class="badge">Vector Search</span>
+                <span class="badge">Published March 2026</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="spread">
+        <span class="spread__num">200+</span>
+        <span class="spread__caption">Emails triaged daily. LLM classification, participant graph, and automated response pipeline — all local, all searchable.</span>
+    </section>
+
+    <div class="wrap-prose">
+        <article class="prose">
+<h1 style="display:none">Email Assistant System</h1>
 
 <!-- Related Documents Navigation -->
 <div class="doc-nav">
@@ -362,10 +407,29 @@
     </div>
 </div>
 
-<hr />
-<p><em>Report compiled from 321 commits spanning July 2025 to March 2026</em>
-<em>Primary source files: email_assistant/ (56 Python modules across cli, orchestration, drafting, skills, memory, rsvp)</em></p>
-        </div>
+        </article>
     </div>
+    <footer class="footer">
+        <div class="wrap">
+            <div class="footer__grid">
+                <div class="footer__colophon">
+                    <strong>Colophon.</strong> Set in Fraunces and JetBrains Mono. Hand-coded HTML and CSS, no build system. Part of the <a class="link" href="white_paper.html">AI-Powered Local Newsroom</a> portfolio. Report compiled from 321 commits spanning July 2025 through March 2026.
+                </div>
+                <div class="footer__right">
+                    <div>© 2026 Alec Meeker</div>
+                    <div style="margin-top: 4px;"><a class="link" href="index.html">← Back to portfolio</a></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+<script>
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        bar.style.width = pct + '%';
+    }, { passive: true });
+</script>
 </body>
 </html>

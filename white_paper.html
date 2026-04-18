@@ -38,335 +38,105 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-    :root {
-        --bg-primary: #0f0e0c;
-        --bg-secondary: #171614;
-        --bg-card: #1c1b18;
-        --text-primary: #f5f2eb;
-        --text-secondary: #c9c1b3;
-        --text-muted: #8a8275;
-        --text-bright: #fdfcfa;
-        --accent: #e5b366;
-        --accent-dim: #b8874a;
-        --border: #3a3830;
-        --font-editorial: 'Fraunces', Georgia, serif;
-        --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    /* Page-specific: white paper masthead */
+    .paper-masthead {
+        padding-top: calc(var(--nav-h) + 48px);
+        padding-bottom: clamp(48px, 8vw, 104px);
+        border-bottom: 1px solid var(--rule);
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; }
-
-    body {
+    .paper-masthead__title {
+        font-size: clamp(3rem, 8.5vw, 7.5rem);
+        font-weight: 500;
+        line-height: 0.92;
+        letter-spacing: -0.035em;
+        color: var(--ink);
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144, "SOFT" 30;
+        margin: 32px 0 24px;
+        max-width: 16ch;
+    }
+    .paper-masthead__title em { font-style: italic; color: var(--accent); }
+    .paper-masthead__dek {
+        font-size: clamp(1.25rem, 2vw, 1.75rem);
+        color: var(--ink-2);
+        max-width: 68ch;
+        line-height: 1.4;
+        font-variation-settings: "opsz" 48, "SOFT" 40;
         font-family: var(--font-body);
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        line-height: 1.75;
-        -webkit-font-smoothing: antialiased;
+        margin-bottom: 40px;
     }
-
-    .back-link {
-        position: fixed;
-        top: 20px;
-        left: 24px;
+    .paper-masthead__meta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .paper-masthead__byline {
         font-family: var(--font-mono);
-        font-size: 0.78rem;
-        color: var(--accent);
-        text-decoration: none;
-        z-index: 100;
-        padding: 8px 16px;
-        background: rgba(15, 14, 12, 0.9);
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        backdrop-filter: blur(8px);
+        font-size: var(--fs-meta);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-mute);
+        margin-top: 24px;
     }
+    .paper-masthead__byline strong { color: var(--ink); font-weight: 500; }
 
-    .back-link:hover { background: var(--bg-card); }
-
-    .paper-container {
-        max-width: 760px;
-        margin: 0 auto;
-        padding: 100px 32px 80px;
+    /* Table of contents */
+    .paper-toc {
+        padding: clamp(32px, 5vw, 64px) 0;
+        background: var(--paper-2);
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        margin: clamp(64px, 8vw, 104px) 0;
     }
-
-    .paper-content h1 {
-        font-family: var(--font-editorial);
-        font-size: 2.6rem;
-        font-weight: 900;
-        color: var(--text-bright);
-        line-height: 1.15;
-        margin-bottom: 8px;
-        letter-spacing: -0.02em;
-    }
-
-    .paper-content h2 {
-        font-family: var(--font-editorial);
-        font-size: 1.6rem;
-        font-weight: 600;
-        color: var(--text-bright);
-        margin-top: 56px;
-        margin-bottom: 20px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .paper-content h3 {
-        font-family: var(--font-editorial);
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--text-bright);
-        margin-top: 36px;
-        margin-bottom: 12px;
-    }
-
-    .paper-content h4 {
-        font-family: var(--font-editorial);
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--text-bright);
-        margin-top: 28px;
-        margin-bottom: 10px;
-    }
-
-    .paper-content p {
-        margin-bottom: 16px;
-        color: var(--text-secondary);
-    }
-
-    .paper-content strong { color: var(--text-primary); }
-
-    .paper-content ul, .paper-content ol {
-        margin-bottom: 16px;
-        padding-left: 24px;
-        color: var(--text-secondary);
-    }
-
-    .paper-content li { margin-bottom: 6px; }
-
-    .paper-content code {
+    .paper-toc__inner { max-width: var(--max-prose); margin: 0 auto; padding: 0 var(--gutter); }
+    .paper-toc__head {
         font-family: var(--font-mono);
-        font-size: 0.88em;
-        background: var(--bg-card);
-        padding: 2px 6px;
-        border-radius: 3px;
-    }
-
-    .paper-content pre {
-        background: var(--bg-secondary);
-        padding: 20px;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        overflow-x: auto;
-        margin-bottom: 20px;
-        white-space: pre;
-        font-family: var(--font-mono);
-        font-size: 0.78rem;
-        line-height: 1.5;
-        color: var(--text-secondary);
-    }
-
-    .paper-content pre code {
-        background: none;
-        padding: 0;
-        font-size: 0.82rem;
-        line-height: 1.6;
-    }
-
-    .paper-content blockquote {
-        border-left: 3px solid var(--accent-dim);
-        padding-left: 20px;
-        margin: 20px 0;
-        color: var(--text-muted);
-        font-style: italic;
-    }
-
-    .paper-content table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    .paper-content th, .paper-content td {
-        padding: 10px 14px;
-        border: 1px solid var(--border);
-        text-align: left;
-        font-size: 0.9rem;
-    }
-
-    .paper-content th {
-        background: var(--bg-card);
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .paper-content td { color: var(--text-secondary); }
-
-    .paper-content hr {
-        border: none;
-        border-top: 1px solid var(--border);
-        margin: 40px 0;
-    }
-
-    .paper-content a {
-        color: var(--accent);
-        text-decoration: none;
-    }
-
-    .paper-content a:hover { text-decoration: underline; }
-
-    /* Author line */
-    .author-line {
-        font-size: 0.95rem;
-        color: var(--text-muted);
+        font-size: var(--fs-meta);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-mute);
         margin-bottom: 24px;
     }
-
-    /* Table of Contents */
-    .toc {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 28px 32px;
-        margin: 32px 0 48px;
-    }
-    .toc-header {
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
-        font-weight: 500;
-        color: var(--accent);
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border);
-    }
-    .toc-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        columns: 2;
-        column-gap: 32px;
-    }
-    .toc-list li {
-        padding: 6px 0;
-        break-inside: avoid;
-    }
-    .toc-list a {
-        color: var(--text-secondary);
-        text-decoration: none;
-        font-size: 0.88rem;
-        line-height: 1.4;
-        display: block;
-        transition: color 0.15s ease;
-    }
-    .toc-list a:hover {
-        color: var(--accent);
-    }
-    .toc-list .toc-num {
-        color: var(--text-muted);
-        font-family: var(--font-mono);
-        font-size: 0.78rem;
-        margin-right: 6px;
-    }
-    @media (max-width: 600px) {
-        .toc-list { columns: 1; }
-    }
-
-    /* Back to Top Button */
-    .back-to-top {
-        position: fixed;
-        bottom: 32px;
-        right: 32px;
-        width: 44px;
-        height: 44px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 50%;
-        color: var(--accent);
-        font-size: 1.1rem;
-        cursor: pointer;
-        z-index: 100;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.25s ease, visibility 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+    .paper-toc__list { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+    .paper-toc__list li {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        align-items: baseline;
+        gap: 24px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--rule);
+        counter-increment: toc;
     }
-    .back-to-top.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-    .back-to-top:hover {
-        background: var(--bg-elevated, #28261f);
-        border-color: var(--accent-dim);
-    }
-    @media (max-width: 768px) {
-        .back-to-top {
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-        }
-    }
-
-    /* Section Navigation List (for deep dive links) */
-    .section-nav {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 24px;
-        margin: 32px 0 40px;
-    }
-    .section-nav h4 {
-        font-family: var(--font-editorial);
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-bright);
-        margin: 0 0 16px 0;
-    }
-    .section-nav ol {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        counter-reset: section-counter;
-    }
-    .section-nav li {
-        padding: 8px 0;
-        border-bottom: 1px solid var(--border);
-        counter-increment: section-counter;
-    }
-    .section-nav li:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-    .section-nav li:first-child {
-        padding-top: 0;
-    }
-    .section-nav li::before {
-        content: counter(section-counter) ". ";
-        color: var(--text-muted);
+    .paper-toc__list li:last-child { border-bottom: none; }
+    .paper-toc__list li::before {
+        content: counter(toc, decimal-leading-zero);
         font-family: var(--font-mono);
-        font-size: 0.85rem;
-    }
-    .section-nav a {
+        font-size: var(--fs-meta);
         color: var(--accent);
-        text-decoration: none;
-        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        min-width: 28px;
     }
-    .section-nav a:hover {
-        text-decoration: underline;
+    .paper-toc__list a {
+        font-family: var(--font-display);
+        font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+        font-weight: 500;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+        flex: 1;
+        border: none;
     }
+    .paper-toc__list a:hover { color: var(--accent); }
 
-    @media (max-width: 768px) {
-        .paper-container { padding: 80px 20px 60px; }
-        .paper-content h1 { font-size: 1.8rem; }
-        .paper-content h2 { font-size: 1.3rem; }
-        .paper-content pre { font-size: 0.7rem; }
+    /* Code blocks (preserve existing codehilite markup) */
+    .codehilite { margin: 1.5em 0; }
+    .codehilite pre {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        line-height: 1.6;
+        padding: clamp(16px, 2vw, 24px);
+        background: var(--paper-2);
+        border: 1px solid var(--rule);
+        color: var(--ink);
+        overflow-x: auto;
+        white-space: pre;
     }
     </style>
 
@@ -397,35 +167,132 @@
     </script>
 </head>
 <body>
-    <a class="back-link" href="index.html">&#8592; Back to site</a>
-    <div class="paper-container">
-        <div class="paper-content">
-<h1 id="building-an-ai-powered-local-newsroom">Building an AI-Powered Local Newsroom</h1>
-<h2 id="a-technical-white-paper-on-the-bushwick-daily-system">A Technical White Paper on the Bushwick Daily System</h2>
-<p class="author-line"><strong>Alec Meeker</strong> &mdash; March 2026</p>
-<hr />
+
+<header class="term-header">
+    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta">USER: AJM@NYC-01</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
+    <span class="term-header__sep">│</span>
+    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
+    <nav class="term-header__keys">
+        <a class="keycap" href="index.html#theory"><strong>F1</strong>THEORY</a>
+        <a class="keycap" href="index.html#system"><strong>F2</strong>SYSTEM</a>
+        <a class="keycap" href="index.html#code"><strong>F3</strong>CODE</a>
+        <a class="keycap" href="index.html#chronicle"><strong>F4</strong>CHRONICLE</a>
+        <a class="keycap" href="index.html#about"><strong>F5</strong>ABOUT</a>
+        <a class="keycap" href="Alec_Meeker_Resume_26.pdf"><strong>F6</strong>RESUME</a>
+    </nav>
+</header>
+<div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
+        <span class="ticker__sep">│</span>
+        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
+    </div>
+</div>
+
+<nav class="nav">
+    <div class="nav__inner">
+        <a class="nav__brand" href="index.html"><strong>BWK</strong>&nbsp;/&nbsp;A.J.MEEKER</a>
+        <ul class="nav__links">
+            <li><a href="index.html#theory" class="is-active">Theory</a></li>
+            <li><a href="index.html#system">System</a></li>
+            <li><a href="index.html#code">Code</a></li>
+            <li><a href="index.html#chronicle">Chronicle</a></li>
+            <li><a href="index.html#about">About</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<main>
+    <div class="wrap-prose">
+        <p class="breadcrumb">
+            <a href="index.html">BWK</a>
+            <span class="breadcrumb__sep">></span>
+            <a href="index.html#theory">THEORY</a>
+            <span class="breadcrumb__sep">></span>
+            <span class="breadcrumb__current">WHITE_PAPER</span>
+        </p>
+    </div>
+
+    <header class="paper-masthead">
+        <div class="wrap-prose">
+            <p class="kicker kicker--accent">SECTION 01 &middot; WHITE PAPER</p>
+            <h1 class="paper-masthead__title">Building an <em>AI-Powered</em> Local Newsroom</h1>
+            <p class="paper-masthead__dek">A comprehensive technical architecture for transforming hyperlocal journalism through artificial intelligence &mdash; covering data ingestion, vector retrieval, multi-agent orchestration, and editorial control systems.</p>
+            <div class="paper-masthead__meta">
+                <span class="badge badge--shipped">Production</span>
+                <span class="badge">March 2026</span>
+                <span class="badge">Technical Paper</span>
+                <span class="badge">~15 min read</span>
+            </div>
+            <p class="paper-masthead__byline"><strong>Alec Meeker</strong> &nbsp;&middot;&nbsp; Bushwick Daily &nbsp;&middot;&nbsp; Compiled from 321 commits over 9 months</p>
+        </div>
+    </header>
+
+    <section class="paper-toc">
+        <div class="paper-toc__inner">
+            <p class="paper-toc__head">Contents</p>
+            <ol class="paper-toc__list">
+                <li><a href="#abstract">Abstract</a></li>
+                <li><a href="#1-introduction-the-local-news-crisis-and-an-ai-response">Introduction: The Local News Crisis</a></li>
+                <li><a href="#2-system-architecture-overview">System Architecture Overview</a></li>
+                <li><a href="#3-data-infrastructure">Data Infrastructure</a></li>
+                <li><a href="#4-nycnewsscanner-intelligent-news-discovery">NYCNewsScanner</a></li>
+                <li><a href="#5-email-assistant">Email Assistant</a></li>
+                <li><a href="#6-integration-orchestration">Integration &amp; Orchestration</a></li>
+                <li><a href="#7-development-journey-lessons-learned">Development Journey</a></li>
+                <li><a href="#8-impact-results">Impact &amp; Results</a></li>
+                <li><a href="#9-ethical-considerations">Ethical Considerations</a></li>
+                <li><a href="#10-future-directions">Future Directions</a></li>
+                <li><a href="#11-conclusion">Conclusion</a></li>
+                <li><a href="#appendices">Appendices</a></li>
+            </ol>
+        </div>
+    </section>
+
+    <div class="prose-with-margin">
+        <article class="prose">
 <h2 id="abstract">Abstract</h2>
 <p>The local news crisis has left communities across America without reliable journalism coverage. While national outlets consolidate and local newsrooms collapse, AI has emerged as a potential force multiplier that could enable small newsrooms to punch above their weight. This white paper documents the nine-month development of a comprehensive AI infrastructure built by Bushwick Daily, a hyperlocal Brooklyn publication. The system encompasses 255 GB of structured data including 1.79 million scraped news articles from 75+ outlets, 218,000 processed emails with participant intelligence, and 8 million searchable semantic chunks. The architecture integrates multiple AI subsystems: an intelligent news scanner that monitors NYC media and extracts stories from email intelligence, an adaptive memory system that learns editorial preferences through human feedback, and an email assistant that triages correspondence and generates voice-accurate draft responses. The human-in-the-loop design philosophy ensures AI augments rather than replaces editorial judgment, with explicit checkpoints requiring human approval before any automated action. Development proceeded through deliberate iteration, with significant architectural pivots driven by production experience rather than theoretical assumptions. The resulting system demonstrates that sophisticated AI infrastructure is achievable for small newsrooms, potentially transforming the economics of local journalism by enabling one-person operations to maintain coverage depth traditionally requiring dedicated research staff.</p>
-<hr />
 
-<!-- Table of Contents -->
-<nav class="toc">
-    <div class="toc-header">Contents</div>
-    <ol class="toc-list">
-        <li><a href="#1-introduction-the-local-news-crisis-and-an-ai-response"><span class="toc-num">1.</span> Introduction</a></li>
-        <li><a href="#2-system-architecture-overview"><span class="toc-num">2.</span> System Architecture</a></li>
-        <li><a href="#3-data-infrastructure"><span class="toc-num">3.</span> Data Infrastructure</a></li>
-        <li><a href="#4-nycnewsscanner-intelligent-news-discovery"><span class="toc-num">4.</span> NYCNewsScanner</a></li>
-        <li><a href="#5-email-assistant"><span class="toc-num">5.</span> Email Assistant</a></li>
-        <li><a href="#6-integration-orchestration"><span class="toc-num">6.</span> Integration</a></li>
-        <li><a href="#7-development-journey-lessons-learned"><span class="toc-num">7.</span> Development Journey</a></li>
-        <li><a href="#8-impact-results"><span class="toc-num">8.</span> Impact &amp; Results</a></li>
-        <li><a href="#9-ethical-considerations"><span class="toc-num">9.</span> Ethics</a></li>
-        <li><a href="#10-future-directions"><span class="toc-num">10.</span> Future Directions</a></li>
-        <li><a href="#11-conclusion"><span class="toc-num">11.</span> Conclusion</a></li>
-        <li><a href="#appendices">Appendices</a></li>
-    </ol>
-</nav>
+<aside class="pullquote">
+    &ldquo;AI could serve as a force multiplier for small newsrooms rather than a replacement for journalists. The goal was not <em>automated content generation</em> but automated information processing.&rdquo;
+    <span class="pullquote__attribution">&mdash; Section 1.2: The Hypothesis</span>
+</aside>
 
 <h2 id="1-introduction-the-local-news-crisis-and-an-ai-response">1. Introduction: The Local News Crisis and an AI Response</h2>
 <h3 id="11-the-challenge">1.1 The Challenge</h3>
@@ -465,6 +332,12 @@ Features address documented workflow problems rather than theoretical capabiliti
 Graceful degradation over brittle perfection. When individual articles cause parsing errors, the system logs and skips rather than crashing. When API calls fail, retry logic with exponential backoff ensures eventual completion. Background processing through Celery workers ensures main operations remain responsive.</p>
 <p><strong>5. Sustainable Operations</strong>
 Infrastructure must run on available hardware within realistic budgets. The system operates on a Mac with an external SSD for PostgreSQL data, using commodity cloud APIs with cost tracking. AI operations are optimized for cost efficiency without sacrificing capability.</p>
+
+<aside class="pullquote">
+    &ldquo;Every automated action passes through human approval. The system <em>proposes</em>; humans decide.&rdquo;
+    <span class="pullquote__attribution">&mdash; Section 2.1: Design Philosophy</span>
+</aside>
+
 <h3 id="22-high-level-architecture">2.2 High-Level Architecture</h3>
 <div class="codehilite"><pre><span></span><code>                    ┌──────────────────────────────────────────────────────┐
                     │                  <span class="nv">DATA</span> <span class="nv">SOURCES</span>                         │
@@ -606,6 +479,12 @@ Infrastructure must run on available hardware within realistic budgets. The syst
 </code></pre></div>
 
 <p>The choice of <code>vector_cosine_ops</code> reflects the semantic nature of the search: cosine similarity captures meaning alignment regardless of vector magnitude, which is appropriate for text embeddings where we care about semantic direction rather than intensity.</p>
+
+<aside class="pullquote">
+    &ldquo;PostgreSQL as universal store: unifying relational data, vector embeddings, and full-text search in <em>one database</em> simplified operations dramatically.&rdquo;
+    <span class="pullquote__attribution">&mdash; Appendix: What Worked</span>
+</aside>
+
 <h3 id="32-article-ingestion-pipeline">3.2 Article Ingestion Pipeline</h3>
 <p>The article scraping system achieves 95% automation through intelligent heuristics, requiring manual configuration only for exceptional sites.</p>
 <p><strong>Article Detection Cascade:</strong></p>
@@ -912,6 +791,12 @@ Infrastructure must run on available hardware within realistic budgets. The syst
 
 <p>Memories with effectiveness below threshold become candidates for automatic pruning via the <code>ea memory prune</code> CLI command.</p>
 <h3 id="44-reflection-engine">4.4 Reflection Engine</h3>
+
+<aside class="pullquote">
+    &ldquo;Reflection without external feedback degrades performance. When you see a reflection system that works, you&rsquo;re almost always looking at a <em>verification system</em> in disguise.&rdquo;
+    <span class="pullquote__attribution">&mdash; Research notes cited in Section 4.4</span>
+</aside>
+
 <p>The reflection system was redesigned after research revealed that "reflection without external feedback degrades performance." The current architecture uses deterministic parsing BEFORE any LLM involvement:</p>
 <p><strong>The Anti-Pattern (Avoided):</strong></p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># DON&#39;T: Send raw edits directly to LLM for reflection</span>
@@ -1313,6 +1198,11 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <p>"celery workers are stable and sql alchemy has been used to implement"</p>
 </blockquote>
 <p><strong>Lesson</strong>: Production stability often requires abandoning clever solutions for boring, proven ones. SQLAlchemy's connection pooling solved problems that took days to debug with manual psycopg3 management.</p>
+
+<aside class="pullquote">
+    &ldquo;Production stability often requires abandoning clever solutions for <em>boring, proven ones</em>.&rdquo;
+    <span class="pullquote__attribution">&mdash; Section 7.1: The Learning Curve</span>
+</aside>
 <p><strong>Month 2 (August 2025): Email Intelligence Integration</strong></p>
 <p>Adding email processing to the RAG system revealed deeper architectural challenges:</p>
 <blockquote>
@@ -1441,6 +1331,11 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <li><strong>10K sender profiles</strong> with communication pattern analysis</li>
 <li><strong>453K participant records</strong> for relationship intelligence</li>
 </ul>
+<aside class="pullquote">
+    &ldquo;If AI can enable one publisher to maintain coverage depth previously requiring dedicated staff, similar systems could <em>revive local news</em> coverage in communities currently without any journalism presence.&rdquo;
+    <span class="pullquote__attribution">&mdash; Section 8: Impact &amp; Results</span>
+</aside>
+
 <h3 id="82-editorial-capabilities">8.2 Editorial Capabilities</h3>
 <p>The system enables capabilities previously unavailable to a small newsroom:</p>
 <p><strong>Comprehensive Competitive Intelligence:</strong></p>
@@ -1919,53 +1814,90 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <p><strong>Semantic Search</strong>: Finding content by meaning rather than exact keyword matching, enabled by vector embeddings</p>
 <p><strong>tsvector</strong>: PostgreSQL's full-text search data type for efficient text matching</p>
 
-<!-- Section Navigation (end of paper) -->
-<div class="section-nav" style="margin-top: 56px;">
-    <h4>Continue Reading</h4>
-    <ol>
-        <li><a href="data_warehouse_report.html">Data Warehouse &amp; Ingestion Pipeline</a></li>
-        <li><a href="news_scanner_report.html">NYCNewsScanner &amp; Publisher</a></li>
-        <li><a href="email_assistant_report.html">Email Assistant</a></li>
-    </ol>
-</div>
+<hr />
+<h3 id="continue-reading">Continue Reading</h3>
+<ol>
+    <li><a href="data_warehouse_report.html">Data Warehouse &amp; Ingestion Pipeline</a></li>
+    <li><a href="news_scanner_report.html">NYCNewsScanner &amp; Publisher</a></li>
+    <li><a href="email_assistant_report.html">Email Assistant</a></li>
+</ol>
 
 <hr />
-<p><em>White paper compiled from 321 commits over 9 months of development</em>
-<em>Data warehouse: 255 GB (1.79M articles, 218K emails, 8M+ chunks)</em>
-<em>Last updated: March 2026</em></p>
+<p><em>White paper compiled from 321 commits over 9 months of development.</em><br>
+<em>Data warehouse: 255 GB (1.79M articles, 218K emails, 8M+ chunks).</em><br>
+<em>Last updated: March 2026.</em></p>
 <hr />
-<p><em>For questions about this system, potential collaboration, or career opportunities, contact:</em>
-<em>Alec Meeker</em>
-<em>alec@bushwickdaily.com</em>
-<em>LinkedIn: linkedin.com/in/alecmeeker</em>
-<em>GitHub: alecmeeeker.github.io</em></p>
-        </div>
+<p><em>For questions about this system, potential collaboration, or career opportunities, contact:</em><br>
+<em>Alec Meeker &mdash; alec@bushwickdaily.com</em><br>
+<em>LinkedIn: linkedin.com/in/alecmeeker &middot; GitHub: alecmeeeker.github.io</em></p>
+        </article>
+        <aside class="margin-notes">
+            <div class="margin-note" style="margin-top: 2em;">
+                <strong>The Premise</strong>
+                Nine months of engineering for one hyperlocal newsroom. The local news crisis, met with infrastructure rather than platitudes.
+            </div>
+            <div class="margin-note" style="margin-top: 14em;">
+                <strong>Section 01 &middot; Why</strong>
+                2,500+ newspapers have closed since 2004. Bushwick Daily processes 200+ emails and monitors 75+ NYC outlets daily &mdash; impossible without AI as a force multiplier.
+            </div>
+            <div class="margin-note" style="margin-top: 18em;">
+                <strong>Section 02 &middot; Five Principles</strong>
+                Human-in-the-loop by default. Editorial integrity as architecture. Practical over impressive. Production reliability. Sustainable operations.
+            </div>
+            <div class="margin-note" style="margin-top: 26em;">
+                <strong>Section 03 &middot; Data</strong>
+                255 GB on PostgreSQL 17 + pgvector. 1.79M articles, 218K emails, 8M+ semantic chunks. HNSW indexes return sub-100ms similarity queries. See the <a href="data_warehouse_report.html">Data Warehouse Report</a>.
+            </div>
+            <div class="margin-note" style="margin-top: 22em;">
+                <strong>Section 04 &middot; Scanner</strong>
+                Multi-agent architecture over the Claude Agent SDK. 4-level memory hierarchy. Deterministic reflection gates prevent degradation. Full detail in the <a href="news_scanner_report.html">News Scanner Report</a>.
+            </div>
+            <div class="margin-note" style="margin-top: 22em;">
+                <strong>Key concept</strong>
+                The "reflection gate" prevents AI systems from learning bad patterns from noisy feedback. Deterministic filters run before any LLM extraction &mdash; the verification system in disguise.
+            </div>
+            <div class="margin-note" style="margin-top: 16em;">
+                <strong>Section 05 &middot; Assistant</strong>
+                Email triage, context-aware drafting, skill-based task orchestration. Voice matched through few-shot retrieval from publisher history. See the <a href="email_assistant_report.html">Email Assistant Report</a>.
+            </div>
+            <div class="margin-note" style="margin-top: 24em;">
+                <strong>Section 07 &middot; Hard Lessons</strong>
+                Connection pool exhaustion in week one. The JOIN bug that returned zero emails. Subprocess-per-email before batching. The reflection redesign. Boring solutions beat clever ones.
+            </div>
+            <div class="margin-note" style="margin-top: 18em;">
+                <strong>Section 08 &middot; Results</strong>
+                80&ndash;90% reduction in time spent on news monitoring, email triage, research, and drafting. Cost: ~$0.15&ndash;0.25 per comprehensive research report.
+            </div>
+            <div class="margin-note" style="margin-top: 16em;">
+                <strong>Closing note</strong>
+                Published March 2026. If AI can let one publisher sustain the coverage depth once requiring a full staff, the economics of local journalism change.
+            </div>
+        </aside>
     </div>
 
-    <!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
+    <footer class="footer">
+        <div class="wrap">
+            <div class="footer__grid">
+                <div class="footer__colophon">
+                    <strong>Colophon.</strong> Set in Fraunces and JetBrains Mono. Hand-coded HTML and CSS, no build system. Part of the <a class="link" href="index.html">AI-Powered Local Newsroom</a> portfolio. White paper compiled March 2026.
+                </div>
+                <div class="footer__right">
+                    <div>&copy; 2026 Alec Meeker</div>
+                    <div style="margin-top: 4px;"><a class="link" href="index.html">&larr; Back to portfolio</a></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
 
-    <script>
-    (function() {
-        const btn = document.getElementById('backToTop');
-        const threshold = 400;
+<script>
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        bar.style.width = pct + '%';
+    }, { passive: true });
+</script>
 
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > threshold) {
-                btn.classList.add('visible');
-            } else {
-                btn.classList.remove('visible');
-            }
-        }, { passive: true });
-
-        btn.addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    })();
-    </script>
 </body>
 </html>
