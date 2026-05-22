@@ -1,890 +1,167 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-TZJB1RJXV6');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alec Meeker — AI Systems Engineer · The AI-Powered Local Newsroom</title>
-    <meta name="description" content="Technical portfolio of Alec Meeker. A nine-month chronicle of building a production AI platform for local news: white paper, subsystem reports, and open-source reference implementations.">
-    <meta name="author" content="Alec Meeker">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alec Meeker</title>
+<meta name="description" content="Alec Meeker, applied-AI builder, finance professional, and media operator. Brooklyn, NY. Production AI systems for local news.">
+<link rel="canonical" href="https://alecmeeker.com/">
+<meta property="og:title" content="Alec Meeker">
+<meta property="og:description" content="Applied-AI builder, finance professional, and media operator. Brooklyn, NY.">
+<meta property="og:url" content="https://alecmeeker.com/">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1613; --surface:#221d18; --surface-2:#2a241d;
+    --text:#e9e0d0; --dim:#b8ab95; --faint:#8a7e6b;
+    --accent:#e07650;
+    --rule:rgba(233,224,208,0.14);
+    --serif:"Fraunces", Georgia, serif;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  *{box-sizing:border-box}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--serif); font-size:20px; line-height:1.55;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  ::selection{ background:var(--accent); color:var(--bg); }
+  a{ color:inherit; }
+  .frame{ max-width:760px; margin:0 auto; padding:72px 28px 104px; }
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Alec Meeker Portfolio">
-    <meta property="og:title" content="Alec Meeker — AI Systems Engineer · The AI-Powered Local Newsroom">
-    <meta property="og:description" content="A nine-month chronicle of building a production AI platform for local news: white paper, subsystem reports, and open-source reference implementations.">
-    <meta property="og:url" content="https://alecmeeker.com/">
-    <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
-    <meta property="og:locale" content="en_US">
+  /* header */
+  .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:72px; }
+  .wordmark{ display:inline-block; font-family:var(--mono); font-size:13px; font-weight:500;
+    letter-spacing:0.16em; text-transform:uppercase; color:var(--text); text-decoration:none;
+    padding-bottom:8px; border-bottom:2px solid var(--accent); }
+  .top-nav{ display:flex; gap:18px; padding-top:2px; }
+  .top-nav a{ font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--dim); text-decoration:none; transition:color .15s ease; }
+  .top-nav a:hover{ color:var(--accent); }
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Alec Meeker — AI Systems Engineer · The AI-Powered Local Newsroom">
-    <meta name="twitter:description" content="A nine-month chronicle of building a production AI platform for local news.">
-    <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+  /* intro */
+  .intro p{ margin:0 0 20px; max-width:38ch; font-size:23px; line-height:1.5; color:var(--text); }
+  .intro a{ color:var(--text); text-decoration:none; border-bottom:1px solid var(--accent);
+    padding-bottom:1px; transition:color .15s ease; }
+  .intro a:hover{ color:var(--accent); }
+  .spec{ font-family:var(--mono) !important; font-size:12px !important; line-height:1.7; letter-spacing:0.01em;
+    color:var(--faint); max-width:62ch; }
+  .rule{ width:120px; height:0; border:0; border-top:1px solid var(--rule); margin:48px 0 0; }
 
-    <link rel="canonical" href="https://alecmeeker.com/">
+  /* feed */
+  .feed{ margin-top:8px; }
+  .entry{ margin:64px 0 0; }
+  .entry-date{ display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:12px;
+    letter-spacing:0.06em; color:var(--faint); }
+  .entry-date .bar{ display:inline-block; width:2px; height:15px; background:var(--accent); }
+  .entry-title{ display:inline-block; font-family:var(--serif); font-weight:600;
+    font-size:clamp(34px,6vw,52px); line-height:1.0; letter-spacing:-0.02em; color:var(--text);
+    text-decoration:none; margin:16px 0 12px; font-variation-settings:"opsz" 80; }
+  .entry-title::first-letter{ color:var(--accent); }
+  .entry-title:hover{ color:var(--accent); }
+  .entry-title:hover::first-letter{ color:var(--accent); }
+  .entry-desc{ margin:0 0 22px; max-width:54ch; font-size:19px; line-height:1.5; color:var(--dim); }
+  .entry-preview{ display:block; }
+  .entry-preview img{ width:100%; display:block; border:1px solid var(--rule);
+    transition:border-color .15s ease; }
+  .entry-preview:hover img{ border-color:var(--accent); }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  /* footer */
+  .foot{ margin-top:96px; padding-top:20px; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:11px; letter-spacing:0.05em; color:var(--faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
 
-    <link rel="stylesheet" href="assets/site.css">
-
-    <style>
-    /* Homepage-specific overrides */
-    .home-masthead {
-        padding-top: calc(var(--nav-h) + 72px);
-        padding-bottom: clamp(56px, 8vw, 104px);
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .home-masthead__title {
-        font-size: clamp(3rem, 9.5vw, 9rem);
-        line-height: 0.9;
-        letter-spacing: -0.04em;
-        font-variation-settings: "opsz" 144, "SOFT" 20;
-    }
-
-    .home-masthead__title em {
-        font-style: italic;
-        font-weight: 400;
-        color: var(--accent);
-    }
-
-    .theory-card .card__title { font-size: clamp(2.25rem, 4vw, 3.5rem); }
-
-    .chronicle {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 48px;
-        align-items: center;
-        padding: clamp(40px, 5vw, 64px) 0;
-        border-top: 1px solid var(--rule-strong);
-        border-bottom: 1px solid var(--rule-strong);
-    }
-
-    @media (max-width: 768px) {
-        .chronicle { grid-template-columns: 1fr; gap: 24px; }
-    }
-
-    .chronicle__strip {
-        display: flex;
-        gap: 4px;
-        align-items: flex-end;
-        height: 48px;
-    }
-
-    .chronicle__bar {
-        width: 18px;
-        background: var(--rule-strong);
-        position: relative;
-    }
-
-    .chronicle__bar[data-intensity="4"] { background: var(--accent); }
-    .chronicle__bar[data-intensity="3"] { background: var(--accent); opacity: 0.75; }
-    .chronicle__bar[data-intensity="2"] { background: var(--ink-2); opacity: 0.55; }
-    .chronicle__bar[data-intensity="1"] { background: var(--ink-2); opacity: 0.35; }
-
-    .chronicle__label {
-        display: block;
-        font-family: var(--font-mono);
-        font-size: 0.625rem;
-        color: var(--ink-mute);
-        letter-spacing: 0.1em;
-        text-align: center;
-        margin-top: 8px;
-        text-transform: uppercase;
-    }
-
-    .chronicle__month {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .chronicle__summary h3 {
-        font-family: var(--font-display);
-        font-size: clamp(1.5rem, 2.6vw, 2rem);
-        font-weight: 500;
-        line-height: 1.1;
-        letter-spacing: -0.015em;
-        margin-bottom: 8px;
-    }
-
-    .chronicle__summary p {
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--ink-mute);
-        margin-bottom: 16px;
-    }
-
-    .about-grid {
-        display: grid;
-        grid-template-columns: 300px minmax(0, 1fr);
-        gap: clamp(32px, 5vw, 64px);
-        align-items: start;
-    }
-
-    @media (max-width: 900px) {
-        .about-grid { grid-template-columns: 1fr; }
-        .about-grid__photo { max-width: 280px; }
-    }
-
-    .about-grid__photo {
-        width: 100%;
-        aspect-ratio: 3/4;
-        object-fit: cover;
-        object-position: center 15%;
-        border: 1px solid var(--rule-strong);
-        filter: grayscale(0.15) contrast(1.02);
-    }
-
-    .about-grid__bio p {
-        font-size: var(--fs-body);
-        line-height: 1.6;
-        color: var(--ink-2);
-        margin-bottom: 16px;
-    }
-
-    .about-grid__bio p:first-child::first-letter {
-        font-family: var(--font-display);
-        font-size: 4.5em;
-        font-weight: 500;
-        float: left;
-        line-height: 0.85;
-        padding: 4px 12px 0 0;
-        color: var(--ink);
-        font-variation-settings: "opsz" 144, "SOFT" 30;
-    }
-
-    .timeline-item {
-        display: grid;
-        grid-template-columns: 180px minmax(0, 1fr);
-        gap: 40px;
-        padding: 32px 0;
-        border-top: 1px solid var(--rule);
-    }
-
-    .timeline-item:last-child { border-bottom: 1px solid var(--rule); }
-
-    @media (max-width: 768px) {
-        .timeline-item { grid-template-columns: 1fr; gap: 8px; }
-    }
-
-    .timeline-date {
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta-s);
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--ink-mute);
-        padding-top: 6px;
-    }
-
-    .timeline-body h3 {
-        font-family: var(--font-display);
-        font-size: clamp(1.35rem, 2vw, 1.625rem);
-        font-weight: 500;
-        line-height: 1.2;
-        letter-spacing: -0.015em;
-        color: var(--ink);
-        margin-bottom: 4px;
-    }
-
-    .timeline-body .role {
-        font-family: var(--font-body);
-        font-style: italic;
-        font-size: var(--fs-body-s);
-        color: var(--ink-mute);
-        margin-bottom: 12px;
-    }
-
-    .timeline-body p {
-        font-size: var(--fs-body-s);
-        color: var(--ink-2);
-        line-height: 1.6;
-    }
-
-    .credentials {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: clamp(32px, 5vw, 64px);
-        margin-top: 64px;
-    }
-
-    @media (max-width: 640px) {
-        .credentials { grid-template-columns: 1fr; }
-    }
-
-    .credentials h3 {
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta);
-        font-weight: 600;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--ink);
-        padding-bottom: 12px;
-        margin-bottom: 16px;
-        border-bottom: 1px solid var(--rule-strong);
-    }
-
-    .credentials p, .credentials li {
-        font-size: var(--fs-body-s);
-        line-height: 1.6;
-        color: var(--ink-2);
-    }
-
-    .credentials ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .credentials li {
-        padding: 8px 0;
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .credentials li:last-child { border-bottom: 0; }
-
-    .contact-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 16px;
-        margin-top: 64px;
-    }
-
-    .contact-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 18px 24px;
-        border: 1px solid var(--rule);
-        background: var(--paper);
-        transition: all 0.15s ease;
-    }
-
-    .contact-item:hover {
-        border-color: var(--ink);
-        background: var(--paper-2);
-    }
-
-    .contact-item__label {
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta-s);
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--ink-mute);
-        margin-bottom: 2px;
-    }
-
-    .contact-item__val {
-        font-family: var(--font-display);
-        font-size: 1.1rem;
-        font-weight: 500;
-        letter-spacing: -0.01em;
-        color: var(--ink);
-    }
-
-    .contact-item__arrow {
-        font-family: var(--font-mono);
-        color: var(--ink-mute);
-        font-size: 1.1rem;
-        transition: transform 0.15s ease, color 0.15s ease;
-    }
-
-    .contact-item:hover .contact-item__arrow {
-        color: var(--accent);
-        transform: translateX(4px);
-    }
-
-    .resume-cta-wrap {
-        display: flex;
-        justify-content: center;
-        padding-top: 56px;
-    }
-    </style>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Alec Meeker",
-      "url": "https://alecmeeker.com/",
-      "image": "https://alecmeeker.com/photo.jpg",
-      "jobTitle": "AI Systems Engineer",
-      "worksFor": { "@type": "Organization", "name": "Bushwick Daily" },
-      "address": { "@type": "PostalAddress", "addressLocality": "Brooklyn", "addressRegion": "NY" },
-      "sameAs": [
-        "https://github.com/alecmeeeker",
-        "https://www.linkedin.com/in/alec-meeker",
-        "https://muckrack.com/alec-meeker"
-      ],
-      "knowsAbout": ["Artificial Intelligence","Data Engineering","PostgreSQL","RAG Systems","Multi-Agent Systems","Python","Machine Learning"]
-    }
-    </script>
+  @media (max-width:560px){
+    body{ font-size:18px; }
+    .frame{ padding:48px 22px 72px; }
+    .top{ flex-direction:column; gap:18px; margin-bottom:48px; }
+    .intro p{ font-size:20px; }
+  }
+</style>
 </head>
 <body>
-<header class="term-header">
-    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">USER: AJM@NYC-01</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
-    <nav class="term-header__keys">
-        <a class="keycap" href="#theory"><strong>F1</strong>THEORY</a>
-        <a class="keycap" href="#system"><strong>F2</strong>SYSTEM</a>
-        <a class="keycap" href="#code"><strong>F3</strong>CODE</a>
-        <a class="keycap" href="#chronicle"><strong>F4</strong>CHRONICLE</a>
-        <a class="keycap" href="#about"><strong>F5</strong>ABOUT</a>
-        <a class="keycap" href="Alec_Meeker_Resume.pdf"><strong>F6</strong>RESUME</a>
+<main class="frame">
+
+  <header class="top">
+    <a class="wordmark" href="/">Alec Meeker</a>
+    <nav class="top-nav">
+      <a href="https://github.com/alecmeeeker">GitHub</a>
+      <a href="Alec_Meeker_Resume.pdf">Résumé</a>
+      <a href="https://linkedin.com/in/alecmeeker">LinkedIn</a>
     </nav>
-</header>
-<div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <!-- Duplicate for seamless loop -->
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-    </div>
-</div>
+  </header>
 
-<nav class="nav" id="nav">
-    <div class="nav__inner">
-        <a class="nav__brand" href="#top"><strong>BWK</strong>&nbsp;/&nbsp;A.J.MEEKER</a>
-        <button class="nav__toggle" onclick="document.getElementById('nav-links').classList.toggle('is-open')" aria-label="Menu">MENU</button>
-        <ul class="nav__links" id="nav-links">
-            <li><a href="#theory">Theory</a></li>
-            <li><a href="#system">System</a></li>
-            <li><a href="#code">Code</a></li>
-            <li><a href="#chronicle">Chronicle</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="Alec_Meeker_Resume.pdf" target="_blank" rel="noopener">Résumé</a></li>
-        </ul>
-    </div>
-</nav>
+  <section class="intro">
+    <p>NYC-based applied-AI builder, finance professional, and media operator.</p>
+    <p>I build production AI systems for local news, in daily use at <a href="https://bushwickdaily.com">Bushwick Daily</a>. Eight years running that newsroom; before it, institutional finance and a CFA. Code on <a href="https://github.com/alecmeeeker">GitHub</a>, and you can <a href="mailto:alec@bushwickdaily.com">email me</a>.</p>
+    <p class="spec">Current platform: 1.79M articles from 75+ NYC outlets in a 255 GB PostgreSQL + pgvector warehouse, 8.1M embedded chunks, sub-100 ms retrieval.</p>
+  </section>
 
-<main id="top">
+  <hr class="rule">
 
-    <header class="home-masthead">
-        <div class="wrap">
-            <p class="kicker reveal reveal--1">MEEKER TERMINAL v1.0 · AJM@NYC-01</p>
+  <section class="feed">
 
-            <div class="masthead__grid" style="margin-top: 32px;">
-                <div>
-                    <h1 class="home-masthead__title display-xl reveal reveal--2">A.J. MEEKER<span class="cursor"></span></h1>
-                    <p class="standfirst reveal reveal--3" style="margin-top: 32px; max-width: 56ch;">NYC · AI BUILDER · CFA L1 · CEO · Available for AI Lab, Startup, or VC roles · Q2 2026</p>
-                </div>
+    <article class="entry">
+      <div class="entry-date">2026-05-11 <span class="bar"></span></div>
+      <a class="entry-title" href="https://alecmeeeker.github.io/local-ai-newsroom-ledger/">Prose Is Dead. Local News Isn&rsquo;t.</a>
+      <p class="entry-desc">A position paper on the future infrastructure of local news, with the open-source platform behind it.</p>
+      <a class="entry-preview" href="https://alecmeeeker.github.io/local-ai-newsroom-ledger/"><img src="assets/previews/essay.png" alt="Prose Is Dead. Local News Isn't., essay"></a>
+    </article>
 
-                <aside class="callout reveal reveal--4" aria-label="Headline statistic">
-                    <span class="callout__num">1.79M</span>
-                    <span class="callout__caption">articles ingested across 75+ NYC outlets</span>
-                    <span class="callout__sub">· 321 commits · 9 months · solo build</span>
-                </aside>
-            </div>
+    <article class="entry">
+      <div class="entry-date">2026-03-01 <span class="bar"></span></div>
+      <a class="entry-title" href="white_paper.html">The AI-Powered Local Newsroom</a>
+      <p class="entry-desc">White paper: how a hyperlocal newsroom runs on a multi-agent retrieval platform, with three subsystem deep-dives.</p>
+      <a class="entry-preview" href="white_paper.html"><img src="assets/previews/white_paper.png" alt="The AI-Powered Local Newsroom, white paper"></a>
+    </article>
 
-            <div class="statrow reveal reveal--5" style="margin-top: 56px;">
-                <div class="statrow__item"><span class="statrow__val">255&nbsp;GB</span><span class="statrow__label">Data warehouse</span></div>
-                <div class="statrow__item"><span class="statrow__val">8.14M</span><span class="statrow__label">Vector chunks</span></div>
-                <div class="statrow__item"><span class="statrow__val">&lt;&nbsp;100ms</span><span class="statrow__label">Query p95</span></div>
-                <div class="statrow__item"><span class="statrow__val">75+</span><span class="statrow__label">Outlets</span></div>
-                <div class="statrow__item"><span class="statrow__val">321</span><span class="statrow__label">Commits</span></div>
-            </div>
+    <article class="entry">
+      <div class="entry-date">2026-03-01 <span class="bar"></span></div>
+      <a class="entry-title" href="data_warehouse_report.html">Data Warehouse &amp; Ingestion Pipeline</a>
+      <p class="entry-desc">1.79M articles in a 255 GB PostgreSQL + pgvector warehouse, with HNSW indexing and sub-100 ms semantic search.</p>
+      <a class="entry-preview" href="data_warehouse_report.html"><img src="assets/previews/data_warehouse.png" alt="Data Warehouse & Ingestion Pipeline"></a>
+    </article>
 
-            <div class="masthead__footer reveal reveal--6">
-                <p class="dateline">
-                    <span>Updated&nbsp;April&nbsp;2026</span>
-                    <span>Filed from Brooklyn</span>
-                    <span>Issue 01</span>
-                </p>
-                <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <a class="link-cta link-cta--accent" href="#theory">
-                        <span>Start with the theory</span>
-                        <span class="link-cta__arrow">→</span>
-                    </a>
-                    <a class="link-cta" href="Alec_Meeker_Resume.pdf" target="_blank" rel="noopener">
-                        <span>Résumé (PDF)</span>
-                        <span class="link-cta__arrow">↓</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <article class="entry">
+      <div class="entry-date">2026-03-01 <span class="bar"></span></div>
+      <a class="entry-title" href="news_scanner_report.html">NYCNewsScanner &amp; Publisher</a>
+      <p class="entry-desc">Multi-agent news discovery with human-in-the-loop review and WordPress publishing.</p>
+      <a class="entry-preview" href="news_scanner_report.html"><img src="assets/previews/news_scanner.png" alt="NYCNewsScanner &amp; Publisher"></a>
+    </article>
 
-    <!-- TRIPLE THREAT -->
-    <section class="section--bordered" id="edge">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <p class="kicker">[§ 00 · THE EDGE]</p>
-                    <h2 class="section-head__title">Triple Threat</h2>
-                </div>
-                <p class="section-head__meta">AI BUILDER · FINANCE PRO · OPERATOR</p>
-            </div>
+    <article class="entry">
+      <div class="entry-date">2026-03-01 <span class="bar"></span></div>
+      <a class="entry-title" href="email_assistant_report.html">Email Assistant</a>
+      <p class="entry-desc">LLM triage and Playwright automation over 200+ inbound emails a day.</p>
+      <a class="entry-preview" href="email_assistant_report.html"><img src="assets/previews/email_assistant.png" alt="Email Assistant"></a>
+    </article>
 
-            <p class="standfirst" style="max-width: 68ch; margin-bottom: 24px; color: var(--term-fg-dim);">Most candidates have one angle. I have three, and they reinforce each other. Production AI infrastructure, institutional finance credentials, and eight years operating a business with real P&amp;L outcomes.</p>
+    <article class="entry">
+      <div class="entry-date">2026-04-17 <span class="bar"></span></div>
+      <a class="entry-title" href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a>
+      <p class="entry-desc">Open-source seven-stage email pipeline: PostgreSQL, pgvector, multi-hash dedup, CPU-first classification.</p>
+      <a class="entry-preview" href="email_warehouse_oss.html"><img src="assets/previews/email_warehouse.png" alt="Email Ingestion Data Warehouse"></a>
+    </article>
 
-            <div class="triple-threat">
-                <div class="tt-col">
-                    <span class="tt-col__code">[01] AI BUILDER</span>
-                    <h3 class="tt-col__title">Production AI Systems</h3>
-                    <p class="tt-col__dek">Multi-agent orchestration, RAG, adaptive memory, and a 255GB data warehouse — 321 commits over 9 months. Built from scratch, runs daily.</p>
-                    <ul class="tt-metrics">
-                        <li class="tt-metric"><span class="tt-metric__label">Articles</span><span class="tt-metric__val">1,790,000</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Vector chunks</span><span class="tt-metric__val">8,140,000</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Warehouse</span><span class="tt-metric__val">255 GB</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Avg query</span><span class="tt-metric__val tt-metric__val--pos">27 ms</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Commits / 9 mo</span><span class="tt-metric__val">321</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Stack</span><span class="tt-metric__val tt-metric__val--hi">Claude · LangGraph · pgvector</span></li>
-                    </ul>
-                    <div class="tt-sparkline" aria-hidden="true">
-                        <span class="tt-sparkline__bar" style="height: 18%"></span>
-                        <span class="tt-sparkline__bar" style="height: 28%"></span>
-                        <span class="tt-sparkline__bar" style="height: 34%"></span>
-                        <span class="tt-sparkline__bar" style="height: 52%"></span>
-                        <span class="tt-sparkline__bar" style="height: 68%"></span>
-                        <span class="tt-sparkline__bar" style="height: 82%"></span>
-                        <span class="tt-sparkline__bar" style="height: 96%"></span>
-                        <span class="tt-sparkline__bar" style="height: 88%"></span>
-                        <span class="tt-sparkline__bar" style="height: 78%"></span>
-                    </div>
-                </div>
+    <article class="entry">
+      <div class="entry-date">2026-04-17 <span class="bar"></span></div>
+      <a class="entry-title" href="multiverse_platform_oss.html">Local News Multiverse Agent Platform</a>
+      <p class="entry-desc">Open-source multi-agent platform: 30+ tables, five parallel research paths, fully local.</p>
+      <a class="entry-preview" href="multiverse_platform_oss.html"><img src="assets/previews/multiverse.png" alt="Local News Multiverse Agent Platform"></a>
+    </article>
 
-                <div class="tt-col">
-                    <span class="tt-col__code">[02] FINANCE PRO</span>
-                    <h3 class="tt-col__title">Institutional Investor</h3>
-                    <p class="tt-col__dek">Two years managing a $200M portfolio at Erie Insurance. CFA Level I in the top quartile. Led due diligence on $100M+ in PE, mezzanine, and real estate fund commitments.</p>
-                    <ul class="tt-metrics">
-                        <li class="tt-metric"><span class="tt-metric__label">CFA Level</span><span class="tt-metric__val tt-metric__val--hi">L1 · top quartile</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Portfolio</span><span class="tt-metric__val">$200M</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Fund diligence</span><span class="tt-metric__val">$100M+</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Reallocation</span><span class="tt-metric__val">$50M</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Outperformance</span><span class="tt-metric__val tt-metric__val--pos">+210 bps</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Models</span><span class="tt-metric__val tt-metric__val--hi">DCF · Gordon Growth · Credit</span></li>
-                    </ul>
-                    <div class="tt-sparkline" aria-hidden="true">
-                        <span class="tt-sparkline__bar" style="height: 42%"></span>
-                        <span class="tt-sparkline__bar" style="height: 55%"></span>
-                        <span class="tt-sparkline__bar" style="height: 48%"></span>
-                        <span class="tt-sparkline__bar" style="height: 68%"></span>
-                        <span class="tt-sparkline__bar" style="height: 72%"></span>
-                        <span class="tt-sparkline__bar" style="height: 88%"></span>
-                        <span class="tt-sparkline__bar" style="height: 92%"></span>
-                        <span class="tt-sparkline__bar" style="height: 86%"></span>
-                        <span class="tt-sparkline__bar" style="height: 94%"></span>
-                    </div>
-                </div>
+  </section>
 
-                <div class="tt-col">
-                    <span class="tt-col__code">[03] OPERATOR</span>
-                    <h3 class="tt-col__title">CEO · 8 Years</h3>
-                    <p class="tt-col__dek">Ran Bushwick Daily for eight years. Executed two acquisitions using DCF and Gordon Growth modeling. Managed P&amp;L, hired 30+, secured $150K+ in government contracts.</p>
-                    <ul class="tt-metrics">
-                        <li class="tt-metric"><span class="tt-metric__label">Years as CEO</span><span class="tt-metric__val">8</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Acquisitions</span><span class="tt-metric__val">2 · $160K</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Gov contracts</span><span class="tt-metric__val">$150K+</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Hires</span><span class="tt-metric__val">30+</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Revenue YoY</span><span class="tt-metric__val tt-metric__val--pos">+25%</span></li>
-                        <li class="tt-metric"><span class="tt-metric__label">Largest event</span><span class="tt-metric__val tt-metric__val--hi">600-person production</span></li>
-                    </ul>
-                    <div class="tt-sparkline" aria-hidden="true">
-                        <span class="tt-sparkline__bar" style="height: 32%"></span>
-                        <span class="tt-sparkline__bar" style="height: 44%"></span>
-                        <span class="tt-sparkline__bar" style="height: 56%"></span>
-                        <span class="tt-sparkline__bar" style="height: 62%"></span>
-                        <span class="tt-sparkline__bar" style="height: 74%"></span>
-                        <span class="tt-sparkline__bar" style="height: 80%"></span>
-                        <span class="tt-sparkline__bar" style="height: 88%"></span>
-                        <span class="tt-sparkline__bar" style="height: 94%"></span>
-                        <span class="tt-sparkline__bar" style="height: 98%"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- THEORY -->
-    <section id="theory">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <p class="kicker">[§ 01 · THEORY]</p>
-                    <h2 class="section-head__title">I. The Theory</h2>
-                </div>
-                <p class="section-head__meta">White paper · 12 min read</p>
-            </div>
-
-            <a class="card card--feature theory-card" href="white_paper.html">
-                <div class="card__kicker">
-                    <span>Published March 2026</span>
-                    <span class="badge">White Paper</span>
-                    <span class="badge badge--live">Canonical Document</span>
-                </div>
-                <h3 class="card__title">The AI&#8209;Powered Local Newsroom</h3>
-                <p class="card__dek">The design thesis behind the whole platform: how a single operator can run a production-grade AI system for hyperlocal journalism using multi-agent orchestration, adaptive memory, and feedback-driven learning — without a cloud bill or a team of ten.</p>
-                <div class="card__meta">
-                    <span>~ 12 min read</span>
-                    <span>8,400 words</span>
-                    <span>3 subsystem deep-dives →</span>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- SYSTEM -->
-    <section id="system">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <p class="kicker">[§ 02 · SYSTEM]</p>
-                    <h2 class="section-head__title">II. The System</h2>
-                </div>
-                <p class="section-head__meta">3 subsystems · Deep-dive reports</p>
-            </div>
-
-            <p class="standfirst" style="max-width: 60ch; margin-bottom: 48px;">Three reports. Each traces a single subsystem from architectural decision to production behavior — the moving parts that, together, make the thesis run.</p>
-
-            <div class="card-grid">
-                <a class="card" href="data_warehouse_report.html">
-                    <div class="card__kicker">
-                        <span>01</span>
-                        <span class="badge badge--shipped">Production</span>
-                    </div>
-                    <h3 class="card__title">Data Warehouse &amp; Ingestion Pipeline</h3>
-                    <p class="card__dek">PostgreSQL 17 + pgvector with HNSW indexing. Scrapy + Celery orchestration, atomic deduplication, 255&nbsp;GB on a single SSD, sub-100ms semantic search over 8.14M chunks.</p>
-                    <div class="tag-row">
-                        <span class="tag">PostgreSQL</span>
-                        <span class="tag">pgvector</span>
-                        <span class="tag">Scrapy</span>
-                        <span class="tag">Celery</span>
-                    </div>
-                </a>
-
-                <a class="card" href="news_scanner_report.html">
-                    <div class="card__kicker">
-                        <span>02</span>
-                        <span class="badge badge--shipped">Production</span>
-                    </div>
-                    <h3 class="card__title">NYCNewsScanner &amp; Publisher</h3>
-                    <p class="card__dek">Multi-agent news discovery with the Claude Agent SDK. Four-level memory hierarchy, human-in-the-loop review, direct WordPress publishing with inline image generation.</p>
-                    <div class="tag-row">
-                        <span class="tag">Claude SDK</span>
-                        <span class="tag">LangGraph</span>
-                        <span class="tag">FastAPI</span>
-                        <span class="tag">React</span>
-                    </div>
-                </a>
-
-                <a class="card" href="email_assistant_report.html">
-                    <div class="card__kicker">
-                        <span>03</span>
-                        <span class="badge badge--shipped">Production</span>
-                    </div>
-                    <h3 class="card__title">Email Assistant</h3>
-                    <p class="card__dek">200+ emails triaged daily. LLM classification, participant intelligence graph, Playwright RPA for response automation, and end-to-end vector search over the full inbox archive.</p>
-                    <div class="tag-row">
-                        <span class="tag">Python</span>
-                        <span class="tag">Gemini</span>
-                        <span class="tag">Playwright</span>
-                        <span class="tag">Vector DB</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- CODE -->
-    <section id="code">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <p class="kicker">[§ 03 · CODE]</p>
-                    <h2 class="section-head__title">III. The Code</h2>
-                </div>
-                <p class="section-head__meta">Open-source reference implementations</p>
-            </div>
-
-            <p class="standfirst" style="max-width: 60ch; margin-bottom: 48px;">The pieces anyone can run. Two production-grade repositories extracted from the platform, fully documented and deployable on a single machine.</p>
-
-            <div class="card-grid card-grid--2">
-                <a class="card" href="email_warehouse_oss.html">
-                    <div class="card__kicker">
-                        <span>Repository</span>
-                        <span class="badge badge--oss">Open Source</span>
-                    </div>
-                    <h3 class="card__title">Email Ingestion Data Warehouse</h3>
-                    <p class="card__dek">Seven-stage pipeline with multi-hash deduplication, semantic chunking, vector embeddings, and LLM classification. CPU-first ML design for local deployment with 30–50% LLM cost savings vs. naive classification.</p>
-                    <div class="card__meta">
-                        <span>Python · ~2,500 LOC</span>
-                        <span>MIT License</span>
-                        <span>GitHub →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="multiverse_platform_oss.html">
-                    <div class="card__kicker">
-                        <span>Repository</span>
-                        <span class="badge badge--oss">Open Source</span>
-                    </div>
-                    <h3 class="card__title">Local News Multiverse Agent Platform</h3>
-                    <p class="card__dek">Self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents, and complete version control without cloud dependencies.</p>
-                    <div class="card__meta">
-                        <span>30+ tables · 5 parallel paths</span>
-                        <span>100% local</span>
-                        <span>GitHub →</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- CHRONICLE -->
-    <section id="chronicle">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <p class="kicker">[§ 04 · CHRONICLE]</p>
-                    <h2 class="section-head__title">IV. The Chronicle</h2>
-                </div>
-                <p class="section-head__meta">Day-by-day build log</p>
-            </div>
-
-            <a class="chronicle" href="dev_blog.html" style="text-decoration:none; color:inherit;">
-                <div class="chronicle__summary">
-                    <h3>321 commits · 9 months · solo build</h3>
-                    <p>Jul 2025 → Mar 2026 · every batch</p>
-                    <span class="link-cta">
-                        <span>Read the dev blog</span>
-                        <span class="link-cta__arrow">→</span>
-                    </span>
-                </div>
-                <div class="chronicle__strip" aria-hidden="true" title="Monthly commit density">
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="1" style="height: 14%;"></div><span class="chronicle__label">JUL</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="2" style="height: 32%;"></div><span class="chronicle__label">AUG</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="3" style="height: 58%;"></div><span class="chronicle__label">SEP</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="4" style="height: 92%;"></div><span class="chronicle__label">OCT</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="3" style="height: 68%;"></div><span class="chronicle__label">NOV</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="4" style="height: 100%;"></div><span class="chronicle__label">DEC</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="4" style="height: 88%;"></div><span class="chronicle__label">JAN</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="3" style="height: 62%;"></div><span class="chronicle__label">FEB</span></div>
-                    <div class="chronicle__month"><div class="chronicle__bar" data-intensity="2" style="height: 40%;"></div><span class="chronicle__label">MAR</span></div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section--bordered">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <p class="kicker">[§ 05 · ABOUT]</p>
-                    <h2 class="section-head__title">V. About</h2>
-                </div>
-                <p class="section-head__meta">Background &amp; contact</p>
-            </div>
-
-            <div class="about-grid">
-                <img class="about-grid__photo" alt="Alec Meeker portrait" src="photo.jpg">
-                <div class="about-grid__bio">
-                    <p>Builder and operator with eight-plus years delivering outcomes across technology, finance, and media. Former investment analyst at Erie Insurance managing a $200M portfolio across energy and mining sectors, with direct experience leading due diligence on $100M+ in PE, mezzanine, and real estate fund commitments. Passed the CFA Level&nbsp;I (top quartile, all sections). Spearheaded a $50M sector reallocation that outperformed by 210 basis points.</p>
-                    <p>Acquired and grew a digital media company through two strategic acquisitions ($160K total, full DCF and Gordon Growth modeling), scaling it to 6M+ unique visitors and $150K+ in government contracts while managing 30+ person teams across editorial, sales, marketing, and technology. Independently designed and built a 255&nbsp;GB AI data platform integrating multi-agent orchestration (Claude Agent SDK, LangGraph), adaptive memory architectures with feedback-driven learning loops, and semantic search across 8M+ vector-embedded chunks with sub-100ms query performance.</p>
-                    <p>Currently seeking roles at the intersection of AI systems, finance, and product — at AI labs, startups, or venture firms where I can apply production AI experience, financial analysis rigor, and eight years of operator judgment.</p>
-                </div>
-            </div>
-
-            <!-- Timeline -->
-            <div style="margin-top: 80px;">
-                <h3 style="font-family: var(--font-mono); font-size: var(--fs-meta); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); padding-bottom: 12px; margin-bottom: 0; border-bottom: 2px solid var(--ink);">Experience</h3>
-                <div class="timeline-item">
-                    <p class="timeline-date">2018 — Present</p>
-                    <div class="timeline-body">
-                        <h3>Bushwick Daily / Brooklyn New Media</h3>
-                        <p class="role">Publisher &amp; CEO — New York, NY</p>
-                        <p>Acquired and grew a digital media company through two strategic acquisitions. Led execution across editorial, sales, marketing, and technology — 2,100+ articles, 6M+ unique visitors, $150K+ in NYC government contracts, 30+ hires. Built a 255&nbsp;GB AI data platform from scratch: multi-agent news scanner (Claude Agent SDK, LangGraph), intelligent email assistant processing 200+ daily emails, and adaptive memory system with feedback-driven learning — 321 commits over 9 months.</p>
-                        <div class="tag-row">
-                            <span class="tag">Python</span><span class="tag">PostgreSQL</span><span class="tag">Claude SDK</span>
-                            <span class="tag">LangGraph</span><span class="tag">FastAPI</span><span class="tag">React</span>
-                            <span class="tag">Scrapy</span><span class="tag">Celery</span><span class="tag">AWS</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <p class="timeline-date">2015 — 2017</p>
-                    <div class="timeline-body">
-                        <h3>Erie Insurance / Erie Indemnity Company</h3>
-                        <p class="role">Investment Analyst — Erie, PA</p>
-                        <p>Managed and analyzed a $200M investment portfolio across energy and mining sectors supporting Erie's $13B asset portfolio. Led due diligence on 5 middle-market PE, mezzanine, and real estate funds resulting in $100M+ in capital commitments. Spearheaded $50M sector reallocation achieving 210bps outperformance. Built VBA/SQL automation reducing reporting cycles by 70%.</p>
-                        <div class="tag-row">
-                            <span class="tag">Portfolio Analysis</span><span class="tag">VBA</span><span class="tag">SQL</span>
-                            <span class="tag">Bloomberg</span><span class="tag">DCF</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <p class="timeline-date">2013 — 2014</p>
-                    <div class="timeline-body">
-                        <h3>Bank of America Merrill Lynch / BNY Mellon</h3>
-                        <p class="role">Management Intern / Performance Analytics — Erie &amp; Pittsburgh, PA</p>
-                        <p>Analyst rotations across wealth management compliance and institutional performance analytics. Reviewed 500+ client documents and developed SQL-based reporting systems.</p>
-                        <div class="tag-row">
-                            <span class="tag">SQL</span><span class="tag">Compliance</span><span class="tag">Performance Analytics</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Education & Awards -->
-            <div class="credentials">
-                <div>
-                    <h3>Education</h3>
-                    <p>University of Pittsburgh, College of Business Administration<br>
-                    B.S. Finance and Business Information Systems, 2011–2014</p>
-                    <p style="color: var(--accent); font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.08em; margin-top: 12px;">CFA LEVEL I — PASSED 2015 · TOP QUARTILE ALL SECTIONS</p>
-                </div>
-                <div>
-                    <h3>Awards &amp; Grants</h3>
-                    <ul>
-                        <li>LION Publishers $20K Sustainability Audit Grant (2024)</li>
-                        <li>CCM Election Reporting Fellowship</li>
-                        <li>LION Publishers $10K Sustainable Journalism Grant (2023)</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Contact -->
-            <div class="contact-grid">
-                <a class="contact-item" href="mailto:alec@bushwickdaily.com">
-                    <div>
-                        <div class="contact-item__label">Email</div>
-                        <div class="contact-item__val">alec@bushwickdaily.com</div>
-                    </div>
-                    <span class="contact-item__arrow">→</span>
-                </a>
-                <a class="contact-item" href="https://github.com/alecmeeeker" target="_blank" rel="noopener">
-                    <div>
-                        <div class="contact-item__label">GitHub</div>
-                        <div class="contact-item__val">@alecmeeeker</div>
-                    </div>
-                    <span class="contact-item__arrow">→</span>
-                </a>
-                <a class="contact-item" href="https://linkedin.com/in/alecmeeker" target="_blank" rel="noopener">
-                    <div>
-                        <div class="contact-item__label">LinkedIn</div>
-                        <div class="contact-item__val">in/alecmeeker</div>
-                    </div>
-                    <span class="contact-item__arrow">→</span>
-                </a>
-                <a class="contact-item" href="https://muckrack.com/alec-meeker-2" target="_blank" rel="noopener">
-                    <div>
-                        <div class="contact-item__label">Press &amp; Media</div>
-                        <div class="contact-item__val">Muck Rack profile</div>
-                    </div>
-                    <span class="contact-item__arrow">→</span>
-                </a>
-                <a class="contact-item" href="https://bushwickdaily.com" target="_blank" rel="noopener">
-                    <div>
-                        <div class="contact-item__label">Company</div>
-                        <div class="contact-item__val">Bushwick Daily</div>
-                    </div>
-                    <span class="contact-item__arrow">→</span>
-                </a>
-            </div>
-
-            <div class="resume-cta-wrap">
-                <a class="link-cta link-cta--accent" href="Alec_Meeker_Resume.pdf" target="_blank" rel="noopener">
-                    <span>Download full résumé (PDF)</span>
-                    <span class="link-cta__arrow">↓</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="wrap">
-            <div class="footer__grid">
-                <div class="footer__colophon">
-                    <strong>Colophon.</strong> Set in Fraunces (display &amp; body) and JetBrains Mono (metadata &amp; code). Hand-coded HTML and CSS, no build system, deployed via GitHub Pages. Written, designed, and built by Alec Meeker in Brooklyn, NY.
-                </div>
-                <div class="footer__right">
-                    <div>© 2026 Alec Meeker</div>
-                    <div style="margin-top: 4px;">Vol. 01 · Updated April 2026</div>
-                </div>
-            </div>
-        </div>
-    </footer>
+  <footer class="foot">
+    <span>&copy; <span id="y"></span> Alec Meeker · Brooklyn, NY</span>
+    <span>Set in Fraunces &amp; JetBrains Mono</span>
+  </footer>
 
 </main>
-
-<script>
-    // Hide nav on scroll down, reveal on scroll up
-    let lastScroll = 0;
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-        const y = window.scrollY;
-        nav.classList.toggle('is-hidden', y > lastScroll && y > 200);
-        lastScroll = y;
-    }, { passive: true });
-
-    // Active nav highlighting
-    const sections = document.querySelectorAll('main section[id]');
-    const navLinks = document.querySelectorAll('.nav__links a[href^="#"]');
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
-        navLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + current));
-    }, { passive: true });
-
-    // Close mobile nav on link click
-    document.querySelectorAll('.nav__links a').forEach(a => {
-        a.addEventListener('click', () => {
-            document.getElementById('nav-links').classList.remove('is-open');
-        });
-    });
-</script>
-
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>

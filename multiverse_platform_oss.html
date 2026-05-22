@@ -141,14 +141,8 @@
 
 <nav class="nav">
     <div class="nav__inner">
-        <a class="nav__brand" href="index.html"><strong>BWK</strong>&nbsp;/&nbsp;A.J.MEEKER</a>
-        <ul class="nav__links">
-            <li><a href="index.html#theory">Theory</a></li>
-            <li><a href="index.html#system">System</a></li>
-            <li><a href="index.html#code" class="is-active">Code</a></li>
-            <li><a href="index.html#chronicle">Chronicle</a></li>
-            <li><a href="index.html#about">About</a></li>
-        </ul>
+        <a class="nav__brand" href="index.html">Alec Meeker</a>
+        <ul class="nav__links"><li><a href="https://github.com/alecmeeeker">GitHub</a></li><li><a href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute;</a></li><li><a href="https://linkedin.com/in/alecmeeker">LinkedIn</a></li></ul>
     </div>
 </nav>
 
@@ -156,20 +150,14 @@
 
 <main>
     <div class="wrap-prose">
-        <p class="breadcrumb">
-            <a href="index.html">BWK</a>
-            <span class="breadcrumb__sep">></span>
-            <a href="index.html#code">CODE</a>
-            <span class="breadcrumb__sep">></span>
-            <span class="breadcrumb__current">MULTIVERSE_PLATFORM</span>
-        </p>
+        <p class="breadcrumb"><a href="index.html">Alec Meeker</a> <span class="breadcrumb__sep">></span> <span class="breadcrumb__current">MULTIVERSE_PLATFORM</span></p>
     </div>
 
     <header class="report-masthead">
         <div class="wrap-prose">
             <p class="kicker kicker--accent">OPEN SOURCE · REFERENCE IMPLEMENTATION</p>
             <h1 class="report-masthead__title">Local News Multiverse Agent Platform</h1>
-            <p class="report-masthead__dek">A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows&mdash;without cloud dependencies. A self-hosted LangGraph alternative with PostgreSQL persistence, parallel path exploration, and self-evolving agents.</p>
+            <p class="report-masthead__dek">A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows, without cloud dependencies. A self-hosted LangGraph alternative with PostgreSQL persistence, parallel path exploration, and self-evolving agents.</p>
             <div class="report-masthead__meta">
                 <span class="badge badge--oss">Open Source</span>
                 <span class="badge">Python 3.11</span>
@@ -182,7 +170,7 @@
 
     <section class="spread">
         <span class="spread__num">5&times;</span>
-        <span class="spread__caption">PARALLEL EXPLORATION PATHS &mdash; run up to five strategy branches simultaneously, compare results, and commit the winner.</span>
+        <span class="spread__caption">PARALLEL EXPLORATION PATHS, run up to five strategy branches simultaneously, compare results, and commit the winner.</span>
     </section>
 
     <div class="wrap-prose">
@@ -225,7 +213,7 @@
 
 <p><strong>This platform exists to change that.</strong></p>
 
-<p>The Multiverse Agent Orchestration Platform gives any local publication&mdash;regardless of technical resources&mdash;the same AI workflow infrastructure that billion-dollar media companies are building internally. And because it's 100% local and open-source, your data never leaves your servers, your workflows are yours forever, and you can share what you build with other publications facing the same challenges.</p>
+<p>The Multiverse Agent Orchestration Platform gives any local publication, regardless of technical resources, the same AI workflow infrastructure that billion-dollar media companies are building internally. And because it's 100% local and open-source, your data never leaves your servers, your workflows are yours forever, and you can share what you build with other publications facing the same challenges.</p>
 
 <h3>The Vision: A Cooperative AI Infrastructure for Local News</h3>
 
@@ -258,7 +246,7 @@
 
 <h3>What This Platform Does Differently</h3>
 
-<p>I built this platform to replicate LangGraph's core capabilities&mdash;state machines, checkpointing, human-in-the-loop interrupts&mdash;but with critical additions:</p>
+<p>I built this platform to replicate LangGraph's core capabilities, state machines, checkpointing, human-in-the-loop interrupts, but with critical additions:</p>
 
 <ol>
 <li><strong>100% Local</strong>: Everything runs on PostgreSQL. No external dependencies. Your data never leaves your infrastructure.</li>
@@ -279,18 +267,18 @@
 
 <h4>1. Immutability Over Mutation</h4>
 <p>Nothing in this system is ever overwritten. When you change a prompt, a new version is created. When you modify a workflow, a new version is branched. When an agent evolves, the before/after states are both preserved.</p>
-<p><strong>Why?</strong> Because AI systems fail in subtle ways. A prompt that worked yesterday might fail tomorrow due to model updates, data drift, or edge cases you haven't seen yet. When things break, you need to know exactly what changed and when&mdash;and you need to roll back instantly.</p>
+<p><strong>Why?</strong> Because AI systems fail in subtle ways. A prompt that worked yesterday might fail tomorrow due to model updates, data drift, or edge cases you haven't seen yet. When things break, you need to know exactly what changed and when, and you need to roll back instantly.</p>
 
 <h4>2. Complete Observability</h4>
 <p>Every input to every agent is logged. Every output is captured. Every decision point records the options considered and the choice made. Every execution captures timing, token usage, and error states.</p>
 <p><strong>Why?</strong> Because you can't improve what you can't measure. And when a user reports that "the AI did something weird last Tuesday," you need to be able to replay exactly what happened.</p>
 
 <h4>3. Parallel Exploration Before Commitment</h4>
-<p>Instead of running a workflow and hoping for the best, this platform can explore up to 5 different strategies simultaneously. Each path runs independently, with its own state. You compare results and select the winner&mdash;or merge the best elements from multiple paths.</p>
+<p>Instead of running a workflow and hoping for the best, this platform can explore up to 5 different strategies simultaneously. Each path runs independently, with its own state. You compare results and select the winner, or merge the best elements from multiple paths.</p>
 <p><strong>Why?</strong> Because the "best" approach often isn't obvious until you've tried alternatives. And in production, you want to test changes on real data before committing to them.</p>
 
 <h4>4. Local-First, Always</h4>
-<p>Every piece of state lives in PostgreSQL. Checkpoints, key-value storage, workflow definitions, execution history&mdash;all local. The platform functions identically whether you're online or offline.</p>
+<p>Every piece of state lives in PostgreSQL. Checkpoints, key-value storage, workflow definitions, execution history, all local. The platform functions identically whether you're online or offline.</p>
 <p><strong>Why?</strong> Because vendor lock-in kills small organizations. Because network dependencies cause production failures. Because your data is yours.</p>
 
 <h4>5. Clean Architecture with Dependency Injection</h4>
@@ -418,7 +406,7 @@ CHANGE_ROUTE, CREATE_BRANCH, PAUSE, ABANDON, MODIFY_WORKFLOW</code></pre></div>
 
 <p><strong>This platform is built for journalists, not engineers.</strong></p>
 
-<p>Every agent definition, workflow configuration, prompt template, and tool parameter lives in PostgreSQL&mdash;not in Python code. This means:</p>
+<p>Every agent definition, workflow configuration, prompt template, and tool parameter lives in PostgreSQL, not in Python code. This means:</p>
 
 <h3>For Non-Technical Users</h3>
 <ul>
@@ -578,8 +566,8 @@ streamlit run ui/agents_v3_workbench.py --server.port 8501</code></pre></div>
 
 <h3>Related Projects</h3>
 <ul>
-<li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a> &mdash; Upstream data source for this platform</li>
-<li><a href="news_scanner_report.html">NYCNewsScanner Report</a> &mdash; The production system this was extracted from</li>
+<li><a href="email_warehouse_oss.html">Email Ingestion Data Warehouse</a>, Upstream data source for this platform</li>
+<li><a href="news_scanner_report.html">NYCNewsScanner Report</a>, The production system this was extracted from</li>
 </ul>
 
 <p><em>Built with determination in Brooklyn, NYC.</em></p>

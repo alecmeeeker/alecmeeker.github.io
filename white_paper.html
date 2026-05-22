@@ -11,7 +11,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White Paper — Building an AI-Powered Local Newsroom | Alec Meeker</title>
+    <title>White Paper, Building an AI-Powered Local Newsroom | Alec Meeker</title>
     <meta name="description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
     <meta name="author" content="Alec Meeker">
     <meta name="robots" content="index, follow">
@@ -224,14 +224,8 @@
 
 <nav class="nav">
     <div class="nav__inner">
-        <a class="nav__brand" href="index.html"><strong>BWK</strong>&nbsp;/&nbsp;A.J.MEEKER</a>
-        <ul class="nav__links">
-            <li><a href="index.html#theory" class="is-active">Theory</a></li>
-            <li><a href="index.html#system">System</a></li>
-            <li><a href="index.html#code">Code</a></li>
-            <li><a href="index.html#chronicle">Chronicle</a></li>
-            <li><a href="index.html#about">About</a></li>
-        </ul>
+        <a class="nav__brand" href="index.html">Alec Meeker</a>
+        <ul class="nav__links"><li><a href="https://github.com/alecmeeeker">GitHub</a></li><li><a href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute;</a></li><li><a href="https://linkedin.com/in/alecmeeker">LinkedIn</a></li></ul>
     </div>
 </nav>
 
@@ -239,27 +233,21 @@
 
 <main>
     <div class="wrap-prose">
-        <p class="breadcrumb">
-            <a href="index.html">BWK</a>
-            <span class="breadcrumb__sep">></span>
-            <a href="index.html#theory">THEORY</a>
-            <span class="breadcrumb__sep">></span>
-            <span class="breadcrumb__current">WHITE_PAPER</span>
-        </p>
+        <p class="breadcrumb"><a href="index.html">Alec Meeker</a> <span class="breadcrumb__sep">></span> <span class="breadcrumb__current">WHITE_PAPER</span></p>
     </div>
 
     <header class="paper-masthead">
         <div class="wrap-prose">
             <p class="kicker kicker--accent">SECTION 01 &middot; WHITE PAPER</p>
             <h1 class="paper-masthead__title">Building an <em>AI-Powered</em> Local Newsroom</h1>
-            <p class="paper-masthead__dek">A comprehensive technical architecture for transforming hyperlocal journalism through artificial intelligence &mdash; covering data ingestion, vector retrieval, multi-agent orchestration, and editorial control systems.</p>
+            <p class="paper-masthead__dek">A comprehensive technical architecture for transforming hyperlocal journalism through artificial intelligence, covering data ingestion, vector retrieval, multi-agent orchestration, and editorial control systems.</p>
             <div class="paper-masthead__meta">
                 <span class="badge badge--shipped">Production</span>
                 <span class="badge">March 2026</span>
                 <span class="badge">Technical Paper</span>
                 <span class="badge">~15 min read</span>
             </div>
-            <p class="paper-masthead__byline"><strong>Alec Meeker</strong> &nbsp;&middot;&nbsp; Bushwick Daily &nbsp;&middot;&nbsp; Compiled from 321 commits over 9 months</p>
+            <p class="paper-masthead__byline"><strong>Alec Meeker</strong> &nbsp;&middot;&nbsp; Bushwick Daily</p>
         </div>
     </header>
 
@@ -274,7 +262,6 @@
                 <li><a href="#4-nycnewsscanner-intelligent-news-discovery">NYCNewsScanner</a></li>
                 <li><a href="#5-email-assistant">Email Assistant</a></li>
                 <li><a href="#6-integration-orchestration">Integration &amp; Orchestration</a></li>
-                <li><a href="#7-development-journey-lessons-learned">Development Journey</a></li>
                 <li><a href="#8-impact-results">Impact &amp; Results</a></li>
                 <li><a href="#9-ethical-considerations">Ethical Considerations</a></li>
                 <li><a href="#10-future-directions">Future Directions</a></li>
@@ -291,7 +278,7 @@
 
 <aside class="pullquote">
     &ldquo;AI could serve as a force multiplier for small newsrooms rather than a replacement for journalists. The goal was not <em>automated content generation</em> but automated information processing.&rdquo;
-    <span class="pullquote__attribution">&mdash; Section 1.2: The Hypothesis</span>
+    <span class="pullquote__attribution">, Section 1.2: The Hypothesis</span>
 </aside>
 
 <h2 id="1-introduction-the-local-news-crisis-and-an-ai-response">1. Introduction: The Local News Crisis and an AI Response</h2>
@@ -302,7 +289,7 @@
 <p>The hypothesis driving this project was straightforward: AI could serve as a force multiplier for small newsrooms rather than a replacement for journalists. The goal was not automated content generation but automated information processing, freeing editorial attention for judgment and writing while AI handled collection, organization, and routine correspondence.</p>
 <p>This required building AI infrastructure from scratch rather than adopting off-the-shelf solutions. Commercial AI tools optimize for general use cases; a newsroom requires domain-specific capabilities around source management, editorial voice preservation, and journalistic accuracy standards.</p>
 <h3 id="13-the-approach">1.3 The Approach</h3>
-<p>Development proceeded through direct engagement with production requirements. The author — with a background in investment analysis ($200M portfolio management, PE fund due diligence), a B.S. in Finance and Business Information Systems, and eight years of company operations — built the system iteratively, applying the same analytical rigor to AI architecture decisions that he previously applied to portfolio analysis and fund evaluation. Prior experience with VBA/SQL automation for institutional reporting (reducing Emerging Market Debt reporting cycles by 70% at Erie Insurance) provided a foundation for the data pipeline engineering documented in this paper.</p>
+<p>Development proceeded through direct engagement with production requirements. The author, with a background in investment analysis ($200M portfolio management, PE fund due diligence), a B.S. in Finance and Business Information Systems, and eight years of company operations, built the system iteratively, applying the same analytical rigor to AI architecture decisions that he previously applied to portfolio analysis and fund evaluation. Prior experience with VBA/SQL automation for institutional reporting (reducing Emerging Market Debt reporting cycles by 70% at Erie Insurance) provided a foundation for the data pipeline engineering documented in this paper.</p>
 <p>The approach prioritized:
 - <strong>Human-in-the-loop design</strong>: AI proposes, humans approve. No automated actions without explicit human checkpoints.
 - <strong>Editorial integrity</strong>: Voice preservation, source attribution, and accuracy verification built into system architecture.
@@ -335,7 +322,7 @@ Infrastructure must run on available hardware within realistic budgets. The syst
 
 <aside class="pullquote">
     &ldquo;Every automated action passes through human approval. The system <em>proposes</em>; humans decide.&rdquo;
-    <span class="pullquote__attribution">&mdash; Section 2.1: Design Philosophy</span>
+    <span class="pullquote__attribution">, Section 2.1: Design Philosophy</span>
 </aside>
 
 <h3 id="22-high-level-architecture">2.2 High-Level Architecture</h3>
@@ -482,7 +469,7 @@ Infrastructure must run on available hardware within realistic budgets. The syst
 
 <aside class="pullquote">
     &ldquo;PostgreSQL as universal store: unifying relational data, vector embeddings, and full-text search in <em>one database</em> simplified operations dramatically.&rdquo;
-    <span class="pullquote__attribution">&mdash; Appendix: What Worked</span>
+    <span class="pullquote__attribution">, Appendix: What Worked</span>
 </aside>
 
 <h3 id="32-article-ingestion-pipeline">3.2 Article Ingestion Pipeline</h3>
@@ -794,7 +781,7 @@ Infrastructure must run on available hardware within realistic budgets. The syst
 
 <aside class="pullquote">
     &ldquo;Reflection without external feedback degrades performance. When you see a reflection system that works, you&rsquo;re almost always looking at a <em>verification system</em> in disguise.&rdquo;
-    <span class="pullquote__attribution">&mdash; Research notes cited in Section 4.4</span>
+    <span class="pullquote__attribution">, Research notes cited in Section 4.4</span>
 </aside>
 
 <p>The reflection system was redesigned after research revealed that "reflection without external feedback degrades performance." The current architecture uses deterministic parsing BEFORE any LLM involvement:</p>
@@ -1184,101 +1171,7 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 </code></pre></div>
 
 <hr />
-<h2 id="7-development-journey-lessons-learned">7. Development Journey &amp; Lessons Learned</h2>
-<h3 id="71-the-learning-curve">7.1 The Learning Curve</h3>
-<p>This system was built iteratively over nine months, with the author applying analytical frameworks from investment analysis and institutional finance to system architecture decisions. The commit history reveals the development journey:</p>
-<p><strong>Week 1 (July 2025): Foundation and First Failures</strong></p>
-<p>The initial commit established an ambitious architecture: Scrapy spider, PostgreSQL with pgvector, Celery background tasks. Within 48 hours, production reality intervened:</p>
-<blockquote>
-<p>Commit b6cce11: "lots of updates" - Connection pool exhaustion and protocol corruption under real-world load</p>
-<p>Commit a98e976: "pooling set to 1" - Defensive retreat, implementing <code>log_problematic_article()</code> for graceful failure handling</p>
-</blockquote>
-<p>The solution emerged in commit 2b52729:</p>
-<blockquote>
-<p>"celery workers are stable and sql alchemy has been used to implement"</p>
-</blockquote>
-<p><strong>Lesson</strong>: Production stability often requires abandoning clever solutions for boring, proven ones. SQLAlchemy's connection pooling solved problems that took days to debug with manual psycopg3 management.</p>
-
-<aside class="pullquote">
-    &ldquo;Production stability often requires abandoning clever solutions for <em>boring, proven ones</em>.&rdquo;
-    <span class="pullquote__attribution">&mdash; Section 7.1: The Learning Curve</span>
-</aside>
-<p><strong>Month 2 (August 2025): Email Intelligence Integration</strong></p>
-<p>Adding email processing to the RAG system revealed deeper architectural challenges:</p>
-<blockquote>
-<p>Commit 2b1155a: "email embedding system is now working with real data and is merged with Rag"</p>
-</blockquote>
-<p>This required HNSW index rebuilding (6+ hours) and careful handling of the embedding dimension matching between article and email chunks.</p>
-<p><strong>Key Insight</strong>: Unifying data models early (same embedding dimension, same chunk size) enables system-wide search without constant adaptation layers.</p>
-<p><strong>Month 4 (October 2025): The Entity System</strong></p>
-<p>Building entity extraction revealed the complexity of real-world names:</p>
-<blockquote>
-<p>Commit 382acca: "entity extraction system created"</p>
-</blockquote>
-<p>The three-hash architecture (SHA-256 for exact match, MD5-16 for fast lookup, Double Metaphone for fuzzy matching) emerged from production requirements: "Johnn Smith" needs to match "John Smith" without false positives.</p>
-<p><strong>Month 6 (December 2025): Memory System Pivot</strong></p>
-<p>The initial reflection system sent raw edit diffs to Claude for preference extraction. Research revealed this approach degrades over time:</p>
-<blockquote>
-<p>From research notes: "Reflection without external feedback degrades performance. When you see a reflection system that works, you're almost always looking at a verification system in disguise."</p>
-</blockquote>
-<p>The redesign implemented deterministic parsing BEFORE LLM involvement, with quality gates preventing noise accumulation.</p>
-<p><strong>Lesson</strong>: Academic research is worth reading. The Mem0 and MemGPT papers predicted exactly the failure mode we encountered.</p>
-<h3 id="72-iterative-development">7.2 Iterative Development</h3>
-<p>Features evolved based on real editorial needs rather than theoretical requirements:</p>
-<p><strong>Email Triage Evolution:</strong></p>
-<ol>
-<li>Initial: Binary YES/NO classification</li>
-<li>Week 2: User feedback demanded distinguishing "notify" from "no action"</li>
-<li>Week 4: Four-tier classification with deterministic pre-filtering</li>
-<li>Month 2: Backlog mode for efficient catchup processing</li>
-</ol>
-<p><strong>Draft Generation Evolution:</strong></p>
-<ol>
-<li>Initial: Static prompts with generic voice</li>
-<li>Week 3: Few-shot retrieval added after inconsistent voice matching</li>
-<li>Month 2: Memory integration for learned preferences</li>
-<li>Month 4: Task orchestration for action extraction</li>
-</ol>
-<p>Each iteration addressed a specific user complaint rather than anticipated requirements.</p>
-<h3 id="73-key-technical-insights">7.3 Key Technical Insights</h3>
-<p><strong>1. Incremental Processing is Essential</strong></p>
-<p>Systems processing 200K+ items need incremental operation. The URL cache middleware (articles) and <code>attachments_extracted</code> flag (emails) enable processing only new content.</p>
-<p><strong>2. Cost Tracking Enables Optimization</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Token usage tracking revealed opportunities</span>
-<span class="c1"># Initial: ~10 seconds per email (subprocess per email)</span>
-<span class="c1"># After single-session batch: ~6 seconds per email</span>
-<span class="c1"># Savings: 100+ hours on 182K email backlog</span>
-</code></pre></div>
-
-<p><strong>3. Database Joins Beat Application Logic</strong></p>
-<p>The email classification bug that returned 0 results for newsletter queries was a JOIN issue (<code>classified_emails.classification</code> was always 'unclassified'; the real data was in <code>email_pipeline_routes.pipeline_type</code>). Fixing the JOIN unlocked 337 emails instantly.</p>
-<p><strong>4. Human-in-the-Loop Reduces Risk</strong></p>
-<p>Every automated action we considered implementing eventually got a HITL checkpoint. The two-phase form filling pattern emerged from a near-miss where test data would have been submitted to a real form.</p>
-<p><strong>5. Checkpoint Commits Enable Recovery</strong></p>
-<p>The commit messages "pre changes before X" and "pre-refactor" represent deliberate checkpoints before risky changes. When refactors go wrong, these enable clean rollback.</p>
-<h3 id="74-what-worked-what-didnt">7.4 What Worked, What Didn't</h3>
-<p><strong>Worked Well:</strong></p>
-<ul>
-<li><strong>PostgreSQL as universal store</strong>: Unifying relational data, vector embeddings, and full-text search in one database simplified operations dramatically</li>
-<li><strong>Hybrid classification</strong>: Deterministic rules for obvious cases, LLM for nuanced decisions</li>
-<li><strong>Few-shot learning</strong>: Historical examples ground generation better than abstract instructions</li>
-<li><strong>Quality gates</strong>: Preventing noise accumulation in learning systems</li>
-</ul>
-<p><strong>Didn't Work:</strong></p>
-<ul>
-<li><strong>Initial psycopg3 pooling</strong>: Manual connection management was fragile; SQLAlchemy's abstractions proved more robust</li>
-<li><strong>Raw reflection</strong>: Sending edit diffs directly to LLM for preference extraction degraded over time</li>
-<li><strong>Subprocess-per-email</strong>: Creating new processes for each email was 10x slower than batch processing</li>
-<li><strong>S3 direct upload</strong>: Bypassing WordPress's media handling created silent failures</li>
-</ul>
-<p><strong>Still Evolving:</strong></p>
-<ul>
-<li><strong>Entity disambiguation</strong>: The "John Smith problem" remains challenging at scale</li>
-<li><strong>Memory consolidation</strong>: When to merge vs. keep separate related memories</li>
-<li><strong>Multi-model orchestration</strong>: Balancing cost, quality, and latency across Claude/Gemini/GPT-4</li>
-</ul>
-<hr />
-<h2 id="8-impact-results">8. Impact &amp; Results</h2>
+<h2 id="8-impact-results">7. Impact &amp; Results</h2>
 <h3 id="81-operational-improvements">8.1 Operational Improvements</h3>
 <p><strong>Quantitative Metrics:</strong></p>
 <table>
@@ -1333,7 +1226,7 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 </ul>
 <aside class="pullquote">
     &ldquo;If AI can enable one publisher to maintain coverage depth previously requiring dedicated staff, similar systems could <em>revive local news</em> coverage in communities currently without any journalism presence.&rdquo;
-    <span class="pullquote__attribution">&mdash; Section 8: Impact &amp; Results</span>
+    <span class="pullquote__attribution">, Section 7: Impact &amp; Results</span>
 </aside>
 
 <h3 id="82-editorial-capabilities">8.2 Editorial Capabilities</h3>
@@ -1383,7 +1276,7 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <li>Documentation enables adoption by other small newsrooms</li>
 </ul>
 <hr />
-<h2 id="9-ethical-considerations">9. Ethical Considerations</h2>
+<h2 id="9-ethical-considerations">8. Ethical Considerations</h2>
 <h3 id="91-ai-in-journalism">9.1 AI in Journalism</h3>
 <p>The use of AI in journalism raises legitimate concerns that this system addresses through architectural choices:</p>
 <p><strong>Human Judgment Preserved:</strong></p>
@@ -1431,7 +1324,7 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <li>AI serves as research and drafting assistance, not authorship</li>
 </ul>
 <hr />
-<h2 id="10-future-directions">10. Future Directions</h2>
+<h2 id="10-future-directions">9. Future Directions</h2>
 <h3 id="101-planned-enhancements">10.1 Planned Enhancements</h3>
 <p><strong>Short-term (2026 Q2):</strong></p>
 <ul>
@@ -1491,7 +1384,7 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <li>Maintenance burden for sophisticated systems</li>
 </ul>
 <hr />
-<h2 id="11-conclusion">11. Conclusion</h2>
+<h2 id="11-conclusion">10. Conclusion</h2>
 <p>This white paper documents nine months of building AI infrastructure for a hyperlocal newsroom. The resulting system demonstrates that sophisticated AI capabilities are achievable for small news operations, potentially transforming the economics of local journalism.</p>
 <p>The technical achievement is significant: 255 GB of structured news and email data, 8 million searchable semantic chunks, sub-100ms query performance, and integrated AI agents that monitor, extract, draft, and orchestrate across diverse information sources.</p>
 <p>But the more important achievement is the design philosophy embedded in the architecture: human-in-the-loop by default, editorial integrity as requirement, practical utility over impressive capabilities. AI serves as force multiplier, not replacement. The system proposes; humans decide.</p>
@@ -1823,12 +1716,12 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 </ol>
 
 <hr />
-<p><em>White paper compiled from 321 commits over 9 months of development.</em><br>
+<p><em> </em><br>
 <em>Data warehouse: 255 GB (1.79M articles, 218K emails, 8M+ chunks).</em><br>
 <em>Last updated: March 2026.</em></p>
 <hr />
 <p><em>For questions about this system, potential collaboration, or career opportunities, contact:</em><br>
-<em>Alec Meeker &mdash; alec@bushwickdaily.com</em><br>
+<em>Alec Meeker, alec@bushwickdaily.com</em><br>
 <em>LinkedIn: linkedin.com/in/alecmeeker &middot; GitHub: alecmeeeker.github.io</em></p>
         </article>
         <aside class="margin-notes">
@@ -1838,7 +1731,7 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
             </div>
             <div class="margin-note" style="margin-top: 14em;">
                 <strong>Section 01 &middot; Why</strong>
-                2,500+ newspapers have closed since 2004. Bushwick Daily processes 200+ emails and monitors 75+ NYC outlets daily &mdash; impossible without AI as a force multiplier.
+                2,500+ newspapers have closed since 2004. Bushwick Daily processes 200+ emails and monitors 75+ NYC outlets daily, impossible without AI as a force multiplier.
             </div>
             <div class="margin-note" style="margin-top: 18em;">
                 <strong>Section 02 &middot; Five Principles</strong>
@@ -1854,18 +1747,14 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
             </div>
             <div class="margin-note" style="margin-top: 22em;">
                 <strong>Key concept</strong>
-                The "reflection gate" prevents AI systems from learning bad patterns from noisy feedback. Deterministic filters run before any LLM extraction &mdash; the verification system in disguise.
+                The "reflection gate" prevents AI systems from learning bad patterns from noisy feedback. Deterministic filters run before any LLM extraction, the verification system in disguise.
             </div>
             <div class="margin-note" style="margin-top: 16em;">
                 <strong>Section 05 &middot; Assistant</strong>
                 Email triage, context-aware drafting, skill-based task orchestration. Voice matched through few-shot retrieval from publisher history. See the <a href="email_assistant_report.html">Email Assistant Report</a>.
             </div>
-            <div class="margin-note" style="margin-top: 24em;">
-                <strong>Section 07 &middot; Hard Lessons</strong>
-                Connection pool exhaustion in week one. The JOIN bug that returned zero emails. Subprocess-per-email before batching. The reflection redesign. Boring solutions beat clever ones.
-            </div>
             <div class="margin-note" style="margin-top: 18em;">
-                <strong>Section 08 &middot; Results</strong>
+                <strong>Section 06 &middot; Results</strong>
                 80&ndash;90% reduction in time spent on news monitoring, email triage, research, and drafting. Cost: ~$0.15&ndash;0.25 per comprehensive research report.
             </div>
             <div class="margin-note" style="margin-top: 16em;">

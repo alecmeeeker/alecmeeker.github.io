@@ -1400,3 +1400,24 @@ section.section--bordered {
 @media (max-width: 640px) {
     .term-header__keys { display: none; }
 }
+
+/* ===== DARK WARM THEME OVERRIDE (reference: torcivia) ===== */
+:root{
+  --term-bg:#1a1613; --term-bg-2:#221d18; --term-bg-3:#2a241d;
+  --term-grid:rgba(233,224,208,0.06); --term-rule:rgba(233,224,208,0.14); --term-rule-2:rgba(233,224,208,0.45);
+  --term-fg:#e9e0d0; --term-fg-dim:#b8ab95; --term-fg-mute:#8a7e6b;
+  --term-hi:#e07650; --term-white:#f3ebdc; --term-pos:#9bbf7a; --term-neg:#e07650; --term-link:#e07650;
+  --font-display:"Fraunces", Georgia, serif;
+  --font-body:"Fraunces", Georgia, serif;
+}
+html, body{ background:#1a1613 !important; color:#e9e0d0 !important; }
+body::after{ display:none !important; }
+.term-header,.ticker,.status-dot,.cursor,.badge--live::before,.tt-sparkline,.chronicle__strip,.progress-bar{ display:none !important; }
+.reveal{ opacity:1 !important; transform:none !important; animation:none !important; }
+.prose,.paper-content,.prose p,.paper-content p,.prose li,.prose blockquote{ font-family:"Fraunces", Georgia, serif !important; }
+
+/* tone stat billboards to clinical + clean breadcrumb separator */
+.spread{ text-align:left !important; padding:24px 0 !important; margin:40px 0 !important; border-top:1px solid var(--term-rule); border-bottom:1px solid var(--term-rule); }
+.spread__num{ font-size:2rem !important; font-weight:600 !important; line-height:1.1 !important; display:block !important; margin:0 0 6px !important; letter-spacing:-0.01em; }
+.spread__caption{ font-size:0.8rem !important; max-width:60ch; }
+.breadcrumb__sep::before{ content:none !important; }
