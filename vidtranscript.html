@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TZJB1RJXV6');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vidtranscript: provably real clips from civic video | Alec Meeker</title>
+<meta name="description" content="vidtranscript is a tool I built for Bushwick Daily that turns civic video into speaker-attributed transcripts, provably real quotes, and captioned clips for local journalism. The code, not the model, decides what is true. Overview, with links to the product and investor pitch.">
+<meta name="keywords" content="vidtranscript, local journalism, local news, Bushwick Daily, civic video, community journalism, newsroom tools, AI transcription for journalists, hyperlocal news, news desert, captioned video, Alec Meeker">
+<meta name="author" content="Alec Meeker">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://alecmeeker.com/vidtranscript.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Alec Meeker">
+<meta property="og:title" content="vidtranscript: provably real clips from civic video">
+<meta property="og:description" content="A tool I built for Bushwick Daily that turns civic video into speaker-attributed transcripts, provably real quotes, and captioned clips. The code, not the model, decides what is true.">
+<meta property="og:url" content="https://alecmeeker.com/vidtranscript.html">
+<meta property="og:image" content="https://alecmeeker.com/assets/previews/vidtranscript.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="vidtranscript: provably real clips from civic video">
+<meta name="twitter:description" content="Turn civic video into speaker-attributed transcripts, provably real quotes, and captioned clips for local journalism. Built for Bushwick Daily.">
+<meta name="twitter:image" content="https://alecmeeker.com/assets/previews/vidtranscript.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"vidtranscript: provably real clips from civic video",
+  "description":"A civic-video tool for local journalism, built for Bushwick Daily. Turns civic video into speaker-attributed transcripts, provably real quotes, and captioned clips, with deterministic checks that decide what is true.",
+  "author":{"@type":"Person","name":"Alec Meeker","url":"https://alecmeeker.com/"},
+  "datePublished":"2026-06-18",
+  "publisher":{"@type":"Person","name":"Alec Meeker"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://alecmeeker.com/vidtranscript.html"},
+  "keywords":"local journalism, Bushwick Daily, civic video, newsroom tools, news desert"
+}
+</script>
+<style>
+  :root{
+    --bg:#1a1613; --surface:#221d18; --surface-2:#2a241d;
+    --text:#e9e0d0; --dim:#b8ab95; --faint:#8a7e6b;
+    --accent:#e07650; --green:#7fb069;
+    --rule:rgba(233,224,208,0.14);
+    --serif:"Fraunces", Georgia, serif;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  *{box-sizing:border-box}
+  html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--serif);
+    font-size:20px; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  ::selection{ background:var(--accent); color:var(--bg); }
+  a{ color:inherit; }
+  .frame{ max-width:720px; margin:0 auto; padding:64px 28px 104px; }
+
+  .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:56px; }
+  .wordmark{ display:inline-block; font-family:var(--mono); font-size:13px; font-weight:500;
+    letter-spacing:0.16em; text-transform:uppercase; color:var(--text); text-decoration:none;
+    padding-bottom:8px; border-bottom:2px solid var(--accent); }
+  .top-nav{ display:flex; gap:18px; padding-top:2px; }
+  .top-nav a{ font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--dim); text-decoration:none; transition:color .15s ease; }
+  .top-nav a:hover{ color:var(--accent); }
+
+  .kicker{ font-family:var(--mono); font-size:12px; letter-spacing:0.08em; color:var(--faint);
+    display:flex; align-items:center; gap:9px; margin-bottom:18px; }
+  .kicker .bar{ display:inline-block; width:2px; height:15px; background:var(--accent); }
+  h1{ font-family:var(--serif); font-weight:600; font-size:clamp(40px,8vw,68px); line-height:0.98;
+    letter-spacing:-0.025em; margin:0 0 20px; font-variation-settings:"opsz" 120; }
+  h1 .lc{ color:var(--accent); }
+  .standfirst{ font-size:clamp(21px,3vw,26px); line-height:1.4; color:var(--dim); margin:0 0 8px; max-width:34ch;
+    font-variation-settings:"opsz" 40; }
+
+  .lede{ width:120px; height:0; border:0; border-top:1px solid var(--rule); margin:44px 0; }
+
+  article p{ margin:0 0 24px; }
+  article h2{ font-family:var(--serif); font-weight:600; font-size:clamp(26px,4vw,34px); line-height:1.05;
+    letter-spacing:-0.02em; margin:56px 0 18px; font-variation-settings:"opsz" 60; }
+  article h2 .n{ font-family:var(--mono); font-size:0.5em; color:var(--accent); vertical-align:middle;
+    margin-right:12px; letter-spacing:0; }
+  article strong{ color:var(--text); font-weight:600; }
+  article em{ font-style:italic; color:var(--text); }
+  .pull{ font-family:var(--serif); font-weight:500; font-size:clamp(24px,4vw,32px); line-height:1.25;
+    letter-spacing:-0.015em; color:var(--text); border-left:2px solid var(--accent); padding:6px 0 6px 24px;
+    margin:40px 0; font-variation-settings:"opsz" 60; }
+
+  .gates{ display:flex; flex-direction:column; gap:14px; margin:28px 0 8px; }
+  .gate{ background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--green);
+    border-radius:10px; padding:18px 20px; }
+  .gate .gh{ font-family:var(--mono); font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--green); margin-bottom:8px; }
+  .gate p{ margin:0; font-size:18px; line-height:1.55; color:var(--dim); }
+  .gate p strong{ color:var(--text); }
+
+  .specline{ font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--faint); max-width:60ch; }
+
+  .links{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0 0; }
+  @media (max-width:560px){ .links{ grid-template-columns:1fr; } }
+  .linkcard{ display:block; text-decoration:none; background:var(--surface); border:1px solid var(--rule);
+    border-radius:12px; padding:20px; transition:border-color .15s ease, transform .15s ease; }
+  .linkcard:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .linkcard .lc-tag{ font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:10px; }
+  .linkcard .lc-h{ font-family:var(--serif); font-weight:600; font-size:21px; color:var(--text); margin-bottom:6px; }
+  .linkcard .lc-d{ font-size:15px; color:var(--dim); line-height:1.45; }
+  .linkcard .lc-go{ font-family:var(--mono); font-size:12px; color:var(--faint); margin-top:12px; }
+  .linkcard:hover .lc-go{ color:var(--accent); }
+
+  .foot{ margin-top:80px; padding-top:20px; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:11px; letter-spacing:0.05em; color:var(--faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .foot a{ color:var(--faint); text-decoration:none; border-bottom:1px solid var(--rule); }
+  .foot a:hover{ color:var(--accent); }
+
+  @media (max-width:560px){ body{ font-size:18px; } .frame{ padding:44px 22px 72px; } .top{ flex-direction:column; gap:18px; margin-bottom:40px; } }
+</style>
+</head>
+<body>
+<main class="frame">
+
+  <header class="top">
+    <a class="wordmark" href="/">Alec Meeker</a>
+    <nav class="top-nav">
+      <a href="/">Home</a>
+      <a href="https://github.com/alecmeeeker">GitHub</a>
+      <a href="mailto:alec@bushwickdaily.com">Email</a>
+    </nav>
+  </header>
+
+  <div class="kicker">2026-06-18 <span class="bar"></span> built for Bushwick Daily</div>
+  <h1><span class="lc">vidtranscript</span></h1>
+  <p class="standfirst">Provably real clips from civic video, for local newsrooms.</p>
+
+  <hr class="lede">
+
+  <article>
+    <p>I run a small newsroom in Brooklyn. Most nights the news is a three hour public meeting on a livestream, and the job is to pull two or three real quotes out of it, cut a clip people will actually watch, and write it up before morning. That work is slow, and the easy shortcuts are the dangerous ones. A generic AI tool will hand you a clean looking quote that nobody actually said. Print that once and you lose the one thing a local newsroom runs on, which is trust.</p>
+
+    <p>vidtranscript is the tool I built so that cannot happen.</p>
+
+    <h2><span class="n">01</span>What it does</h2>
+    <p>You give it a link to a civic video, a community board meeting, a debate, a press conference, or you upload footage from your own camera. It transcribes the whole thing, works out who is speaking, and lets you put a name to each voice yourself. It reads the transcript and proposes the moments worth covering. You review each one, hear it played back, and approve the cuts you want to keep. Then it renders a captioned vertical clip you can post, and drafts an article to go with it. The first useful thing, a searchable transcript with names attached, is ready while you are still reading.</p>
+
+    <p class="pull">The model reads and suggests. It never decides what is true.</p>
+
+    <h2><span class="n">02</span>Why it is different</h2>
+    <p>The part that matters is what the language model is allowed to do, and what it is not. The model is good at reading a long transcript and pointing at the parts that are newsworthy. It is not trusted to decide what was said, what is fair, or what is allowed to ship. Three checks handle those, and each one runs in code rather than in a prompt. Each one can refuse.</p>
+
+    <div class="gates">
+      <div class="gate">
+        <div class="gh">Check 1 · the quote</div>
+        <p>When the model proposes a quote, the tool matches that text word for word against the actual words in the recording. A quote is stored as a range of word positions, and the text you read is rebuilt from those words every time. If the model writes a word that nobody spoke, the quote is rejected. There is no path for a published quote to contain a word that is not in the recording. <strong>That is mechanical, not a promise.</strong> It guarantees the quote matches the transcript. It does not claim the transcript is a perfect record of the audio, because no transcription is, which is why a person still approves every quote by ear.</p>
+      </div>
+      <div class="gate">
+        <div class="gh">Check 2 · the approval</div>
+        <p>The approve button stays locked until the clip has played all the way through. You cannot ship a cut you have not heard. <strong>The rule lives on the server,</strong> so a clever front end cannot get around it.</p>
+      </div>
+      <div class="gate">
+        <div class="gh">Check 3 · the fairness of a debate edit</div>
+        <p>Before a debate edit can render, the tool recounts how much speaking time each candidate got in the final cut, with the moderator left out of the math. If the edit is lopsided, it will not render until you write down why. During an election season that is the difference between an edit you can defend and one you cannot. One honest limit: where people talk over each other, overlapping words get attributed to one speaker, so the count can undercount crosstalk.</p>
+      </div>
+    </div>
+
+    <h2><span class="n">03</span>What it costs and where it runs</h2>
+    <p>It runs on a laptop. Rendering the video costs nothing, because it uses ffmpeg instead of a paid video service. The only money spent is on transcription and on the model that reads the transcript, and every cent of it is written to a ledger you can query. A long meeting lands somewhere between a few cents and under a dollar, depending on how much of it is worth transcribing. The same source is never billed twice.</p>
+
+    <h2><span class="n">04</span>What it is, and what it is not yet</h2>
+    <p>I built it for <a href="https://bushwickdaily.com" style="color:var(--text);border-bottom:1px solid var(--accent);text-decoration:none;">Bushwick Daily</a>, the newsroom I have run for eight years, and it is in use there now. I would rather be straight about its edges than oversell it. It is built for one operator at a time, with no accounts or hosting yet. A few pieces, like an automatic recap reel, work from the command line but are not in the web app. The core path, from a pasted link to a finished captioned clip with a verified quote, is built and runs every day.</p>
+
+    <h2><span class="n">05</span>See it</h2>
+    <p>There are two ways to go deeper. If you run a newsroom or want to test it, the product walkthrough shows the whole flow on real footage. If you are an investor, the one page pitch covers the problem, the moats, the unit economics, and the ask.</p>
+
+    <div class="links">
+      <a class="linkcard" href="https://alecmeeeker.github.io/vidtranscript-pitch/customer/">
+        <div class="lc-tag">For newsrooms &amp; testers</div>
+        <div class="lc-h">The product walkthrough</div>
+        <div class="lc-d">How one paste of a civic meeting becomes a transcript, approved quotes, an article draft, and a captioned clip.</div>
+        <div class="lc-go">open the product pitch &rsaquo;</div>
+      </a>
+      <a class="linkcard" href="https://alecmeeeker.github.io/vidtranscript-pitch/investor/">
+        <div class="lc-tag">For investors</div>
+        <div class="lc-h">The one page pitch</div>
+        <div class="lc-d">The local news problem, the three code-enforced moats, the economics, and the ask. Proven live at a real newsroom.</div>
+        <div class="lc-go">open the investor pitch &rsaquo;</div>
+      </a>
+    </div>
+
+    <p style="margin-top:32px;" class="specline">Want a walkthrough on your own footage? Email <a href="mailto:alec.meeker@gmail.com" style="color:var(--accent);">alec.meeker@gmail.com</a>.</p>
+  </article>
+
+  <footer class="foot">
+    <span>&copy; <span id="y"></span> Alec Meeker · Brooklyn, NY</span>
+    <span>Set in Fraunces &amp; JetBrains Mono</span>
+  </footer>
+
+</main>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+</body>
+</html>
