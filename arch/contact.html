@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Alec Meeker</title>
+<meta name="description" content="Contact Alec Meeker. Brooklyn, New York.">
+<link rel="canonical" href="https://alecmeeker.com/contact.html">
+<style>
+  :root { --paper:#faf9f6; --ink:#22201c; --gray:#6f6a61; --link:#14603e; }
+  * { box-sizing:border-box; }
+  body { font-family:Georgia, 'Charter', 'Iowan Old Style', 'Times New Roman', serif;
+    font-size:17px; line-height:1.6; color:var(--ink); background:var(--paper);
+    max-width:36em; margin:0 auto; padding:3.5em 1.4em 4.5em;
+    font-kerning:normal; text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased; }
+  h1 { font-size:1.5em; line-height:1.25; letter-spacing:-0.01em; font-weight:700; margin:0 0 0.85em; }
+  p { margin:0 0 1.05em; }
+  a { color:var(--link); text-decoration-thickness:1px; text-underline-offset:2.5px; }
+  .nav { font-size:0.88em; margin:0 0 3.2em; color:var(--gray); }
+  .nav a { color:var(--link); }
+  form { margin-top:1.4em; }
+  form div { margin-bottom:1em; }
+  label { display:block; margin-bottom:0.3em; font-size:0.88em; color:var(--gray); }
+  input[type=text], input[type=email], textarea { width:100%; max-width:27em; font:inherit;
+    padding:0.5em 0.6em; border:1px solid #c9c4ba; border-radius:4px; color:var(--ink); background:#fff; }
+  input:focus, textarea:focus { outline:2px solid var(--link); outline-offset:1px; border-color:var(--link); }
+  textarea { min-height:7em; resize:vertical; }
+  button { font:inherit; padding:0.5em 1.6em; border:1px solid #9c978d; border-radius:4px; background:#f1efe9; cursor:pointer; }
+  button:hover { background:#e7e4dc; }
+  .foot { margin-top:4.2em; color:var(--gray); font-size:0.85em; }
+</style>
+</head>
+<body>
+
+<p class="nav"><a href="/">Alec Meeker</a> &middot; <a href="services.html">Services</a> &middot; <a href="work.html">Selected work</a> &middot; Contact</p>
+
+<h1>Contact</h1>
+
+<p>Inquiries: <a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a>, or the form below. Always happy to grab a coffee in New York.</p>
+
+<form action="https://formsubmit.co/alec@bushwickdaily.com" method="POST">
+  <input type="hidden" name="_subject" value="Inquiry — alecmeeker.com">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+  <div><label for="f-name">Name</label><input id="f-name" type="text" name="name" autocomplete="name" required></div>
+  <div><label for="f-email">Email</label><input id="f-email" type="email" name="email" autocomplete="email" required></div>
+  <div><label for="f-msg">Message</label><textarea id="f-msg" name="message" required></textarea></div>
+  <button type="submit">Send</button>
+</form>
+
+<p class="foot">Brooklyn, New York</p>
+
+</body>
+</html>

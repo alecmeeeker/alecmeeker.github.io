@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alec Meeker — Owner, Publisher &amp; CEO, Bushwick Daily · Applied AI Engineer</title>
+<meta name="description" content="Digital CV of Alec Meeker: Owner, Publisher & CEO of Bushwick Daily, builder of the Provenance-Grounded Research Agent (production multi-agent AI on the Claude Agent SDK), former institutional investment analyst. Brooklyn, NY.">
+<link rel="canonical" href="https://alecmeeker.com/">
+<meta property="og:title" content="Alec Meeker — Digital CV">
+<meta property="og:description" content="Owner, Publisher & CEO of Bushwick Daily. Built production multi-agent AI for a working newsroom. Former institutional investment analyst. Brooklyn, NY.">
+<meta property="og:url" content="https://alecmeeker.com/">
+<meta property="og:type" content="profile">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Alec Meeker",
+  "jobTitle": "Owner, Publisher & CEO",
+  "worksFor": { "@type": "Organization", "name": "Bushwick Daily / Brooklyn New Media, LLC" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Pittsburgh" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Brooklyn", "addressRegion": "NY" },
+  "email": "mailto:alec@bushwickdaily.com",
+  "url": "https://alecmeeker.com",
+  "sameAs": ["https://github.com/alecmeeeker", "https://linkedin.com/in/alecmeeker", "https://bushwickdaily.com"]
+}
+</script>
+<style>
+  :root{
+    --paper:#f6f2e8; --paper-2:#efe9db;
+    --ink:#1d1a15; --dim:#5d5647; --faint:#8a8171;
+    --rule:#cfc6b2; --rule-dark:#1d1a15;
+    --red:#9d2b1f;
+    --display:"Fraunces", Georgia, serif;
+    --body: Georgia, 'Charter', Cambria, serif;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--body); font-size:17px; line-height:1.58;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:clip;
+  }
+  ::selection{ background:var(--red); color:var(--paper); }
+  a{ color:inherit; }
+  .sheet{ max-width:1020px; margin:0 auto; padding:34px 30px 90px; }
+
+  /* ---- masthead ---- */
+  .mast{ text-align:center; border-bottom:3px double var(--rule-dark); padding-bottom:18px; }
+  .mast-top{ display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--rule-dark); padding-bottom:7px; margin-bottom:22px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); }
+  .mast h1{ font-family:var(--display); font-weight:900; font-variation-settings:"opsz" 144;
+    font-size:clamp(44px,8.5vw,86px); line-height:0.98; letter-spacing:0.045em; text-transform:uppercase; }
+  .mast .kicker{ margin-top:12px; font-family:var(--mono); font-size:12px; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--dim); }
+  .mast .kicker b{ color:var(--red); font-weight:500; }
+
+  /* folio nav */
+  .folio{ display:flex; justify-content:center; gap:0; flex-wrap:wrap;
+    border-bottom:1px solid var(--rule-dark); padding:9px 0; margin-bottom:44px; }
+  .folio a{ font-family:var(--mono); font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase;
+    text-decoration:none; color:var(--ink); padding:2px 18px; border-right:1px solid var(--rule); }
+  .folio a:last-child{ border-right:0; }
+  .folio a:hover{ color:var(--red); }
+  .folio a.hot{ color:var(--red); }
+
+  /* ---- section machinery ---- */
+  section{ margin-bottom:52px; }
+  .sec-label{ display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .sec-label h2{ font-family:var(--mono); font-weight:500; font-size:12px; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--ink); white-space:nowrap; }
+  .sec-label::after{ content:""; flex:1; border-top:1px solid var(--rule-dark); }
+  .sec-label::before{ content:"§"; font-family:var(--display); color:var(--red); font-size:14px; }
+
+  /* ---- lede ---- */
+  .lede{ display:grid; grid-template-columns:1.6fr 1fr; gap:44px; align-items:start; }
+  .lede-main p{ font-size:19.5px; line-height:1.6; margin-bottom:18px; max-width:58ch; }
+  .lede-main p:first-child::first-letter{
+    font-family:var(--display); font-weight:900; font-size:64px; line-height:0.8;
+    float:left; padding:6px 10px 0 0; color:var(--red);
+  }
+  .lede-main a{ text-decoration:none; border-bottom:1px solid var(--red); }
+  .lede-main a:hover{ color:var(--red); }
+  .lede-side{ border-left:1px solid var(--rule); padding-left:28px; }
+  .lede-side img{ width:150px; display:block; filter:grayscale(1) contrast(1.06);
+    border:1px solid var(--rule-dark); margin-bottom:14px; }
+  .lede-side .cap{ font-family:var(--mono); font-size:11px; line-height:1.7; letter-spacing:0.04em;
+    color:var(--faint); text-transform:uppercase; margin-bottom:22px; }
+  .lede-side dl{ font-size:14px; }
+  .lede-side dt{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--faint); margin-top:12px; }
+  .lede-side dd{ margin:2px 0 0; }
+  .lede-side dd a{ text-decoration:none; border-bottom:1px solid var(--rule); }
+  .lede-side dd a:hover{ color:var(--red); border-bottom-color:var(--red); }
+
+  /* ---- stat strip ---- */
+  .stats{ display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); border:1px solid var(--rule-dark); }
+  .stat{ padding:14px 8px 12px; border-right:1px solid var(--rule); text-align:center; background:var(--paper-2); min-width:0; }
+  .stat:last-child{ border-right:0; }
+  .stat b{ display:block; font-family:var(--display); font-weight:700; font-size:24px; line-height:1.1; }
+  .stat span{ display:block; margin-top:4px; font-family:var(--mono); font-size:9.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--dim); }
+
+  /* ---- system feature ---- */
+  .system{ display:grid; grid-template-columns:1.6fr 1fr; gap:44px; }
+  .system h3{ font-family:var(--display); font-weight:700; font-size:clamp(26px,4vw,36px);
+    line-height:1.08; margin-bottom:12px; }
+  .system h3 a{ text-decoration:none; }
+  .system h3 a:hover{ color:var(--red); }
+  .system p{ margin-bottom:14px; max-width:60ch; }
+  .system .cta{ font-family:var(--mono); font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    text-decoration:none; color:var(--red); border-bottom:1px solid var(--red); padding-bottom:2px; }
+  .specbox{ border:1px solid var(--rule-dark); background:var(--paper-2); padding:18px 20px; align-self:start; }
+  .specbox h4{ font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:0.2em;
+    text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
+  .specbox ul{ list-style:none; font-family:var(--mono); font-size:12px; line-height:2.0; color:var(--ink); }
+  .specbox li::before{ content:"— "; color:var(--red); }
+
+  /* ---- experience ---- */
+  .job{ display:grid; grid-template-columns:170px 1fr; gap:26px; padding:22px 0; border-top:1px solid var(--rule); }
+  .job:first-of-type{ border-top:0; padding-top:0; }
+  .job-when{ font-family:var(--mono); font-size:12px; letter-spacing:0.06em; color:var(--faint); padding-top:6px; }
+  .job h3{ font-family:var(--display); font-weight:700; font-size:22px; line-height:1.15; }
+  .job .role{ font-style:italic; color:var(--dim); margin:2px 0 10px; font-size:16px; }
+  .job ul{ list-style:none; }
+  .job li{ position:relative; padding-left:20px; margin-bottom:7px; max-width:72ch; font-size:15.5px; }
+  .job li::before{ content:"•"; position:absolute; left:2px; color:var(--red); }
+  .job li b{ font-weight:700; }
+
+  /* ---- work index ---- */
+  .work{ display:grid; grid-template-columns:1fr 1fr; gap:0 44px; }
+  .work a.item{ display:block; text-decoration:none; padding:14px 2px; border-top:1px solid var(--rule); }
+  .work a.item:hover .wt{ color:var(--red); }
+  .work .wd{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.1em; color:var(--faint); }
+  .work .wt{ font-family:var(--display); font-weight:600; font-size:19px; line-height:1.2; margin:3px 0 4px; }
+  .work .ws{ font-size:14px; color:var(--dim); max-width:52ch; }
+
+  /* ---- recognition ---- */
+  .recog{ display:grid; grid-template-columns:1fr 1fr; gap:44px; }
+  .recog ul{ list-style:none; }
+  .recog li{ position:relative; padding-left:20px; margin-bottom:8px; font-size:15.5px; }
+  .recog li::before{ content:"•"; position:absolute; left:2px; color:var(--red); }
+  .recog .cited{ font-style:italic; color:var(--dim); }
+
+  /* ---- footer ---- */
+  .colophon{ border-top:3px double var(--rule-dark); margin-top:26px; padding-top:14px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--faint); }
+  .colophon a{ color:var(--dim); text-decoration:none; }
+  .colophon a:hover{ color:var(--red); }
+
+  @media (max-width:760px){
+    .sheet{ padding:22px 18px 60px; }
+    .lede, .system, .work, .recog{ grid-template-columns:1fr; gap:26px; }
+    .lede-side{ border-left:0; padding-left:0; border-top:1px solid var(--rule); padding-top:22px; }
+    .stats{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .stat span{ letter-spacing:0.04em; }
+    .stat:nth-child(3){ border-right:0; }
+    .stat:nth-child(-n+3){ border-bottom:1px solid var(--rule); }
+    .job{ grid-template-columns:1fr; gap:6px; }
+    .folio a{ padding:2px 10px; }
+    .mast-top{ flex-direction:column; gap:2px; align-items:center; }
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <header class="mast">
+    <div class="mast-top">
+      <span>Brooklyn, New York</span>
+      <span>Digital CV — Established 2018</span>
+      <span id="today">2026</span>
+    </div>
+    <h1>Alec Meeker</h1>
+    <div class="kicker">Owner, Publisher &amp; CEO, <b>Bushwick Daily</b> &nbsp;·&nbsp; Applied AI Engineer &nbsp;·&nbsp; Former Institutional Investment Analyst</div>
+  </header>
+
+  <nav class="folio">
+    <a class="hot" href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute; (PDF)</a>
+    <a href="white_paper.html">White Paper</a>
+    <a href="https://github.com/alecmeeeker">GitHub</a>
+    <a href="https://linkedin.com/in/alecmeeker">LinkedIn</a>
+    <a href="mailto:alec@bushwickdaily.com">Email</a>
+  </nav>
+
+  <section class="lede" id="about">
+    <div class="lede-main">
+      <p>I run a newspaper, and I built the machine that runs it. In 2018 I valued Bushwick Daily with my own DCF model, bought it, and have operated it since as sole executive across product, engineering, sales, and operations, growing distribution to 4M monthly impressions across web and social.</p>
+      <p>When the newsroom needed research infrastructure no vendor sold, I built the <a href="white_paper.html">Provenance-Grounded Research Agent</a>: a production multi-agent RAG system on the Claude Agent SDK, running daily with citation-traceable outputs and human-in-the-loop gating. Before publishing, I was an investment analyst at Erie Insurance, covering a $200M investment-grade book within a $13B portfolio.</p>
+      <p>Everything below is verifiable: the code is public, the architecture is published, and the newspaper comes out every day.</p>
+    </div>
+    <aside class="lede-side">
+      <img src="photo-small.jpg" alt="Alec Meeker" width="150" height="150">
+      <div class="cap">Meeker &mdash; Brooklyn, NY</div>
+      <dl>
+        <dt>Currently</dt><dd>Owner, Publisher &amp; CEO — <a href="https://bushwickdaily.com">Bushwick Daily</a></dd>
+        <dt>Also</dt><dd>Communications Director (vol.), Khan for NY State Assembly '26</dd>
+        <dt>Credential</dt><dd>CFA Level I, top quartile all sections</dd>
+        <dt>Contact</dt><dd><a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a> · 814-464-3709</dd>
+      </dl>
+    </aside>
+  </section>
+
+  <section id="numbers">
+    <div class="sec-label"><h2>By the Numbers</h2></div>
+    <div class="stats">
+      <div class="stat"><b>4M</b><span>monthly impressions</span></div>
+      <div class="stat"><b>100+</b><span>commercial deals closed</span></div>
+      <div class="stat"><b>85%</b><span>client retention</span></div>
+      <div class="stat"><b>7,000+</b><span>articles published</span></div>
+      <div class="stat"><b>$200M</b><span>book covered, $13B portfolio</span></div>
+      <div class="stat"><b>$100M+</b><span>fund commitments diligenced</span></div>
+    </div>
+  </section>
+
+  <section id="system">
+    <div class="sec-label"><h2>The System</h2></div>
+    <div class="system">
+      <div>
+        <h3><a href="white_paper.html">The Provenance-Grounded Research Agent</a></h3>
+        <p>A production multi-agent research platform built for a working newsroom: multi-model orchestration routes Claude for generation, Haiku for classification, Gemini Flash for routing, and GPT-4 for specialized extraction. A PostgreSQL warehouse with pgvector and HNSW indexing fuses vector similarity with full-text search through Reciprocal Rank Fusion. An adaptive memory system with deterministic quality gates learns from human feedback. Every agent-initiated action clears human approval before it touches the paper.</p>
+        <p>It is deployed across news research, story extraction, and email triage, and it runs every day.</p>
+        <a class="cta" href="white_paper.html">Read the white paper &rarr;</a>
+      </div>
+      <div class="specbox">
+        <h4>Specification</h4>
+        <ul>
+          <li>Claude Agent SDK</li>
+          <li>Multi-model orchestration</li>
+          <li>PostgreSQL · pgvector · HNSW</li>
+          <li>Reciprocal Rank Fusion</li>
+          <li>Adaptive memory + quality gates</li>
+          <li>Celery · Redis · Playwright</li>
+          <li>Human-in-the-loop approval</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-label"><h2>Experience</h2></div>
+
+    <div class="job">
+      <div class="job-when">Feb 2018 — Present</div>
+      <div>
+        <h3>Bushwick Daily / Brooklyn New Media, LLC</h3>
+        <div class="role">Owner, Publisher &amp; CEO — New York, NY</div>
+        <ul>
+          <li><b>Applied AI:</b> Architected, shipped, and operate the Provenance-Grounded Research Agent, a production multi-agent RAG system on the Claude Agent SDK; architecture published as a technical white paper.</li>
+          <li><b>Commercial:</b> Owned the full sales cycle on 100+ deals spanning NYC city agencies (Department of Education, Office of the Mayor, MOME), institutions and brands (NYU Langone, Citi Bike, Airbnb), and Manhattan ad agencies; land-and-expand motion delivered 85% retention and 30%+ average expansion on renewals.</li>
+          <li><b>Government &amp; policy:</b> Built and maintain the publication's government relationships across three mayoral administrations; partnered with the publisher coalition whose campaign won the nation's first state payroll tax credit for local news employment ($90M, FY2025 NY budget); classified by MOME as a preferred city partner and official city news source.</li>
+          <li><b>Operations:</b> Acquired the publication and a second brand on self-built DCF valuations; managed a 20+ person organization; recruited 30+ journalists; CUNY internship pipeline produced 15 full-time hires; produced sponsored events up to 600 people.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-when">2026</div>
+      <div>
+        <h3>Mahtab Khan for New York State Assembly, District 24</h3>
+        <div class="role">Communications Director (volunteer) — Queens, NY</div>
+        <ul>
+          <li>Directed communications for a contested State Assembly primary targeted by opposition super PACs: candidate messaging, press relations, and rapid response.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-when">Jan 2015 — Mar 2017</div>
+      <div>
+        <h3>Erie Insurance / Erie Indemnity Company</h3>
+        <div class="role">Investment Analyst — Erie, PA</div>
+        <ul>
+          <li>Covered the firm's $200M investment-grade bond portfolio within the $13B book: relative value analysis for primary issuance, credit underwriting models, buy/sell recommendations on 20+ credits.</li>
+          <li>Led due diligence on $100M+ in private equity, venture capital, mezzanine, and real estate fund commitments, with on-site GP evaluations and Burgiss benchmarking.</li>
+          <li>Presented to the senior investment committee on a bottom-up Oil Field Services reallocation; authored the monthly inflation overview for the Asset Allocation Committee.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-when">2013 — 2014</div>
+      <div>
+        <h3>Bank of America Merrill Lynch / BNY Mellon</h3>
+        <div class="role">Management Intern / Performance Analytics — Erie &amp; Pittsburgh, PA</div>
+        <ul>
+          <li>Analyst rotations across wealth-management compliance and institutional performance analytics; built SQL-based reporting systems.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-when">2011 — 2014</div>
+      <div>
+        <h3>University of Pittsburgh</h3>
+        <div class="role">B.S. Finance &amp; Business Information Systems — Pittsburgh, PA</div>
+        <ul>
+          <li>Passed CFA Level I (2015), top quartile in all sections.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="sec-label"><h2>Selected Work</h2></div>
+    <div class="work">
+      <a class="item" href="vidtranscript.html">
+        <div class="wd">2026-06</div>
+        <div class="wt">vidtranscript</div>
+        <div class="ws">Provably real clips from civic video, for local newsrooms.</div>
+      </a>
+      <a class="item" href="https://alecmeeeker.github.io/local-ai-newsroom-ledger/">
+        <div class="wd">2026-05</div>
+        <div class="wt">Prose Is Dead. Local News Isn't.</div>
+        <div class="ws">Position paper on the future infrastructure of local news.</div>
+      </a>
+      <a class="item" href="white_paper.html">
+        <div class="wd">2026-03</div>
+        <div class="wt">The AI-Powered Local Newsroom</div>
+        <div class="ws">White paper: a hyperlocal newsroom on a multi-agent retrieval platform.</div>
+      </a>
+      <a class="item" href="data_warehouse_report.html">
+        <div class="wd">2026-03</div>
+        <div class="wt">Data Warehouse &amp; Ingestion Pipeline</div>
+        <div class="ws">1.79M articles in a PostgreSQL + pgvector warehouse, sub-100ms search.</div>
+      </a>
+      <a class="item" href="news_scanner_report.html">
+        <div class="wd">2026-03</div>
+        <div class="wt">NYCNewsScanner &amp; Publisher</div>
+        <div class="ws">Multi-agent news discovery with human-in-the-loop review.</div>
+      </a>
+      <a class="item" href="email_assistant_report.html">
+        <div class="wd">2026-03</div>
+        <div class="wt">Email Assistant</div>
+        <div class="ws">LLM triage and Playwright automation over the newsroom inbox.</div>
+      </a>
+      <a class="item" href="email_warehouse_oss.html">
+        <div class="wd">2026-04</div>
+        <div class="wt">Email Ingestion Data Warehouse</div>
+        <div class="ws">Open-source seven-stage email pipeline: dedup, chunking, classification.</div>
+      </a>
+      <a class="item" href="multiverse_platform_oss.html">
+        <div class="wd">2026-04</div>
+        <div class="wt">Local News Multiverse Agent Platform</div>
+        <div class="ws">Open-source multi-agent platform with PostgreSQL persistence.</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="recognition">
+    <div class="sec-label"><h2>Recognition</h2></div>
+    <div class="recog">
+      <ul>
+        <li>LION Publishers Sustainability Audit Grant, 2024</li>
+        <li>LION Publishers Grant for Sustainable Journalism, 2023</li>
+        <li>Center for Community Media Creator in Residence, CUNY</li>
+        <li>CCM Election Reporting Fellowship</li>
+      </ul>
+      <ul>
+        <li class="cited">Coverage cited by The New York Times, New York Magazine, Rolling Stone, and Gothamist.</li>
+        <li class="cited">Classified by the NYC Mayor's Office of Media and Entertainment as a preferred city partner and official city news source.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <span>&copy; <span id="y">2026</span> Alec Meeker &middot; Brooklyn, NY</span>
+    <span><a href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute;</a> &middot; <a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a></span>
+    <span>Set in Fraunces &amp; Georgia</span>
+  </footer>
+
+</main>
+<script>
+  var d=new Date();
+  document.getElementById('y').textContent=d.getFullYear();
+  document.getElementById('today').textContent=d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+</script>
+</body>
+</html>
