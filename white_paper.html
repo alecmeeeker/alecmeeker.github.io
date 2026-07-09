@@ -1,147 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-TZJB1RJXV6');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White Paper, Building an AI-Powered Local Newsroom | Alec Meeker</title>
-    <meta name="description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
-    <meta name="author" content="Alec Meeker">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article">
-    <meta property="og:site_name" content="Alec Meeker Portfolio">
-    <meta property="og:title" content="Building an AI-Powered Local Newsroom | Alec Meeker">
-    <meta property="og:description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
-    <meta property="og:url" content="https://alecmeeker.com/white_paper.html">
-    <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Building an AI-Powered Local Newsroom | Alec Meeker">
-    <meta name="twitter:description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
-    <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://alecmeeker.com/white_paper.html">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/site.css">
-    <style>
-    /* Page-specific: white paper masthead */
-    .paper-masthead {
-        padding-top: calc(var(--nav-h) + 48px);
-        padding-bottom: clamp(48px, 8vw, 104px);
-        border-bottom: 1px solid var(--rule);
-    }
-    .paper-masthead__title {
-        font-size: clamp(3rem, 8.5vw, 7.5rem);
-        font-weight: 500;
-        line-height: 0.92;
-        letter-spacing: -0.035em;
-        color: var(--ink);
-        font-family: var(--font-display);
-        font-variation-settings: "opsz" 144, "SOFT" 30;
-        margin: 32px 0 24px;
-        max-width: 16ch;
-    }
-    .paper-masthead__title em { font-style: italic; color: var(--accent); }
-    .paper-masthead__dek {
-        font-size: clamp(1.25rem, 2vw, 1.75rem);
-        color: var(--ink-2);
-        max-width: 68ch;
-        line-height: 1.4;
-        font-variation-settings: "opsz" 48, "SOFT" 40;
-        font-family: var(--font-body);
-        margin-bottom: 40px;
-    }
-    .paper-masthead__meta { display: flex; gap: 12px; flex-wrap: wrap; }
-    .paper-masthead__byline {
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--ink-mute);
-        margin-top: 24px;
-    }
-    .paper-masthead__byline strong { color: var(--ink); font-weight: 500; }
-
-    /* Table of contents */
-    .paper-toc {
-        padding: clamp(32px, 5vw, 64px) 0;
-        background: var(--paper-2);
-        border-top: 1px solid var(--rule);
-        border-bottom: 1px solid var(--rule);
-        margin: clamp(64px, 8vw, 104px) 0;
-    }
-    .paper-toc__inner { max-width: var(--max-prose); margin: 0 auto; padding: 0 var(--gutter); }
-    .paper-toc__head {
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta);
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--ink-mute);
-        margin-bottom: 24px;
-    }
-    .paper-toc__list { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
-    .paper-toc__list li {
-        display: flex;
-        align-items: baseline;
-        gap: 24px;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--rule);
-        counter-increment: toc;
-    }
-    .paper-toc__list li:last-child { border-bottom: none; }
-    .paper-toc__list li::before {
-        content: counter(toc, decimal-leading-zero);
-        font-family: var(--font-mono);
-        font-size: var(--fs-meta);
-        color: var(--accent);
-        letter-spacing: 0.08em;
-        min-width: 28px;
-    }
-    .paper-toc__list a {
-        font-family: var(--font-display);
-        font-size: clamp(1.125rem, 1.6vw, 1.375rem);
-        font-weight: 500;
-        color: var(--ink);
-        letter-spacing: -0.01em;
-        flex: 1;
-        border: none;
-    }
-    .paper-toc__list a:hover { color: var(--accent); }
-
-    /* Code blocks (preserve existing codehilite markup) */
-    .codehilite { margin: 1.5em 0; }
-    .codehilite pre {
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        line-height: 1.6;
-        padding: clamp(16px, 2vw, 24px);
-        background: var(--paper-2);
-        border: 1px solid var(--rule);
-        color: var(--ink);
-        overflow-x: auto;
-        white-space: pre;
-    }
-    </style>
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TZJB1RJXV6');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>White Paper, Building an AI-Powered Local Newsroom | Alec Meeker</title>
+<meta name="description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
+<meta name="author" content="Alec Meeker">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Alec Meeker Portfolio">
+<meta property="og:title" content="Building an AI-Powered Local Newsroom | Alec Meeker">
+<meta property="og:description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
+<meta property="og:url" content="https://alecmeeker.com/white_paper.html">
+<meta property="og:image" content="https://alecmeeker.com/photo.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Building an AI-Powered Local Newsroom | Alec Meeker">
+<meta name="twitter:description" content="White paper on building an AI-powered local newsroom. Covers RAG architecture, multi-agent systems, and sustainable news automation at hyperlocal scale. By Alec Meeker.">
+<meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+<link rel="canonical" href="https://alecmeeker.com/white_paper.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -168,93 +60,32 @@
 </head>
 <body>
 
-<header class="term-header">
-    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">USER: AJM@NYC-01</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
-    <nav class="term-header__keys">
-        <a class="keycap" href="index.html#theory"><strong>F1</strong>THEORY</a>
-        <a class="keycap" href="index.html#system"><strong>F2</strong>SYSTEM</a>
-        <a class="keycap" href="index.html#code"><strong>F3</strong>CODE</a>
-        <a class="keycap" href="index.html#chronicle"><strong>F4</strong>CHRONICLE</a>
-        <a class="keycap" href="index.html#about"><strong>F5</strong>ABOUT</a>
-        <a class="keycap" href="Alec_Meeker_Resume.pdf"><strong>F6</strong>RESUME</a>
-    </nav>
+<header class="topbar">
+  <a class="topbar__mark" href="/">Alec Meeker</a>
+  <nav class="topbar__nav">
+    <a href="work.html" class="on">Work</a>
+    <a href="cv.html">Record</a>
+    <a href="mailto:alec@bushwickdaily.com">Email</a>
+  </nav>
 </header>
-<div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <!-- Duplicate for seamless loop -->
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-    </div>
-</div>
+<hr class="topbar-rule">
 
-<nav class="nav">
-    <div class="nav__inner">
-        <a class="nav__brand" href="index.html">Alec Meeker</a>
-        <ul class="nav__links"><li><a href="https://github.com/alecmeeeker">GitHub</a></li><li><a href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute;</a></li><li><a href="https://linkedin.com/in/alecmeeker">LinkedIn</a></li></ul>
-    </div>
-</nav>
+<main class="sheet">
 
-<div class="progress-bar" id="progress-bar"></div>
+<header class="masthead">
+  <div class="masthead__inner">
+    <p class="caps masthead__kicker">WHITE PAPER</p>
+    <h1 class="masthead__title">Building an <em>AI-Powered</em> Local Newsroom</h1>
+    <p class="masthead__dek">A comprehensive technical architecture for transforming hyperlocal journalism through artificial intelligence, covering data ingestion, vector retrieval, multi-agent orchestration, and editorial control systems.</p>
+    <p class="caps masthead__meta">Production <span class="sep">&middot;</span> March 2026 <span class="sep">&middot;</span> Technical Paper <span class="sep">&middot;</span> ~15 min read</p>
+    <p class="caps masthead__byline"><strong>Alec Meeker</strong> &nbsp;&middot;&nbsp; Bushwick Daily</p>
+    <hr class="rule-double">
+  </div>
+</header>
 
-<main>
-    <div class="wrap-prose">
-        <p class="breadcrumb"><a href="index.html">Alec Meeker</a> <span class="breadcrumb__sep">></span> <span class="breadcrumb__current">WHITE_PAPER</span></p>
-    </div>
-
-    <header class="paper-masthead">
-        <div class="wrap-prose">
-            <p class="kicker kicker--accent">SECTION 01 &middot; WHITE PAPER</p>
-            <h1 class="paper-masthead__title">Building an <em>AI-Powered</em> Local Newsroom</h1>
-            <p class="paper-masthead__dek">A comprehensive technical architecture for transforming hyperlocal journalism through artificial intelligence, covering data ingestion, vector retrieval, multi-agent orchestration, and editorial control systems.</p>
-            <div class="paper-masthead__meta">
-                <span class="badge badge--shipped">Production</span>
-                <span class="badge">March 2026</span>
-                <span class="badge">Technical Paper</span>
-                <span class="badge">~15 min read</span>
-            </div>
-            <p class="paper-masthead__byline"><strong>Alec Meeker</strong> &nbsp;&middot;&nbsp; Bushwick Daily</p>
-        </div>
-    </header>
-
-    <section class="paper-toc">
-        <div class="paper-toc__inner">
-            <p class="paper-toc__head">Contents</p>
-            <ol class="paper-toc__list">
+<section class="contents">
+  <p class="caps contents__head">Contents</p>
+  <ol>
                 <li><a href="#abstract">Abstract</a></li>
                 <li><a href="#1-introduction-the-local-news-crisis-and-an-ai-response">Introduction: The Local News Crisis</a></li>
                 <li><a href="#2-system-architecture-overview">System Architecture Overview</a></li>
@@ -268,11 +99,11 @@
                 <li><a href="#11-conclusion">Conclusion</a></li>
                 <li><a href="#appendices">Appendices</a></li>
             </ol>
-        </div>
-    </section>
+</section>
 
-    <div class="prose-with-margin">
-        <article class="prose">
+<div class="paperbody paperbody--margins">
+
+<article class="prose">
 <h2 id="abstract">Abstract</h2>
 <p>The local news crisis has left communities across America without reliable journalism coverage. While national outlets consolidate and local newsrooms collapse, AI has emerged as a potential force multiplier that could enable small newsrooms to punch above their weight. This white paper documents the nine-month development of a comprehensive AI infrastructure built by Bushwick Daily, a hyperlocal Brooklyn publication. The system encompasses 255 GB of structured data including 1.79 million scraped news articles from 75+ outlets, 218,000 processed emails with participant intelligence, and 8 million searchable semantic chunks. The architecture integrates multiple AI subsystems: an intelligent news scanner that monitors NYC media and extracts stories from email intelligence, an adaptive memory system that learns editorial preferences through human feedback, and an email assistant that triages correspondence and generates voice-accurate draft responses. The human-in-the-loop design philosophy ensures AI augments rather than replaces editorial judgment, with explicit checkpoints requiring human approval before any automated action. Development proceeded through deliberate iteration, with significant architectural pivots driven by production experience rather than theoretical assumptions. The resulting system demonstrates that sophisticated AI infrastructure is achievable for small newsrooms, potentially transforming the economics of local journalism by enabling one-person operations to maintain coverage depth traditionally requiring dedicated research staff.</p>
 
@@ -1724,7 +1555,8 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
 <em>Alec Meeker, alec@bushwickdaily.com</em><br>
 <em>LinkedIn: linkedin.com/in/alecmeeker &middot; GitHub: alecmeeeker.github.io</em></p>
         </article>
-        <aside class="margin-notes">
+
+<aside class="margin-notes">
             <div class="margin-note" style="margin-top: 2em;">
                 <strong>The Premise</strong>
                 Nine months of engineering for one hyperlocal newsroom. The local news crisis, met with infrastructure rather than platitudes.
@@ -1762,31 +1594,20 @@ Actions: <span class="o">[</span>x<span class="o">]</span>spam <span class="o">[
                 Published March 2026. If AI can let one publisher sustain the coverage depth once requiring a full staff, the economics of local journalism change.
             </div>
         </aside>
+
+</div>
+
+<footer class="footer">
+  <div class="masthead__inner">
+    <hr class="rule-double">
+    <div class="footer__row">
+      <span>&copy; 2026 Alec Meeker &middot; Brooklyn, New York</span>
+      <span><a href="/">alecmeeker.com</a></span>
+      <span>Set in Newsreader &amp; JetBrains Mono</span>
     </div>
+  </div>
+</footer>
 
-    <footer class="footer">
-        <div class="wrap">
-            <div class="footer__grid">
-                <div class="footer__colophon">
-                    <strong>Colophon.</strong> Set in Fraunces and JetBrains Mono. Hand-coded HTML and CSS, no build system. Part of the <a class="link" href="index.html">AI-Powered Local Newsroom</a> portfolio. White paper compiled March 2026.
-                </div>
-                <div class="footer__right">
-                    <div>&copy; 2026 Alec Meeker</div>
-                    <div style="margin-top: 4px;"><a class="link" href="index.html">&larr; Back to portfolio</a></div>
-                </div>
-            </div>
-        </div>
-    </footer>
 </main>
-
-<script>
-    const bar = document.getElementById('progress-bar');
-    window.addEventListener('scroll', () => {
-        const h = document.documentElement;
-        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-        bar.style.width = pct + '%';
-    }, { passive: true });
-</script>
-
 </body>
 </html>

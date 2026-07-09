@@ -4,12 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alec Meeker</title>
-<meta name="description" content="Alec Meeker builds production AI systems and advises on media, communications, and government affairs. Owner of Bushwick Daily. Brooklyn, New York.">
+<meta name="description" content="Alec Meeker. Owner and operator of New York media properties. Private consulting in applied AI, communications, and government affairs. Brooklyn, New York.">
 <link rel="canonical" href="https://alecmeeker.com/">
 <meta property="og:title" content="Alec Meeker">
-<meta property="og:description" content="Applied AI systems and media advisory. New York.">
+<meta property="og:description" content="Owner and operator of New York media properties. Private consulting in applied AI, communications, and government affairs. New York.">
 <meta property="og:url" content="https://alecmeeker.com/">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,38 +28,90 @@
 }
 </script>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 16px; line-height: 1.5; color: #111; background: #fff;
-    max-width: 640px; margin: 0 auto; padding: 48px 20px 64px; }
-  h1 { font-size: 1.35em; margin: 0 0 20px; }
-  h2 { font-size: 1.1em; margin: 36px 0 10px; }
-  p { margin: 0 0 14px; }
-  ul { margin: 0 0 14px; padding-left: 22px; }
-  li { margin-bottom: 10px; }
-  img.me { width: 130px; height: 130px; object-fit: cover; margin-bottom: 20px; display: block; }
-  .foot { margin-top: 44px; color: #555; font-size: 0.9em; }
+  .card { max-width: 620px; margin: 0 auto; padding: clamp(56px, 9vw, 104px) var(--gutter) 96px; }
+  .card__portrait {
+      width: 108px; height: 108px; object-fit: cover; display: block;
+      filter: grayscale(1) contrast(1.04);
+      border: 1px solid var(--rule-mid);
+      padding: 4px; background: var(--paper);
+      margin-bottom: 30px;
+  }
+  .card__name {
+      font-size: 1.28rem; font-weight: 500;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      font-variation-settings: "opsz" 24;
+      margin-bottom: 26px;
+  }
+  .card .rule-double { width: 64px; margin-bottom: 34px; }
+  .card p { font-size: 1.09rem; line-height: 1.75; max-width: 54ch; margin-bottom: 1.35em; }
+  .card p a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--rule-mid); transition: color .2s ease, text-decoration-color .2s ease; }
+  .card p a:hover { color: var(--navy); text-decoration-color: var(--navy); }
+  .card__holdings { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--rule); }
+  .card__holdings .caps { display: block; margin-bottom: 10px; }
+  .card__holdings p { margin-bottom: 0; }
+  .card__close { margin-top: 44px; }
+  .card__close p { margin-bottom: 0.6em; }
+  .card__email {
+      display: inline-block; margin-top: 10px;
+      font-size: 1.09rem; text-decoration: none;
+      border-bottom: 1px solid var(--rule-strong); padding-bottom: 1px;
+      transition: color .2s ease, border-color .2s ease;
+  }
+  .card__email:hover { color: var(--navy); border-color: var(--navy); }
+  .card__foot {
+      margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px;
+      font-size: 0.76rem; color: var(--ink-mute);
+  }
+  .card__foot a { color: var(--ink-mute); text-decoration: none; transition: color .2s ease; }
+  .card__foot a:hover { color: var(--ink); }
+  .card__foot .links { display: flex; gap: 18px; }
 </style>
 </head>
 <body>
 
-<img class="me" src="photo-small.jpg" alt="Alec Meeker">
+<header class="topbar">
+  <span></span>
+  <nav class="topbar__nav">
+    <a href="work.html">Work</a>
+    <a href="cv.html">Record</a>
+  </nav>
+</header>
 
-<h1>Alec Meeker</h1>
+<main class="card">
+  <img class="card__portrait arrive" src="photo-small.jpg" alt="Alec Meeker" width="108" height="108">
 
-<p>I design and build production AI systems, and I advise on media, communications, and government affairs. I own and operate <a href="https://bushwickdaily.com">Bushwick Daily</a>; the research platform I built to run it is documented in a <a href="/white-paper">technical white paper</a>. Previously, I was an investment analyst covering investment-grade bonds in the oil-and-gas and metals-and-mining sectors, and performed diligence on alternative investment fund placements. I live in Brooklyn.</p>
+  <h1 class="card__name arrive arrive-2">Alec Meeker</h1>
+  <hr class="rule-double arrive arrive-2">
 
-<p>Email: <a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a>.</p>
+  <div class="arrive arrive-3">
+    <p>Owner and operator of New York media properties.</p>
 
-<h2>Services</h2>
-<p><b>Applied AI systems.</b> Design and build: retrieval, agents, and data infrastructure, taken to production.</p>
-<p><b>Media &amp; communications.</b> Positioning, press, and government relations, from an operating publisher.</p>
-<p><b>Commercial &amp; financial analysis.</b> Valuation, diligence, and partnership strategy.</p>
-<p>Work at Bushwick Daily has been cited by The New York Times, New York Magazine, Rolling Stone, and Gothamist.</p>
+    <p>Private consulting in applied AI, communications, and government affairs; the practice runs from creative direction and fundraising to full-stack engineering. Engagements have included electoral campaigns, city government, and institutional clients. A standing portfolio across successive New York mayoral administrations.</p>
 
-<h2>Elsewhere</h2>
-<p><a href="https://github.com/alecmeeeker">alecmeeeker</a> on GitHub; <a href="https://linkedin.com/in/alecmeeker">LinkedIn</a>; <a href="Alec_Meeker_Resume.pdf">CV</a> (PDF); the <a href="/white-paper">white paper</a>.</p>
+    <p>Designed and operates proprietary AI research infrastructure; the architecture is published as a <a href="/white-paper">white paper</a>.</p>
 
-<p class="foot">Brooklyn, New York</p>
+    <p>Earlier career in institutional credit and private markets.</p>
+
+    <div class="card__holdings">
+      <p>Founder and CEO of Brooklyn New Media. Owner and publisher of <a href="https://bushwickdaily.com">Bushwick Daily</a>.</p>
+    </div>
+
+    <div class="card__close">
+      <p>Work is taken on selectively. Always happy to grab a coffee in New York.</p>
+      <a class="card__email" href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a>
+    </div>
+  </div>
+
+  <footer class="card__foot">
+    <span>Brooklyn, New York</span>
+    <span class="links">
+      <a href="https://github.com/alecmeeeker">GitHub</a>
+      <a href="https://linkedin.com/in/alecmeeker">LinkedIn</a>
+      <a href="Alec_Meeker_Resume.pdf">Résumé</a>
+    </span>
+  </footer>
+</main>
 
 </body>
 </html>

@@ -1,70 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-TZJB1RJXV6');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Warehouse & Ingestion Pipeline | Alec Meeker</title>
-    <meta name="description" content="Technical documentation of a 1.5M+ article data warehouse built with PostgreSQL 17, pgvector, and Scrapy. Covers ingestion pipelines, HNSW indexing, and semantic search. By Alec Meeker.">
-    <meta name="author" content="Alec Meeker">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article">
-    <meta property="og:site_name" content="Alec Meeker Portfolio">
-    <meta property="og:title" content="Data Warehouse & Ingestion Pipeline | Alec Meeker">
-    <meta property="og:description" content="Technical documentation of a 1.5M+ article data warehouse built with PostgreSQL 17, pgvector, and Scrapy. Covers ingestion pipelines, HNSW indexing, and semantic search. By Alec Meeker.">
-    <meta property="og:url" content="https://alecmeeker.com/data_warehouse_report.html">
-    <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Data Warehouse & Ingestion Pipeline | Alec Meeker">
-    <meta name="twitter:description" content="Technical documentation of a 1.5M+ article data warehouse built with PostgreSQL 17, pgvector, and Scrapy. Covers ingestion pipelines, HNSW indexing, and semantic search. By Alec Meeker.">
-    <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://alecmeeker.com/data_warehouse_report.html">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/site.css">
-    <style>
-    .report-masthead { padding-top: calc(var(--nav-h) + 24px); padding-bottom: clamp(48px, 7vw, 88px); border-bottom: 1px solid var(--rule); }
-    .report-masthead__title { font-size: clamp(2.5rem, 6.5vw, 5.5rem); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; color: var(--ink); font-family: var(--font-display); font-variation-settings: "opsz" 144, "SOFT" 30; margin: 24px 0; max-width: 14ch; }
-    .report-masthead__dek { font-size: var(--fs-standfirst); color: var(--ink-2); max-width: 60ch; margin-bottom: 32px; line-height: 1.4; font-variation-settings: "opsz" 36, "SOFT" 40; }
-    .report-masthead__meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-    .doc-nav { background: var(--paper-2); border: 1px solid var(--rule); padding: clamp(20px, 3vw, 32px); margin: 48px 0; }
-    .doc-nav-header h4 { font-family: var(--font-mono); font-size: var(--fs-meta); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); margin: 0 0 4px; }
-    .doc-nav-header span { font-family: var(--font-mono); font-size: var(--fs-meta-s); color: var(--ink-mute); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 16px; }
-    .doc-nav-list { list-style: none; padding: 0; margin: 0; }
-    .doc-nav-list li { padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: var(--fs-body-s); color: var(--ink-2); }
-    .doc-nav-list li:last-child { border-bottom: none; }
-    .doc-nav-list a { color: var(--accent-2); border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
-    .doc-nav-list a:hover { color: var(--accent); border-color: var(--accent); }
-    .doc-nav-list .current { color: var(--ink-mute); font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.08em; text-transform: uppercase; }
-    .doc-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .doc-nav-item { display: block; padding: 16px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); transition: border-color 0.15s ease, background 0.15s ease; }
-    .doc-nav-item:hover { border-color: var(--ink); background: var(--paper-2); }
-    .doc-nav-item .nav-section { font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
-    .doc-nav-item .nav-title { font-family: var(--font-display); font-size: 1rem; font-weight: 500; line-height: 1.2; color: var(--ink); }
-    .codehilite { margin: 1.5em 0; }
-    .codehilite pre { font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.6; padding: clamp(16px, 2vw, 24px); background: var(--paper-2); border: 1px solid var(--rule); color: var(--ink); overflow-x: auto; white-space: pre; }
-    </style>
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TZJB1RJXV6');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Warehouse & Ingestion Pipeline | Alec Meeker</title>
+<meta name="description" content="Technical documentation of a 1.5M+ article data warehouse built with PostgreSQL 17, pgvector, and Scrapy. Covers ingestion pipelines, HNSW indexing, and semantic search. By Alec Meeker.">
+<meta name="author" content="Alec Meeker">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Alec Meeker Portfolio">
+<meta property="og:title" content="Data Warehouse & Ingestion Pipeline | Alec Meeker">
+<meta property="og:description" content="Technical documentation of a 1.5M+ article data warehouse built with PostgreSQL 17, pgvector, and Scrapy. Covers ingestion pipelines, HNSW indexing, and semantic search. By Alec Meeker.">
+<meta property="og:url" content="https://alecmeeker.com/data_warehouse_report.html">
+<meta property="og:image" content="https://alecmeeker.com/photo.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Data Warehouse & Ingestion Pipeline | Alec Meeker">
+<meta name="twitter:description" content="Technical documentation of a 1.5M+ article data warehouse built with PostgreSQL 17, pgvector, and Scrapy. Covers ingestion pipelines, HNSW indexing, and semantic search. By Alec Meeker.">
+<meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+<link rel="canonical" href="https://alecmeeker.com/data_warehouse_report.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -91,96 +60,36 @@
 </head>
 <body>
 
-<header class="term-header">
-    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">USER: AJM@NYC-01</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
-    <nav class="term-header__keys">
-        <a class="keycap" href="index.html#theory"><strong>F1</strong>THEORY</a>
-        <a class="keycap" href="index.html#system"><strong>F2</strong>SYSTEM</a>
-        <a class="keycap" href="index.html#code"><strong>F3</strong>CODE</a>
-        <a class="keycap" href="index.html#chronicle"><strong>F4</strong>CHRONICLE</a>
-        <a class="keycap" href="index.html#about"><strong>F5</strong>ABOUT</a>
-        <a class="keycap" href="Alec_Meeker_Resume.pdf"><strong>F6</strong>RESUME</a>
-    </nav>
+<header class="topbar">
+  <a class="topbar__mark" href="/">Alec Meeker</a>
+  <nav class="topbar__nav">
+    <a href="work.html" class="on">Work</a>
+    <a href="cv.html">Record</a>
+    <a href="mailto:alec@bushwickdaily.com">Email</a>
+  </nav>
 </header>
-<div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <!-- Duplicate for seamless loop -->
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-    </div>
-</div>
+<hr class="topbar-rule">
 
-<nav class="nav">
-    <div class="nav__inner">
-        <a class="nav__brand" href="index.html">Alec Meeker</a>
-        <ul class="nav__links"><li><a href="https://github.com/alecmeeeker">GitHub</a></li><li><a href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute;</a></li><li><a href="https://linkedin.com/in/alecmeeker">LinkedIn</a></li></ul>
-    </div>
-</nav>
+<main class="sheet">
 
-<div class="progress-bar" id="progress-bar"></div>
+<header class="masthead">
+  <div class="masthead__inner">
+    <p class="caps masthead__kicker">SUBSYSTEM REPORT</p>
+    <h1 class="masthead__title">Data Warehouse &amp; Ingestion Pipeline</h1>
+    <p class="masthead__dek">The foundation layer: 1.79M articles, 8.14M semantic chunks, 255&nbsp;GB on a single SSD. PostgreSQL 17 with pgvector HNSW indices, Scrapy + Celery orchestration, atomic deduplication, and sub-100ms vector search across the full corpus.</p>
+    <p class="caps masthead__meta">Production <span class="sep">&middot;</span> PostgreSQL 17 <span class="sep">&middot;</span> pgvector <span class="sep">&middot;</span> Scrapy <span class="sep">&middot;</span> Published March 2026</p>
+    <hr class="rule-double">
+  </div>
+</header>
 
-<main>
-    <div class="wrap-prose">
-        <p class="breadcrumb"><a href="index.html">Alec Meeker</a> <span class="breadcrumb__sep">></span> <span class="breadcrumb__current">DATA_WAREHOUSE</span></p>
-    </div>
+<section class="figureline">
+  <span class="figureline__num">1.79M</span>
+  <span class="figureline__caption">Articles ingested across 75+ NYC outlets. 8.14 million embedded chunks. 255&nbsp;GB. One SSD. Sub-100ms p95.</span>
+</section>
 
-    <header class="report-masthead">
-        <div class="wrap-prose">
-            <p class="kicker kicker--accent">SECTION 01 · SUBSYSTEM REPORT</p>
-            <h1 class="report-masthead__title">Data Warehouse &amp; Ingestion Pipeline</h1>
-            <p class="report-masthead__dek">The foundation layer: 1.79M articles, 8.14M semantic chunks, 255&nbsp;GB on a single SSD. PostgreSQL 17 with pgvector HNSW indices, Scrapy + Celery orchestration, atomic deduplication, and sub-100ms vector search across the full corpus.</p>
-            <div class="report-masthead__meta">
-                <span class="badge badge--shipped">Production</span>
-                <span class="badge">PostgreSQL 17</span>
-                <span class="badge">pgvector</span>
-                <span class="badge">Scrapy</span>
-                <span class="badge">Published March 2026</span>
-            </div>
-        </div>
-    </header>
+<div class="paperbody">
 
-    <section class="spread">
-        <span class="spread__num">1.79M</span>
-        <span class="spread__caption">Articles ingested across 75+ NYC outlets. 8.14 million embedded chunks. 255&nbsp;GB. One SSD. Sub-100ms p95.</span>
-    </section>
-
-    <div class="wrap-prose">
-        <article class="prose">
+<article class="prose">
 <h1 style="display:none">Data Warehouse &amp; Ingestion Pipeline</h1>
 
 <!-- Related Documents Navigation -->
@@ -439,31 +348,20 @@
 <hr />
 <p><em> Core infrastructure files: <code>/news_scraper_project/news_scraper_project/pipelines.py</code>, <code>/news_scraper_project/news_scraper_project/spiders/article_spider.py</code>, <code>/news_scraper_project/news_scraper_project/tasks.py</code>, <code>/news_scraper_project/news_scraper_project/middlewares.py</code>, <code>/news_scraper_project/scripts/create_chunks_table.py</code>.</em></p>
         </article>
+
+</div>
+
+<footer class="footer">
+  <div class="masthead__inner">
+    <hr class="rule-double">
+    <div class="footer__row">
+      <span>&copy; 2026 Alec Meeker &middot; Brooklyn, New York</span>
+      <span><a href="white_paper.html">the white paper</a> &nbsp;&middot;&nbsp; <a href="/">alecmeeker.com</a></span>
+      <span>Set in Newsreader &amp; JetBrains Mono</span>
     </div>
+  </div>
+</footer>
 
-    <footer class="footer">
-        <div class="wrap">
-            <div class="footer__grid">
-                <div class="footer__colophon">
-                    <strong>Colophon.</strong> Set in Fraunces and JetBrains Mono. Hand-coded HTML and CSS, no build system. Part of the <a class="link" href="white_paper.html">AI-Powered Local Newsroom</a> portfolio.
-                </div>
-                <div class="footer__right">
-                    <div>© 2026 Alec Meeker</div>
-                    <div style="margin-top: 4px;"><a class="link" href="index.html">← Back to portfolio</a></div>
-                </div>
-            </div>
-        </div>
-    </footer>
 </main>
-
-<script>
-    const bar = document.getElementById('progress-bar');
-    window.addEventListener('scroll', () => {
-        const h = document.documentElement;
-        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-        bar.style.width = pct + '%';
-    }, { passive: true });
-</script>
-
 </body>
 </html>

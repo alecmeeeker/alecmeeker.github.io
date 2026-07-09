@@ -1,64 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-TZJB1RJXV6');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local News Multiverse Agent Platform | Alec Meeker</title>
-    <meta name="description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents, and version control.">
-    <meta name="author" content="Alec Meeker">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article">
-    <meta property="og:site_name" content="Alec Meeker Portfolio">
-    <meta property="og:title" content="Local News Multiverse Agent Platform | Alec Meeker">
-    <meta property="og:description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents.">
-    <meta property="og:url" content="https://alecmeeker.com/multiverse_platform_oss.html">
-    <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Local News Multiverse Agent Platform | Alec Meeker">
-    <meta name="twitter:description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents.">
-    <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://alecmeeker.com/multiverse_platform_oss.html">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/site.css">
-    <style>
-    /* Page-specific: OSS masthead */
-    .report-masthead { padding-top: calc(var(--nav-h) + 24px); padding-bottom: clamp(48px, 7vw, 88px); border-bottom: 1px solid var(--rule); }
-    .report-masthead__title { font-size: clamp(2.5rem, 6.5vw, 5.5rem); font-weight: 500; line-height: 0.95; letter-spacing: -0.03em; color: var(--ink); font-family: var(--font-display); font-variation-settings: "opsz" 144, "SOFT" 30; margin: 24px 0; max-width: 14ch; }
-    .report-masthead__dek { font-size: var(--fs-standfirst); color: var(--ink-2); max-width: 60ch; margin-bottom: 32px; line-height: 1.4; font-variation-settings: "opsz" 36, "SOFT" 40; }
-    .report-masthead__meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-    /* Repo meta strip */
-    .repo-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; padding: 24px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 40px; }
-    .repo-meta__item { display: flex; flex-direction: column; gap: 4px; }
-    .repo-meta__label { font-family: var(--font-mono); font-size: var(--fs-meta-s); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
-    .repo-meta__value { font-family: var(--font-mono); font-size: 0.95rem; color: var(--ink); font-weight: 500; }
-    .repo-meta__value a { color: var(--accent-2); }
-    .repo-meta__value a:hover { color: var(--accent); }
-    /* Pre/code blocks */
-    .codehilite { margin: 1.5em 0; }
-    .codehilite pre, .paper-content pre { font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; padding: clamp(16px, 2vw, 24px); background: var(--paper-2); border: 1px solid var(--rule); color: var(--ink); overflow-x: auto; white-space: pre; margin: 1.5em 0; }
-    </style>
-
-    <script type="application/ld+json">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZJB1RJXV6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TZJB1RJXV6');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local News Multiverse Agent Platform | Alec Meeker</title>
+<meta name="description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents, and version control.">
+<meta name="author" content="Alec Meeker">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Alec Meeker Portfolio">
+<meta property="og:title" content="Local News Multiverse Agent Platform | Alec Meeker">
+<meta property="og:description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents.">
+<meta property="og:url" content="https://alecmeeker.com/multiverse_platform_oss.html">
+<meta property="og:image" content="https://alecmeeker.com/photo.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Local News Multiverse Agent Platform | Alec Meeker">
+<meta name="twitter:description" content="Open source self-hosted MLOps platform for agentic AI workflows. LangGraph-compatible local persistence, parallel path exploration, self-evolving agents.">
+<meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+<link rel="canonical" href="https://alecmeeker.com/multiverse_platform_oss.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -85,96 +60,36 @@
 </head>
 <body>
 
-<header class="term-header">
-    <span class="term-header__brand">MEEKER &lt;AJM&gt;</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">USER: AJM@NYC-01</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta">SESSION 04-17-26 · 09:42:11 EST</span>
-    <span class="term-header__sep">│</span>
-    <span class="term-header__meta"><span class="status-dot"></span> LIVE</span>
-    <nav class="term-header__keys">
-        <a class="keycap" href="index.html#theory"><strong>F1</strong>THEORY</a>
-        <a class="keycap" href="index.html#system"><strong>F2</strong>SYSTEM</a>
-        <a class="keycap" href="index.html#code"><strong>F3</strong>CODE</a>
-        <a class="keycap" href="index.html#chronicle"><strong>F4</strong>CHRONICLE</a>
-        <a class="keycap" href="index.html#about"><strong>F5</strong>ABOUT</a>
-        <a class="keycap" href="Alec_Meeker_Resume.pdf"><strong>F6</strong>RESUME</a>
-    </nav>
+<header class="topbar">
+  <a class="topbar__mark" href="/">Alec Meeker</a>
+  <nav class="topbar__nav">
+    <a href="work.html" class="on">Work</a>
+    <a href="cv.html">Record</a>
+    <a href="mailto:alec@bushwickdaily.com">Email</a>
+  </nav>
 </header>
-<div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">WAREHOUSE</span> <span class="ticker__val">255GB</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">QUERY</span> <span class="ticker__val">27ms</span> <span class="ticker__delta ticker__delta--neg">▼</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">COMMITS</span> <span class="ticker__val">321</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">FUND DILIGENCE</span> <span class="ticker__val">$100M+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">OUTPERFORM</span> <span class="ticker__val">+210bps</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">ACQUISITIONS</span> <span class="ticker__val">2</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">HIRES</span> <span class="ticker__val">30+</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">YoY</span> <span class="ticker__val">+25%</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <!-- Duplicate for seamless loop -->
-        <span class="ticker__item"><span class="ticker__label">ARTICLES</span> <span class="ticker__val">1,790,000</span> <span class="ticker__delta">▲</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CHUNKS</span> <span class="ticker__val">8,140,000</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">CFA</span> <span class="ticker__val">L1 ✓</span></span>
-        <span class="ticker__sep">│</span>
-        <span class="ticker__item"><span class="ticker__label">PORTFOLIO</span> <span class="ticker__val">$200M</span></span>
-    </div>
-</div>
+<hr class="topbar-rule">
 
-<nav class="nav">
-    <div class="nav__inner">
-        <a class="nav__brand" href="index.html">Alec Meeker</a>
-        <ul class="nav__links"><li><a href="https://github.com/alecmeeeker">GitHub</a></li><li><a href="Alec_Meeker_Resume.pdf">R&eacute;sum&eacute;</a></li><li><a href="https://linkedin.com/in/alecmeeker">LinkedIn</a></li></ul>
-    </div>
-</nav>
+<main class="sheet">
 
-<div class="progress-bar" id="progress-bar"></div>
+<header class="masthead">
+  <div class="masthead__inner">
+    <p class="caps masthead__kicker">OPEN SOURCE · REFERENCE IMPLEMENTATION</p>
+    <h1 class="masthead__title">Local News Multiverse Agent Platform</h1>
+    <p class="masthead__dek">A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows, without cloud dependencies. A self-hosted LangGraph alternative with PostgreSQL persistence, parallel path exploration, and self-evolving agents.</p>
+    <p class="caps masthead__meta">Open Source <span class="sep">&middot;</span> Python 3.11 <span class="sep">&middot;</span> FastAPI <span class="sep">&middot;</span> LangGraph-compatible <span class="sep">&middot;</span> PostgreSQL</p>
+    <hr class="rule-double">
+  </div>
+</header>
 
-<main>
-    <div class="wrap-prose">
-        <p class="breadcrumb"><a href="index.html">Alec Meeker</a> <span class="breadcrumb__sep">></span> <span class="breadcrumb__current">MULTIVERSE_PLATFORM</span></p>
-    </div>
+<section class="figureline">
+  <span class="figureline__num">5&times;</span>
+  <span class="figureline__caption">PARALLEL EXPLORATION PATHS, run up to five strategy branches simultaneously, compare results, and commit the winner.</span>
+</section>
 
-    <header class="report-masthead">
-        <div class="wrap-prose">
-            <p class="kicker kicker--accent">OPEN SOURCE · REFERENCE IMPLEMENTATION</p>
-            <h1 class="report-masthead__title">Local News Multiverse Agent Platform</h1>
-            <p class="report-masthead__dek">A 100% local, open-source MLOps platform for building, testing, and evolving agentic AI workflows, without cloud dependencies. A self-hosted LangGraph alternative with PostgreSQL persistence, parallel path exploration, and self-evolving agents.</p>
-            <div class="report-masthead__meta">
-                <span class="badge badge--oss">Open Source</span>
-                <span class="badge">Python 3.11</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">LangGraph-compatible</span>
-                <span class="badge">PostgreSQL</span>
-            </div>
-        </div>
-    </header>
+<div class="paperbody">
 
-    <section class="spread">
-        <span class="spread__num">5&times;</span>
-        <span class="spread__caption">PARALLEL EXPLORATION PATHS, run up to five strategy branches simultaneously, compare results, and commit the winner.</span>
-    </section>
-
-    <div class="wrap-prose">
-        <article class="prose">
+<article class="prose">
 <h1 style="display:none">Local News Multiverse Agent Platform</h1>
 
 <!-- repo metadata strip -->
@@ -573,28 +488,20 @@ streamlit run ui/agents_v3_workbench.py --server.port 8501</code></pre></div>
 <p><em>Built with determination in Brooklyn, NYC.</em></p>
 
         </article>
+
+</div>
+
+<footer class="footer">
+  <div class="masthead__inner">
+    <hr class="rule-double">
+    <div class="footer__row">
+      <span>&copy; 2026 Alec Meeker &middot; Brooklyn, New York</span>
+      <span><a href="white_paper.html">the white paper</a> &nbsp;&middot;&nbsp; <a href="/">alecmeeker.com</a></span>
+      <span>Set in Newsreader &amp; JetBrains Mono</span>
     </div>
-    <footer class="footer">
-        <div class="wrap">
-            <div class="footer__grid">
-                <div class="footer__colophon">
-                    <strong>Colophon.</strong> Set in Fraunces and JetBrains Mono. Hand-coded HTML and CSS, no build system. Part of the <a class="link" href="white_paper.html">AI-Powered Local Newsroom</a> portfolio. Open-source reference implementation for production systems.
-                </div>
-                <div class="footer__right">
-                    <div>© 2026 Alec Meeker</div>
-                    <div style="margin-top: 4px;"><a class="link" href="index.html">← Back to portfolio</a></div>
-                </div>
-            </div>
-        </div>
-    </footer>
+  </div>
+</footer>
+
 </main>
-<script>
-    const bar = document.getElementById('progress-bar');
-    window.addEventListener('scroll', () => {
-        const h = document.documentElement;
-        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-        bar.style.width = pct + '%';
-    }, { passive: true });
-</script>
 </body>
 </html>
