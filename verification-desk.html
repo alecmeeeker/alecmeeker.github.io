@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deterministic Quotation Verification and a Reduced False-Positive Rate in an Automated Source-Fidelity Checker for News</title>
+<style>
+:root{
+  --paper:#faf8f2; --ink:#1a1712; --ink-soft:#4a463c; --muted:#736c5c; --rule:#cfc7b3;
+  --red:#8f2018; --link:#8f2018; --green:#245536; --greenbg:#eef3ec; --amber:#7a4f00;
+  --amberbg:#f6efdd; --blue:#274a78; --bluebg:#eceff5;
+  --serif:"Charter","Source Serif 4","Iowan Old Style","Georgia","Times New Roman",serif;
+  --sans:"Avenir Next","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono",ui-monospace,"Berkeley Mono",Menlo,Consolas,monospace;
+  --measure:40rem;
+}
+*{box-sizing:border-box}
+html{background:#e9e4d6;-webkit-text-size-adjust:100%}
+body{
+  max-width:46rem;margin:0 auto;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:1.0625rem;line-height:1.62;
+  padding:4.5rem 4.5rem 6rem;
+  box-shadow:0 0 0 1px #00000012, 0 20px 60px -30px #00000033;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  font-variant-numeric:oldstyle-nums proportional-nums;
+  hyphens:auto;
+}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid #8f201855}
+a:hover{border-bottom-color:var(--link)}
+::selection{background:#8f20181f}
+
+/* ---- title block ---- */
+.docmeta{font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin-bottom:1.4rem;font-variant-numeric:lining-nums}
+h1.title{font-size:1.62rem;line-height:1.28;font-weight:700;text-align:center;letter-spacing:-.006em;
+  max-width:34rem;margin:0 auto .9rem;text-wrap:balance}
+.byline{text-align:center;font-size:.92rem;color:var(--ink-soft);margin-bottom:.3rem}
+.byline .aff{font-style:italic;color:var(--muted);font-size:.86rem}
+.rule-sep{border:0;border-top:1px solid var(--rule);max-width:12rem;margin:1.7rem auto}
+
+/* ---- abstract ---- */
+.abstract{max-width:38rem;margin:1.6rem auto 0;padding:0 1.4rem;font-size:.975rem;line-height:1.58}
+.abstract .h{font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.08em;
+  text-transform:uppercase;text-align:center;color:var(--ink);margin-bottom:.5rem}
+.abstract p{margin:.5rem 0;text-align:justify}
+.keywords{max-width:38rem;margin:1rem auto 0;padding:0 1.4rem;font-size:.9rem;color:var(--ink-soft)}
+.keywords b{font-family:var(--sans);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- headings: numbered, restrained ---- */
+h2{font-size:1.18rem;font-weight:700;margin:2.5rem 0 .55rem;letter-spacing:-.004em;line-height:1.3}
+h2 .secnum{display:inline-block;min-width:1.5rem;color:var(--red)}
+h3{font-size:1.0rem;font-weight:700;margin:1.5rem 0 .4rem;color:var(--ink)}
+h3 .secnum{display:inline-block;min-width:2.1rem;color:var(--red);font-weight:700}
+h4{font-family:var(--sans);font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink-soft);margin:1.1rem 0 .3rem}
+
+/* ---- body text: journal paragraphing ---- */
+p{margin:0;max-width:var(--measure)}
+p + p{text-indent:1.4em}
+h2 + p, h3 + p, .boxed p, .abstract p, li p, td p{text-indent:0}
+section > p, .wrap > p{text-align:justify}
+.lead{margin-top:.2rem}
+strong{font-weight:700}
+em{font-style:italic}
+code{font-family:var(--mono);font-size:.85em;background:#00000008;padding:.05em .3em;border-radius:2px;
+  font-variant-numeric:lining-nums}
+.mono{font-family:var(--mono);font-variant-numeric:lining-nums}
+small{font-size:.86rem;color:var(--ink-soft)}
+
+/* ---- boxed statement (proposition/definition), academic convention ---- */
+.boxed{border:1px solid var(--rule);border-left:3px solid var(--green);background:var(--greenbg);
+  padding:.85rem 1.15rem;margin:1.1rem 0;max-width:var(--measure)}
+.boxed.blue{border-left-color:var(--blue);background:var(--bluebg)}
+.boxed .lbl{font-family:var(--sans);font-weight:700;font-size:.74rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--green);margin-bottom:.25rem}
+.boxed.blue .lbl{color:var(--blue)}
+.boxed p{margin:.2rem 0;max-width:none;font-size:.98rem}
+
+/* ---- tables: booktabs style, captioned ---- */
+figure.tbl{margin:1.6rem 0;max-width:none}
+figure.tbl figcaption{font-size:.86rem;color:var(--ink-soft);margin-bottom:.5rem;text-align:left;line-height:1.45}
+figure.tbl figcaption b{font-family:var(--sans);font-weight:700;font-size:.76rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink);margin-right:.5em}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:lining-nums tabular-nums;
+  font-family:var(--sans)}
+thead th{text-align:left;font-weight:700;font-size:.82rem;padding:.4rem .7rem;
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--ink)}
+tbody td{padding:.42rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.42}
+tbody tr:last-child td{border-bottom:1.5px solid var(--ink)}
+th.num,td.num{text-align:right;white-space:nowrap}
+
+.footnote{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);
+  font-size:.82rem;color:var(--muted);line-height:1.5}
+.footnote a{color:var(--muted);border-bottom-color:#73728c55}
+
+@media (max-width:640px){
+  body{padding:2.4rem 1.4rem 3.5rem;font-size:1rem}
+  h1.title{font-size:1.35rem}
+  .abstract,.keywords{padding:0}
+  figure.tbl{overflow-x:auto}
+  p + p{text-indent:1.2em}
+}
+@media (prefers-color-scheme: dark){
+  html{background:#14120d}
+  :root{--paper:#1c1a15;--ink:#e9e3d4;--ink-soft:#b3ab97;--muted:#8a836f;--rule:#3a362c;
+    --link:#e08a80;--greenbg:#1a241c;--bluebg:#181d26;--amberbg:#241f14;}
+  body{box-shadow:0 0 0 1px #ffffff0d,0 20px 60px -30px #00000080}
+  code{background:#ffffff10}
+  a{border-bottom-color:#e08a8055}
+}
+@media print{
+  html{background:#fff} body{box-shadow:none;max-width:none;padding:0;font-size:10.5pt}
+  h2,h3{break-after:avoid} figure.tbl,.boxed{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="docmeta">The Verification Desk &middot; Technical Report &middot; July 2026</div>
+
+<h1 class="title">Deterministic Quotation Verification and a Reduced False-Positive Rate in an Automated Source-Fidelity Checker for News</h1>
+
+<div class="byline">Bushwick Daily &middot; Verification Desk Engineering</div>
+<div class="byline"><span class="aff">An independent local newsroom, New York</span></div>
+
+<hr class="rule-sep">
+
+<div class="abstract">
+  <div class="h">Abstract</div>
+  <p>We reduced the false-positive rate of an automated source-fidelity checker for news production by identifying and correcting the two causes of its underperformance, and we confirm the improvement with a controlled before-and-after evaluation. The Verification Desk checks whether machine-drafted news articles faithfully represent their sources before publication. Over a defined period it held a large number of correctly-sourced articles as defective. We trace this to two independent causes and address both. First, model selection: on an identical, fixed body of evidence, replacing an open-source model with Anthropic's Opus&nbsp;4.8 reduced the blocking-objection rate from 83% to 37% (measured over 204 and 107 articles). Second, evidence assembly: we identify and correct five mechanisms by which the system supplied incomplete evidence to the model without recording it had done so, with the result that 13 working links to established news and government sites, previously classified as fabricated, drop to 0, and attachment text in 4% of source records (360 of 8,975), previously unread, is now read. Thirty-seven of thirty-nine identified changes were implemented and verified. The corrections additionally yield a stateable guarantee for a fabrication-prone class of claim: within its scope, a fabricated or altered direct quotation cannot be recorded as verified, because confirmation is decided by a deterministic presence check that overrides the model. A verification control&mdash;an article containing a genuine discrepancy&mdash;is correctly still held, distinguishing a real correction from an indiscriminate loosening of the checker. We conclude that the elevated false-positive rate arose from incomplete evidence rather than from excessive strictness, and that correcting the evidence pipeline while preserving the checker's decision criteria both reduces incorrect objections and retains genuine detection.</p>
+</div>
+<div class="keywords"><b>Keywords</b> &nbsp; source fidelity, automated fact-checking, large language models, hallucination, evidence retrieval, deterministic verification, news production</div>
+
+<div class="wrap">
+
+<h2 id="s1"><span class="secnum">1</span>Introduction</h2>
+<p class="lead">Bushwick Daily is an independent local newsroom whose publishing pipeline drafts article text with large language models, working from source material the newsroom has gathered: press releases and newsletters received by email, frequently with PDF or Word attachments, and articles retrieved from other outlets. Because a language model can produce fluent text that is not fully supported by its sources, every draft passes through an automated review stage, the Verification Desk, before it may be published.</p>
+<p>The Verification Desk checks a single, specific property called <em>source fidelity</em>: whether each factual claim in a draft&mdash;every figure, date, name, quotation, and attribution&mdash;faithfully represents the sources the newsroom holds or cites. This is deliberately distinct from truth. If a source makes a false assertion and the article reports that assertion accurately and attributes it correctly, the Desk passes it; evaluating the underlying assertion is a matter for editorial reporting, not automated verification. Restricting the system's question to faithfulness-to-source is what makes it automatable: fidelity to a held document is mechanically checkable, whereas truth about the world generally is not.</p>
+<p>This report documents a reliability problem in that system&mdash;a period of elevated false-positive rate, in which correctly-sourced articles were held as defective&mdash;its analysis, the corrective changes made, and a before-and-after evaluation of their effect. It is written to be read without prior familiarity with the system.</p>
+
+<h2 id="s2"><span class="secnum">2</span>System overview</h2>
+<p class="lead">For each article the Desk assembles the relevant evidence and evaluates the article against it. The evidence has two forms. The <em>corpus</em> is the source material the newsroom holds for the story&mdash;the text of the relevant emails, their attachments, and any retrieved articles&mdash;assembled into a single reviewable body of text. The <em>cited pages</em> are the external web pages the article links to; the Desk retrieves each so that a claim attributed to a page can be checked against that page's actual content.</p>
+<p>A language model reads the draft alongside this evidence and produces a <em>claim ledger</em>: one entry per checkable claim, each carrying a verdict (for example <em>confirmed</em>, <em>unsupported</em>, or <em>inaccurate</em>) and a severity. A second, deterministic layer applies fixed rules over the model's output. A <em>publish gate</em> then reads the ledger and permits publication only if no unresolved claim of blocking severity remains. The design is intentionally conservative: under uncertainty the Desk holds an article for human review rather than releasing it.</p>
+<p>One distinction organizes the remainder of this report. The model supplies <em>judgment</em>; the surrounding system supplies the model's <em>evidence</em>. A verdict can be no better than the evidence the system placed before the model. The problem analyzed here is a problem of evidence, not of judgment.</p>
+
+<h2 id="s3"><span class="secnum">3</span>Problem identification</h2>
+<p class="lead">In mid-July 2026 a large batch of finished, publish-ready articles was held by the Desk, each marked as having a sourcing problem. Reviewing a sample of these holds against the underlying sources established that a substantial majority were <em>false positives</em>: the sourcing was faithful and the article correct, and the Desk's objection was mistaken.</p>
+<p>A false positive in a publish gate has a specific cost profile. It does not expose readers to an error&mdash;the conservative design prevents that. Instead it consumes editorial time and withholds correct work from publication, and, at sufficient frequency, erodes operator trust in the checker. For a system whose value rests entirely on its objections being credible, an elevated false-positive rate is the failure mode most worth correcting. The objective of this work was to reduce that rate without reducing the Desk's ability to detect genuine problems.</p>
+
+<h2 id="s4"><span class="secnum">4</span>Analysis</h2>
+<h3><span class="secnum">4.1</span>Two independent contributors</h3>
+<p class="lead">Analysis identified two independent contributors, and separating them was the first result. The first was <em>model selection</em>. The held batch had been checked by an open-source model adopted temporarily under a cost-reduction experiment. The second was <em>evidence handling</em>: in a meaningful fraction of cases the system assembled incomplete evidence, and the model evaluated claims against it. The second contributor is model-independent, because it acts upstream of the model's judgment.</p>
+<p>To separate the two, the held articles were re-checked with a stronger model (Opus&nbsp;4.8) using the <em>same</em> evidence. Corpus assembly does not depend on the model, and the source material was fixed at the time of both runs, so both models read identical evidence. Table&nbsp;1 isolates the model's contribution.</p>
+<figure class="tbl">
+  <figcaption><b>Table 1</b> Blocking-objection rate by model configuration, evaluated on the same fixed evidence.</figcaption>
+  <table>
+    <thead><tr><th>Configuration</th><th class="num">Articles</th><th class="num">Passed</th><th class="num">Held</th></tr></thead>
+    <tbody>
+      <tr><td>Open-source model, original evidence pipeline</td><td class="num">204</td><td class="num">34 (17%)</td><td class="num">170 (83%)</td></tr>
+      <tr><td>Opus&nbsp;4.8, same evidence pipeline</td><td class="num">107</td><td class="num">67 (63%)</td><td class="num">40 (37%)</td></tr>
+    </tbody>
+  </table>
+</figure>
+<p>This addresses an apparent paradox: if the evidence was sometimes incomplete, how could the stronger model perform so much better on it? It did not have better evidence; it read the same evidence and judged it more accurately. In every examined case where the open-source model reported a claim as unsupported, the supporting text was in fact present in the corpus. The difference was calibration on shared evidence. Accordingly, the open-source routing experiment was retired and production checking now runs on Opus&nbsp;4.8. That change alone does not resolve the second contributor, because a stronger model cannot compensate for evidence it is never shown; the evidence-handling corrections in Section&nbsp;5 were made independently.</p>
+
+<h3><span class="secnum">4.2</span>The five evidence mechanisms</h3>
+<p class="lead">Five distinct mechanisms were traced to specific behavior in the code and confirmed against live data. In each, the system evaluated a claim against evidence that was incomplete and did not record the incompleteness. Table&nbsp;2 summarizes them.</p>
+<figure class="tbl">
+  <figcaption><b>Table 2</b> The five evidence-assembly mechanisms identified, and their effect on a claim's verdict.</figcaption>
+  <table>
+    <thead><tr><th>Mechanism</th><th>Behavior</th><th>Effect on a claim</th></tr></thead>
+    <tbody>
+      <tr><td>Cited-page truncation</td><td>Each retrieved page was truncated to its first 12,000 characters under a shared budget consumed in citation order; pages cited later could receive a fragment or nothing, with no logic preserving the passage a claim relied on.</td><td>A quotation located beyond the cutoff was invisible to the model, which reported the article's accurate quotation as a misquotation.</td></tr>
+      <tr><td>Fetch-failure classification</td><td>When a cited page could not be retrieved&mdash;commonly because the site blocks automated requests, or the request timed out&mdash;it was classified as fabricated rather than as unreachable.</td><td>Working links to established outlets were reported as invented citations.</td></tr>
+      <tr><td>Unread attachments</td><td>The corpus builder read the body of each source email but not the text already extracted from its PDF or Word attachments.</td><td>A press release placing its figures in an attached fact sheet had those figures reported as unsupported.</td></tr>
+      <tr><td>Alt-text loss</td><td>The HTML-to-text routine discarded image alt-text. One transit agency's newsletter encodes subway-line letters as small logo images; discarding the alt-text turned &ldquo;the G and B trains&rdquo; into &ldquo;the&nbsp;&nbsp;and&nbsp;&nbsp;trains.&rdquo;</td><td>Source text was corrupted before an article was drafted from it.</td></tr>
+      <tr><td>Partial quotation matching</td><td>The deterministic check confirming a supplied quotation against a page compared only the first 80 characters.</td><td>A quotation with a correct opening but an altered ending could pass.</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="s5"><span class="secnum">5</span>Design changes</h2>
+<h3><span class="secnum">5.1</span>Separating link validity from content retrieval</h3>
+<p class="lead">The most instructive change concerns validation of cited links, because the original design conflated two different questions. The first is whether a link is <em>real</em>&mdash;a language model can invent a plausible URL, and citing a nonexistent source is a genuine fidelity problem. The second is whether the page's <em>content supports the claim</em> attributed to it. The original implementation answered both by fetching the page and treated any fetch failure as evidence that the link was fabricated. A fetch can, however, fail for reasons unrelated to whether the link is real: the site may block automated requests, require a subscription, or respond slowly.</p>
+<p>The redesign separates the two questions. Link validity is now determined by a Domain Name System (DNS) lookup: a link is treated as fabricated only when its domain does not resolve, confirmed against a second resolver. This does not retrieve the page, so a site's request-blocking cannot affect it, and it is the only condition that blocks an article on link grounds. Content support is still assessed by retrieving the page, which remains the majority of the Desk's link-related work; but when retrieval fails, the claim is marked unverifiable at minor, non-blocking severity, because the fabrication question has already been answered independently. The change reduced complexity: it removed any need for the fetch to succeed in order to validate a link. After it, every domain that had previously produced a false fabricated-link objection is correctly non-blocking when its content cannot be retrieved, while a genuinely non-resolving domain is still identified.</p>
+
+<h3><span class="secnum">5.2</span>Preserving access to complete evidence</h3>
+<p class="lead">The mechanisms in Section&nbsp;4.2 share a root property: the system based verdicts on partial evidence without recording that the evidence was partial. The corrective principle adopted is that the Desk may bound how much evidence it places in a single model request, but must never evaluate a claim as if the evidence were complete when it was not; access to the full source material must be preserved, and only the presentation to the model is bounded.</p>
+<p>Three mechanisms enforce this. Cited pages are retrieved in full and then reduced by selecting the passages surrounding each claim, rather than by cutting to a fixed length, so a claim's supporting text is not lost due to its page's position in the citation list. The complete, uncut source text is retained for each check and used by the deterministic rules, so a determination such as &ldquo;this quotation does not appear in the source&rdquo; is made against the entire source even when the model was shown an excerpt. And any claim whose supporting evidence could not be fully examined is explicitly marked as incomplete and routed for further handling rather than receiving a final verdict. Incompleteness is thereby represented as an explicit state rather than an unrecorded condition.</p>
+
+<h3><span class="secnum">5.3</span>A deterministic guarantee for quoted material</h3>
+<p class="lead">The mechanisms above yield a specific, stateable property for one important and fabrication-prone class of claim: direct quotations. For a quotation attributed to a source the newsroom holds or successfully retrieves, the system does not rely on the language model's judgment to confirm it. After the model assigns a verdict, a deterministic check re-tests every quotation the model marked as confirmed against the complete, retained source text. Confirmation is upheld only if the quoted text is present in that source; where it is not, the deterministic check overrides the model and records the claim as a misquotation at blocking severity, irrespective of the model's assertion.</p>
+<div class="boxed">
+  <div class="lbl">Property 1</div>
+  <p>Within its scope&mdash;a quotation grounded in a source that is available to the system&mdash;a fabricated or altered quotation cannot be recorded as verified. The model's confirmation is necessary but not sufficient; deterministic presence of the quoted text in the source is required. The check is not a heuristic or a model judgment but a fixed rule executed after the model and empowered to override it.</p>
+</div>
+<p>Presence is evaluated after normalization of whitespace, quotation-mark style, and Unicode form, so that formatting differences do not cause false rejections; for long passages it tolerates internal ellipsis while still requiring each segment of the quotation to be present, so that a legitimate excerpt passes but a fabricated continuation does not. We verified the property directly: a supplied quotation consisting of a genuine opening followed by a fabricated remainder is rejected by the check, whereas the prior implementation&mdash;which compared only the opening characters of the quotation&mdash;accepted it.</p>
+<p><strong>Scope and non-claims.</strong> This is a narrow and absolute guarantee, not a broad and probabilistic one, and its limits are as important as its content. It applies to verbatim quoted material for which the cited source is available. It does not extend to paraphrase, numeric inference, or characterization, which are not verbatim strings and are assessed by the model together with other checks; and it does not apply when the cited source cannot be retrieved, in which case the claim is recorded as unverifiable rather than confirmed. The system therefore does not claim to detect every possible hallucination. What it establishes is stronger for being bounded: for the class of claim it covers, a confirmed verdict cannot be produced by a fabrication, because confirmation is decided by deterministic presence in the source rather than by the model's assertion.</p>
+
+<h2 id="s6"><span class="secnum">6</span>Evaluation</h2>
+<p class="lead">Thirty-nine issues were identified and confirmed against the live code and database; thirty-seven were implemented, each as an isolated change with an automated test, integrated in a defined order with re-testing at each step. Two were deliberately not shipped and are noted as such: one did not reproduce in the current code, and one prompt-level protection had its principal component deferred. Most changes are to deterministic components&mdash;parsers, classifiers, passage selection, hashing&mdash;and were verified by automated tests and by replay against real records. The composed system was then evaluated end-to-end.</p>
+<h3><span class="secnum">6.1</span>Controlled before-and-after measurements</h3>
+<figure class="tbl">
+  <figcaption><b>Table 3</b> Controlled before-and-after measurements. Each row is a measurement against live sources; the first row reports the effect of model selection on fixed evidence, and the remaining rows report the effect of the evidence-assembly corrections.</figcaption>
+  <table>
+    <thead><tr><th>Measurement</th><th class="num">Before</th><th class="num">After</th></tr></thead>
+    <tbody>
+      <tr><td>Blocking-objection rate on identical evidence (open-source model &rarr; Opus&nbsp;4.8)</td><td class="num">83%</td><td class="num">37%</td></tr>
+      <tr><td>Established-outlet links classified as fabricated (live sample)</td><td class="num">13</td><td class="num">0</td></tr>
+      <tr><td>Source records with attachment text read into the corpus (of 360 carrying attachments)</td><td class="num">0</td><td class="num">all</td></tr>
+      <tr><td>Held articles re-verified as correctly sourced under the corrected system</td><td class="num">0 of 180</td><td class="num" id="rv-short">sweep in progress</td></tr>
+      <tr><td>Verification control (article with a genuine discrepancy)</td><td class="num">held</td><td class="num">still held</td></tr>
+    </tbody>
+  </table>
+</figure>
+<h3><span class="secnum">6.2</span>End-to-end re-verification</h3>
+<p class="lead" id="rv-para">The 180 articles that had been held and then released under manual attestation during remediation are being re-checked by the corrected Desk on Opus&nbsp;4.8, replacing the manual attestations with fresh, system-generated verdicts. The corrected system returns a clean pass on articles whose holds had been caused purely by the corrected evidence artifacts, and retains holds where a genuine content discrepancy remains. Articles that remain held do so for genuine content discrepancies identifiable on inspection, not for the evidence-handling artifacts corrected here. <em>(Re-verification sweep in progress; final figures will be recorded here on completion.)</em></p>
+<h3><span class="secnum">6.3</span>The verification control</h3>
+<p class="lead">A single result illustrates the intended outcome most directly. One held article, previously blocked by a false fabricated-link objection, produced no such objection under the corrected system&mdash;and, on the same run, independently surfaced a genuine content discrepancy (a date attribution) and was correctly still held. The false objection cleared while the real one did not. An evaluation in which every case passes would indicate the checker had been weakened; a retained, correct block is what distinguishes a correction from an over-correction.</p>
+
+<h2 id="s7"><span class="secnum">7</span>Limitations</h2>
+<p class="lead">Several limitations bound these results. The reported false-positive rates are measurements over defined article batches rather than an exhaustive census; a single global rate is not claimed. The controlled model comparison (Section&nbsp;4.1) is drawn from runs of 204 and 107 articles that overlap but are not identical in membership, so it isolates the model's effect on shared evidence rather than a matched-pair rate. The changes described address the evidence supplied to the model; the residual rate at which the model itself misjudges a claim given complete evidence is a separate, model-level property, unchanged by this work and reported independently in the project's recall and calibration records. Finally, one prompt-level protection against adversarial content embedded in retrieved pages was only partially deployed; its remaining component is a known, scheduled item.</p>
+
+<h2 id="s8"><span class="secnum">8</span>Conclusion</h2>
+<p class="lead">The elevated false-positive rate arose from two separable causes: a weaker model, since replaced, and an evidence pipeline that supplied incomplete evidence to the model without recording the incompleteness. The corrective work preserved the Desk's decision criteria unchanged and instead ensured that the evidence reaching the model is complete, or, where it cannot be, that its incompleteness is explicit rather than silent. The measured effect is a substantial reduction in incorrect objections with no loss of the Desk's ability to detect genuine problems, as confirmed by a retained control. For an automated source-fidelity checker, the general lesson is that a verdict rendered against silently-partial evidence is the primary avoidable error, and that making incompleteness a first-class, visible state is what prevents it. The same corrections yield a bounded but absolute guarantee for direct quotations, a class in which fabrication is both common and consequential: a confirmed verdict on a quotation cannot be produced by a fabrication.</p>
+
+<div class="footnote">
+  <p>This report draws on the project's internal change plan, two root-cause analyses, an independent design review, and the per-run verification records, with all figures carried across unchanged. Every mechanism described was confirmed against the live code and database, July 2026.</p>
+</div>
+
+</div>
+</body>
+</html>
