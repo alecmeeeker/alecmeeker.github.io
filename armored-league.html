@@ -81,8 +81,9 @@ h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size
 /* ledger */
 .ledger{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(1.5rem,5vw,5rem)}
 .ledger ol{list-style:none;margin:0;padding:0;counter-reset:job}
-.ledger li{display:grid;grid-template-columns:2.6rem 1fr;gap:.8rem;padding:.9rem 0;border-top:1px solid rgba(239,230,211,.12);counter-increment:job}
-.ledger li::before{content:counter(job,decimal-leading-zero);font-family:var(--display);font-size:1.4rem;color:var(--blood);line-height:1.2}
+.ledger ol.second{counter-reset:job 6}
+.ledger li{position:relative;padding:.9rem 0 .9rem 3.4rem;border-top:1px solid rgba(239,230,211,.12);counter-increment:job}
+.ledger li::before{content:counter(job,decimal-leading-zero);position:absolute;left:0;top:.85rem;font-family:var(--display);font-size:1.4rem;color:var(--blood);line-height:1.2}
 .ledger li b{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.15rem}
 .ledger li span{color:var(--bone-soft)}
 
@@ -169,7 +170,7 @@ footer a{color:var(--bone-soft);border:0}
         <li><b>Crew</b><span>Hired the first assistant director and the production assistants.</span></li>
         <li><b>Safety</b><span>Booked the EMT and held the safety plan for full-contact bouts in 80-pound armor.</span></li>
       </ol>
-      <ol start="7">
+      <ol class="second" start="7">
         <li><b>Show</b><span>Directed the live show: single-elimination bouts under modified international Buhurt rules, then the costume contest and the sword raffle.</span></li>
         <li><b>Vendors</b><span>Brought in the market partners, including the Bushwick collective Kaleidoscope Studios.</span></li>
         <li><b>Music</b><span>Booked about $10,000 in DJ talent, including Discwoman co-founder DJ Umfang, and hired the costume-contest judge.</span></li>
