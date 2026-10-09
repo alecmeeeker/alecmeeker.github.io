@@ -498,6 +498,109 @@ a { color: inherit; }
 }
 
 /* --------------------------------------------------------------------------
+   Portfolio: events, film, design
+   Index rows carry a role line and, in a folio, a still. Plates set
+   photographs and design work like a monograph: hairline frame, caption
+   beneath, no shadow. A band is the one element wider than the column.
+   -------------------------------------------------------------------------- */
+.worklist__role { grid-column: 2; font-size: 0.84rem; font-style: italic; color: var(--ink-mute); }
+
+.worklist__row { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 4px 36px; padding: 20px 2px; }
+
+.folio a { grid-template-columns: 92px minmax(0, 1fr) 184px; }
+.folio .worklist__still {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    align-self: start;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+}
+
+.column--flush { padding-bottom: 0; }
+
+.band { max-width: var(--max-page); margin: clamp(40px, 6vw, 64px) auto 0; padding: 0 var(--gutter); }
+.band__head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 24px; margin-bottom: 18px; }
+.band__head .caps { color: var(--ink); }
+.band__head a { font-size: 0.86rem; color: var(--ink-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--rule-mid); }
+.band__head a:hover { color: var(--navy); text-decoration-color: var(--navy); }
+
+.plates { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(12px, 1.8vw, 22px); }
+.plate { grid-column: span 6; margin: 0; min-width: 0; }
+.plate--third { grid-column: span 4; }
+.plate--two-thirds { grid-column: span 8; }
+.plate--full { grid-column: 1 / -1; }
+.plate a { display: block; }
+.plate img, .plate video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+}
+.plates--even .plate img { aspect-ratio: 3 / 2; object-fit: cover; }
+/* A plate that takes the height of its row: the image fills what the caption leaves. */
+.plate--fill { display: flex; flex-direction: column; }
+.plate--fill > a, .plate--fill > .plate__frame { position: relative; flex: 1 1 auto; min-height: 180px; }
+.plate--fill > a img, .plate--fill > .plate__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.plate--sixth { grid-column: span 2; }
+.plate figcaption { margin-top: 10px; font-size: 0.84rem; line-height: 1.5; color: var(--ink-mute); }
+.plate figcaption b { display: block; font-weight: 500; font-size: 0.98rem; color: var(--ink); font-variation-settings: "opsz" 24; }
+.plate figcaption i { font-style: italic; }
+.plate figcaption a { display: inline; color: var(--ink-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--rule-mid); }
+.plate figcaption a:hover { color: var(--navy); }
+.plates + .plates { margin-top: clamp(18px, 2.6vw, 30px); }
+/* Justified row: each plate's width follows its aspect ratio (--ar = w / h), so every frame shares one height. */
+.plates--justified { display: flex; align-items: flex-start; gap: clamp(12px, 1.8vw, 22px); }
+.plates--justified .plate { flex: var(--ar, 1) 1 0; }
+.plates--single { max-width: 760px; }
+/* Design projects: an index row above its plates */
+.project + .project { margin-top: clamp(56px, 8vw, 96px); }
+.project__head { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 4px 36px; padding: 20px 2px 22px; border-top: 1px solid var(--rule); }
+.project__head .worklist__title a { text-decoration: none; }
+.project__head .worklist__title a:hover { color: var(--navy); }
+.project__link { grid-column: 2; font-size: 0.86rem; }
+.project__link a { color: var(--ink-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--rule-mid); }
+.project__link a:hover { color: var(--navy); text-decoration-color: var(--navy); }
+.plates-credit { margin-top: 14px; font-size: 0.8rem; color: var(--ink-mute); }
+
+.facts { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 12px 28px; margin-top: 8px; }
+.facts dt { padding-top: 4px; }
+.facts dd { font-size: 1rem; color: var(--ink); }
+.facts dd a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--rule-mid); }
+.facts dd a:hover { color: var(--navy); }
+
+.lede { font-size: 1.12rem; line-height: 1.7; color: var(--ink-2); max-width: 60ch; }
+.lede + .lede { margin-top: 1em; }
+
+@media (max-width: 720px) {
+    .plate, .plate--third, .plate--two-thirds { grid-column: 1 / -1; }
+    .plates .plate--sixth { grid-column: span 6; }
+    .plates--justified { flex-direction: column; }
+    .plates--justified .plate { flex: none; width: 100%; }
+    .plate--fill > a, .plate--fill > .plate__frame { position: static; min-height: 0; }
+    .plate--fill > a img, .plate--fill > .plate__frame img { position: static; height: auto; }
+}
+@media (max-width: 640px) {
+    .worklist__role { grid-column: 1; }
+    .worklist__row { grid-template-columns: 1fr; }
+    .project__head { grid-template-columns: 1fr; }
+    .project__link { grid-column: 1; }
+    .folio a { grid-template-columns: 1fr; }
+    .folio .worklist__still { grid-column: 1; grid-row: auto; order: -1; margin-bottom: 12px; }
+    .facts { grid-template-columns: 1fr; gap: 2px; }
+    .facts dd { margin-bottom: 12px; }
+}
+@media (max-width: 560px) {
+    .topbar { flex-direction: column; align-items: flex-start; gap: 12px; padding-top: 24px; padding-bottom: 20px; }
+    .topbar__nav { gap: 8px 13px; }
+    .topbar__nav a[href^="mailto:"] { display: none; } /* the address is in every footer */
+}
+
+/* --------------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------------- */
 .footer { margin-top: clamp(72px, 10vw, 120px); }
