@@ -557,12 +557,26 @@ a { color: inherit; }
 .plates--justified { display: flex; align-items: flex-start; gap: clamp(12px, 1.8vw, 22px); }
 .plates--justified .plate { flex: var(--ar, 1) 1 0; }
 .plates--single { max-width: 760px; }
+/* Stats: the record in figures. Numerals large, labels plain, hairlines between. */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(30px, 4vw, 44px); border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule); }
+.stat { padding: 22px 18px 22px 0; min-width: 0; }
+.stat + .stat { padding-left: 18px; border-left: 1px solid var(--rule); }
+.stat__num { display: block; font-size: clamp(2.3rem, 4.4vw, 3.3rem); font-weight: 500; line-height: 1; letter-spacing: -0.02em; font-variation-settings: "opsz" 72; font-feature-settings: "lnum" 1; }
+.stat__label { display: block; margin-top: 12px; font-size: 0.84rem; line-height: 1.45; color: var(--ink-2); }
+@media (max-width: 640px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+
 /* Design projects: an index row above its plates */
 .project + .project { margin-top: clamp(56px, 8vw, 96px); }
 .project__head { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 4px 36px; padding: 20px 2px 22px; border-top: 1px solid var(--rule); }
 .project__head .worklist__title a { text-decoration: none; }
 .project__head .worklist__title a:hover { color: var(--navy); }
 .project__link { grid-column: 2; font-size: 0.86rem; }
+.project__specs { max-width: var(--max-prose); margin: clamp(22px, 3vw, 30px) 0 0 128px; }
+.project__specs dd { font-size: 0.94rem; color: var(--ink-2); }
 .project__link a { color: var(--ink-2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--rule-mid); }
 .project__link a:hover { color: var(--navy); text-decoration-color: var(--navy); }
 .plates-credit { margin-top: 14px; font-size: 0.8rem; color: var(--ink-mute); }
@@ -589,6 +603,7 @@ a { color: inherit; }
     .worklist__row { grid-template-columns: 1fr; }
     .project__head { grid-template-columns: 1fr; }
     .project__link { grid-column: 1; }
+    .project__specs { margin-left: 0; }
     .folio a { grid-template-columns: 1fr; }
     .folio .worklist__still { grid-column: 1; grid-row: auto; order: -1; margin-bottom: 12px; }
     .facts { grid-template-columns: 1fr; gap: 2px; }

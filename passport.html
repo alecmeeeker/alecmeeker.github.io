@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Passport to Bushwick | Alec Meeker</title>
+<meta name="description" content="Passport to Bushwick: a pocket book of the neighborhood's bars, one free drink at each, every copy funding local journalism. Four editions, 2019 to 2026. Creative direction by Alec Meeker; design by Matthew Perratore.">
+<link rel="canonical" href="https://alecmeeker.com/passport.html">
+<meta property="og:title" content="Passport to Bushwick">
+<meta property="og:description" content="One book, one drink at every bar inside it, and every copy paying for the local news.">
+<meta property="og:url" content="https://alecmeeker.com/passport.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alecmeeker.com/assets/passport/p01.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261009">
+<style>
+  /* The booklet viewer. Pages are the printed artwork at 300 ppi (1050 x 1500, trim size 3.5 x 5 in). */
+  .pp { --pw: clamp(150px, 26vw, 330px); --ph: calc(var(--pw) * 1500 / 1050); --navy: #10214a; }
+  .pp-stage { position: relative; margin-top: clamp(28px, 4vw, 44px); border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule); background: radial-gradient(120% 90% at 50% 40%, #fdfcf8 0%, var(--paper-2) 70%); overflow: hidden; }
+  .pp-scene { position: relative; height: calc(var(--ph) + clamp(90px, 12vw, 150px)); perspective: 2200px; perspective-origin: 50% 40%; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .pp-scene.is-dragging { cursor: grabbing; }
+  .pp-book { position: absolute; left: 50%; top: 50%; width: var(--pw); height: var(--ph); margin: calc(var(--ph) / -2) 0 0 calc(var(--pw) / -2); transform-style: preserve-3d; transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .pp-scene.is-dragging .pp-book { transition: none; }
+  .pp-leaf, .pp-base { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: left center; transition: transform 0.9s cubic-bezier(0.25, 0.75, 0.2, 1); }
+  .pp-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: #fff; overflow: hidden; }
+  .pp-face img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .pp-face--back { transform: rotateY(180deg); }
+  .pp-face--blank { background: #fffefb; box-shadow: inset 0 0 0 1px rgba(27, 25, 20, 0.08); }
+  /* Gutter shading: depth at the spine on every page. */
+  .pp-face::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+  .pp-face--front::after { background: linear-gradient(90deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.04) 4%, rgba(0, 0, 0, 0) 9%); }
+  .pp-face--back::after { background: linear-gradient(270deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.04) 4%, rgba(0, 0, 0, 0) 9%); }
+  .pp-cover .pp-face--front::after, .pp-base .pp-face--back::after { background: linear-gradient(90deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 2%, rgba(0, 0, 0, 0) 100%); }
+  /* Paper stack seen from the edge when the book is closed. */
+  .pp-edge { position: absolute; background: repeating-linear-gradient(90deg, #f4f1e8 0 1px, #dcd6c6 1px 1.6px); transition: opacity 0.4s ease; }
+  .pp-edge--fore { top: 0; right: 0; width: 10px; height: 100%; transform-origin: right center; transform: rotateY(90deg); }
+  .pp-edge--head { top: 0; left: 0; width: 100%; height: 10px; transform-origin: center top; transform: rotateX(-90deg); background: repeating-linear-gradient(0deg, #f4f1e8 0 1px, #dcd6c6 1px 1.6px); }
+  .pp-book.is-open .pp-edge { opacity: 0; }
+  .pp-shadow { position: absolute; left: 50%; top: calc(50% + var(--ph) / 2 + 8px); width: calc(var(--pw) * 1.1); height: 28px; margin-left: calc(var(--pw) * -0.55); border-radius: 50%; background: radial-gradient(closest-side, rgba(27, 25, 20, 0.28), rgba(27, 25, 20, 0)); filter: blur(4px); transition: width 0.7s ease, margin-left 0.7s ease; pointer-events: none; }
+  .pp-stage.is-open .pp-shadow { width: calc(var(--pw) * 2.2); margin-left: calc(var(--pw) * -1.1); }
+
+  .pp-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 22px; padding: 14px var(--gutter) 18px; border-top: 1px solid var(--rule); }
+  .pp-btn { appearance: none; border: 0; background: none; font: inherit; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); cursor: pointer; padding: 6px 2px; transition: color 0.2s ease; font-variation-settings: "opsz" 10; }
+  .pp-btn:hover, .pp-btn:focus-visible { color: var(--ink); }
+  .pp-btn:focus-visible { outline: 1px solid var(--navy); outline-offset: 3px; }
+  .pp-btn[disabled] { opacity: 0.35; cursor: default; }
+  .pp-btn--key { color: var(--ink); border-bottom: 1px solid var(--rule-strong); }
+  .pp-status { min-width: 15ch; text-align: center; font-size: 0.8rem; color: var(--ink-2); font-variant-numeric: lining-nums; }
+  .pp-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: var(--ink-mute); pointer-events: none; transition: opacity 0.4s ease; }
+  .pp-stage.has-interacted .pp-hint { opacity: 0; }
+
+  /* The dossier: specifications, philosophy, ethos. Revealed on first click. */
+  .pp-view { position: relative; }
+  .pp-dossier { position: absolute; top: 0; right: 0; bottom: 0; width: min(430px, 100%); background: rgba(251, 250, 246, 0.97); border-left: 1px solid var(--rule); transform: translateX(102%); transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); display: flex; flex-direction: column; z-index: 2; }
+  .pp-stage.show-dossier .pp-dossier { transform: none; }
+  .pp-stage.show-dossier .pp-scene { margin-right: 430px; }
+  /* With the dossier open, the spread shrinks to fit the space left of it. */
+  .pp-stage.show-dossier { --pw: clamp(140px, calc((min(100vw, var(--max-page)) - 2 * var(--gutter) - 430px) / 2 - 36px), 300px); --ph: calc(var(--pw) * 1500 / 1050); }
+  .pp-scene { transition: margin-right 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .pp-dossier__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 20px 26px 0; }
+  .pp-tabs { display: flex; gap: 20px; padding: 14px 26px 0; border-bottom: 1px solid var(--rule); }
+  .pp-tab { appearance: none; border: 0; background: none; font: inherit; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); padding: 8px 0 10px; cursor: pointer; border-bottom: 1px solid transparent; margin-bottom: -1px; font-variation-settings: "opsz" 10; }
+  .pp-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+  .pp-panel { flex: 1 1 auto; overflow-y: auto; padding: 20px 26px 28px; }
+  .pp-panel[hidden] { display: none; }
+  .pp-panel h3 { font-size: 1.02rem; font-weight: 600; line-height: 1.3; margin: 18px 0 4px; font-variation-settings: "opsz" 24; }
+  .pp-panel h3:first-child { margin-top: 0; }
+  .pp-panel p { font-size: 0.94rem; line-height: 1.6; color: var(--ink-2); }
+  .pp-panel blockquote { margin: 10px 0 0; padding-left: 14px; border-left: 2px solid var(--rule-mid); font-style: italic; color: var(--ink); font-size: 0.94rem; line-height: 1.55; }
+  .pp-panel blockquote cite { display: block; margin-top: 4px; font-style: normal; font-size: 0.78rem; color: var(--ink-mute); }
+  .pp-specs { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 9px 16px; }
+  .pp-specs dt { padding-top: 3px; }
+  .pp-specs dd { font-size: 0.9rem; line-height: 1.5; color: var(--ink); }
+  .pp-swatch { display: inline-block; width: 0.9em; height: 0.9em; vertical-align: -0.1em; margin-right: 6px; border: 1px solid var(--rule-mid); }
+
+  .editions { width: 100%; border-collapse: collapse; font-size: 0.94rem; font-variant-numeric: lining-nums tabular-nums; }
+  .editions th { text-align: left; padding: 0 12px 10px 0; border-bottom: 1px solid var(--rule-strong); }
+  .editions td { padding: 11px 12px 11px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .editions td:first-child { font-weight: 500; }
+
+  @media (max-width: 900px) {
+    .pp-dossier { position: static; width: auto; transform: none; border-left: 0; border-top: 1px solid var(--rule); display: none; }
+    .pp-stage.show-dossier .pp-dossier { display: flex; }
+    .pp-stage.show-dossier .pp-scene { margin-right: 0; }
+    .pp-stage.show-dossier { --pw: clamp(150px, 26vw, 330px); --ph: calc(var(--pw) * 1500 / 1050); }
+    .pp-panel { overflow: visible; }
+  }
+  @media (max-width: 640px) {
+    .pp { --pw: min(160px, 41vw); }
+    .pp-stage.show-dossier { --pw: min(160px, 41vw); --ph: calc(var(--pw) * 1500 / 1050); }
+    .pp-specs { grid-template-columns: 1fr; gap: 2px; }
+    .pp-specs dd { margin-bottom: 10px; }
+    .editions { font-size: 0.86rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pp-book, .pp-leaf, .pp-dossier, .pp-scene { transition-duration: 0.01s; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="topbar__mark" href="/">Alec Meeker</a>
+  <nav class="topbar__nav">
+    <a href="work.html">Work</a>
+    <a href="events.html">Events</a>
+    <a href="film.html">Film</a>
+    <a href="design.html" class="on">Design</a>
+    <a href="cv.html">Record</a>
+    <a href="mailto:alec@bushwickdaily.com">Email</a>
+  </nav>
+</header>
+<hr class="topbar-rule">
+
+<main class="pp">
+
+  <div class="column column--flush">
+    <header class="record-head">
+      <span class="caps">Design &middot; Case study</span>
+      <h1>Passport to Bushwick</h1>
+      <p class="standing">A neighborhood, bound in navy and yellow. One book, one drink at every bar inside it, and every copy paying for the local news.</p>
+    </header>
+
+  </div>
+
+  <section class="band" aria-label="In figures">
+    <dl class="stats">
+      <div class="stat"><dt class="stat__num">4</dt><dd class="stat__label">Editions, 2019 to 2026</dd></div>
+      <div class="stat"><dt class="stat__num">3,600</dt><dd class="stat__label">Copies printed</dd></div>
+      <div class="stat"><dt class="stat__num">26</dt><dd class="stat__label">Bars in the 2026 edition</dd></div>
+      <div class="stat"><dt class="stat__num">300</dt><dd class="stat__label">The 2026 first run, sold out within seven weeks</dd></div>
+    </dl>
+  </section>
+
+  <section class="band">
+    <div class="pp-stage" id="pp-stage">
+      <div class="pp-view">
+      <div class="pp-scene" id="pp-scene" aria-label="The 2026 Passport to Bushwick. Drag to turn the book; click to open it and read the specifications." role="application">
+        <div class="pp-shadow"></div>
+        <div class="pp-book" id="pp-book"></div>
+        <p class="pp-hint caps">Drag to turn &middot; Click to open</p>
+      </div>
+
+      <aside class="pp-dossier" id="pp-dossier" aria-label="Design dossier">
+        <div class="pp-dossier__head">
+          <span class="caps" style="color: var(--ink)">The 2026 edition</span>
+          <button class="pp-btn" type="button" id="pp-dossier-close" aria-label="Close the dossier">Close</button>
+        </div>
+        <div class="pp-tabs" role="tablist">
+          <button class="pp-tab" role="tab" id="tab-specs" aria-controls="panel-specs" aria-selected="true">Specifications</button>
+          <button class="pp-tab" role="tab" id="tab-philosophy" aria-controls="panel-philosophy" aria-selected="false">Philosophy</button>
+          <button class="pp-tab" role="tab" id="tab-ethos" aria-controls="panel-ethos" aria-selected="false">Ethos</button>
+        </div>
+
+        <div class="pp-panel" role="tabpanel" id="panel-specs" aria-labelledby="tab-specs">
+          <dl class="pp-specs">
+            <dt class="caps">Format</dt><dd>3.5 &times; 5 in, portrait, saddle-stitched</dd>
+            <dt class="caps">Extent</dt><dd>Cover, how-to, contents and credits, then one page for each of 26 bars; printed at 32 pages</dd>
+            <dt class="caps">Cover</dt><dd>80# matte, four-color, one side</dd>
+            <dt class="caps">Interior</dt><dd>80# gloss text, black</dd>
+            <dt class="caps">Color</dt><dd><span class="pp-swatch" style="background:#10214a"></span>Navy, C89 M75 Y15 K62<br><span class="pp-swatch" style="background:#f9ef45"></span>Yellow, C4 M0 Y84 K0</dd>
+            <dt class="caps">Type</dt><dd>Bebas Neue for venues and headings; Helvetica and Helvetica Bold for the information; Bodoni 72 Oldstyle for the cover numerals</dd>
+            <dt class="caps">Page system</dt><dd>A running head, then four quadrants on dashed rules: the venue (or its own logo), the address, a short portrait of the place, and a redemption box with a visit-date line for the bartender&rsquo;s mark. Street-map ground; folio at the foot.</dd>
+            <dt class="caps">Artwork</dt><dd>1125 &times; 1575 px per page at 300 ppi, 1/8 in bleed, CMYK (U.S. Web Coated SWOP v2)</dd>
+            <dt class="caps">Print</dt><dd>Mendez Printing, two runs of 300</dd>
+            <dt class="caps">Credits</dt><dd>Creative direction: Alec Meeker<br>Design: Matthew Perratore</dd>
+          </dl>
+        </div>
+
+        <div class="pp-panel" role="tabpanel" id="panel-philosophy" aria-labelledby="tab-philosophy" hidden>
+          <h3>The object is the idea.</h3>
+          <p>A passport is carried, shown at the door and marked. The book asks nothing more of its holder: show the bartender the page, order the drink it names, have the page marked.</p>
+          <h3>One page, one place.</h3>
+          <p>Every bar receives the same page and the same four quadrants, so a neighborhood dive and a cocktail room sit on equal footing. Where a venue has its own mark, the mark replaces the set name.</p>
+          <h3>Two colors, held.</h3>
+          <p>The cover&rsquo;s navy and yellow have not moved since 2020; the 2020, 2025 and 2026 covers carry the same CMYK to within half a point. The edition changes. The identity does not.</p>
+          <h3>Built for a year in a pocket.</h3>
+          <p>Three and a half by five inches, saddle-stitched, valid through December&nbsp;31. The brief to the first printer said it plainly:</p>
+          <blockquote>&ldquo;The book will be used for 12 months. Binding and cover should be designed with this in mind.&rdquo;<cite>Alec Meeker to the printer, December 2018</cite></blockquote>
+        </div>
+
+        <div class="pp-panel" role="tabpanel" id="panel-ethos" aria-labelledby="tab-ethos" hidden>
+          <h3>The neighborhood pays for its own news.</h3>
+          <p>The Passport is published by Bushwick Daily, and the money it raises goes to the paper&rsquo;s reporting.</p>
+          <blockquote>&ldquo;All the money we raise goes to supporting Bushwick Daily and keeping local journalism alive in the neighborhood.&rdquo;<cite>Bushwick Daily, 2020</cite></blockquote>
+          <h3>The bars are the content.</h3>
+          <p>In the 2026 edition, every page after the front matter belongs to a bar: its name, its address, a short portrait of the place and the drink it pours.</p>
+          <h3>Hospitality first.</h3>
+          <p>The how-to page sets one instruction in capitals:</p>
+          <blockquote>&ldquo;Seriously, TIP YOUR BARTENDER.&rdquo;<cite>Passport to Bushwick, 2026</cite></blockquote>
+          <h3>The result.</h3>
+          <p>The 2026 first run of 300 sold out within seven weeks of going on sale, and a second run of 300 followed.</p>
+        </div>
+      </aside>
+      </div>
+
+      <div class="pp-controls">
+        <button class="pp-btn" type="button" id="pp-prev" aria-label="Previous spread">&larr; Back</button>
+        <span class="pp-status" id="pp-status" aria-live="polite">Front cover</span>
+        <button class="pp-btn" type="button" id="pp-next" aria-label="Next spread">Turn &rarr;</button>
+        <button class="pp-btn" type="button" id="pp-over">Turn over</button>
+        <button class="pp-btn pp-btn--key" type="button" id="pp-dossier-open" aria-expanded="false" aria-controls="pp-dossier">Specifications</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="column">
+    <section class="record-section">
+      <span class="caps">Four editions</span>
+      <table class="editions">
+        <thead><tr><th class="caps">Edition</th><th class="caps">Bars</th><th class="caps">Copies</th><th class="caps">Price</th></tr></thead>
+        <tbody>
+          <tr><td>2019</td><td>19</td><td>1,000</td><td>$25</td></tr>
+          <tr><td>2020</td><td>20</td><td>1,000</td><td>$25</td></tr>
+          <tr><td>2025</td><td>30</td><td>1,000</td><td>$35</td></tr>
+          <tr><td>2026</td><td>26</td><td>300 + 300</td><td>$25</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 14px; font-size: 0.86rem; color: var(--ink-mute);">Creative direction: Alec Meeker. Design: Matthew Perratore. 2020 update: Konstantin Kahl. <a href="https://www.passporttobushwick.com/" style="color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--rule-mid); text-underline-offset: 3px;">passporttobushwick.com</a></p>
+    </section>
+
+    <footer class="footer">
+      <hr class="rule-double">
+      <div class="footer__row">
+        <span><a href="design.html">All design</a></span>
+        <span><a href="https://github.com/alecmeeeker">GitHub</a> &nbsp;&middot;&nbsp; <a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a></span>
+      </div>
+    </footer>
+  </div>
+
+</main>
+
+<script>
+(() => {
+  const P = n => "assets/passport/p" + String(n).padStart(2, "0") + ".jpg";
+  // Leaves: front/back page numbers (0 = unprinted paper). The base holds the last bar page and the back cover.
+  const LEAVES = [[1, 0]];
+  for (let j = 1; j <= 14; j++) LEAVES.push([2 * j, 2 * j + 1]);
+  const BASE = [30, 31];
+  const SPREADS = LEAVES.length;            // 15 spreads when fully open
+  const stage = document.getElementById("pp-stage");
+  const scene = document.getElementById("pp-scene");
+  const book = document.getElementById("pp-book");
+  const status = document.getElementById("pp-status");
+  const prev = document.getElementById("pp-prev"), next = document.getElementById("pp-next");
+  const over = document.getElementById("pp-over");
+  const openBtn = document.getElementById("pp-dossier-open"), closeBtn = document.getElementById("pp-dossier-close");
+
+  function face(n, side, eager) {
+    const f = document.createElement("div");
+    f.className = "pp-face pp-face--" + side + (n ? "" : " pp-face--blank");
+    if (n) {
+      const img = document.createElement("img");
+      img.alt = n === 1 ? "Front cover: Passport to Bushwick, 26 drinks at 26 Bushwick bars, 2026 edition" :
+                n === 31 ? "Back cover: Cheers, Bushwick Daily" : "Page " + n + " of the 2026 Passport to Bushwick";
+      img.width = 1050; img.height = 1500; img.decoding = "async";
+      if (eager) img.src = P(n); else img.dataset.src = P(n);
+      f.appendChild(img);
+    }
+    return f;
+  }
+  const leafEls = LEAVES.map(([a, b], i) => {
+    const el = document.createElement("div");
+    el.className = "pp-leaf" + (i === 0 ? " pp-cover" : "");
+    el.appendChild(face(a, "front", i < 2));
+    el.appendChild(face(b, "back", i < 2));
+    return el;
+  });
+  const base = document.createElement("div");
+  base.className = "pp-base";
+  base.appendChild(face(BASE[0], "front", false));
+  base.appendChild(face(BASE[1], "back", true));
+  ["fore", "head"].forEach(k => { const e = document.createElement("div"); e.className = "pp-edge pp-edge--" + k; book.appendChild(e); });
+  book.appendChild(base);
+  leafEls.forEach(el => book.appendChild(el));
+
+  let flipped = 0, turned = false, rotX = 12, rotY = -26, interacted = false;
+
+  let preloadAll = false;
+  function loadAround(k) {
+    const want = new Set();
+    for (let n = 2 * k - 3; n <= 2 * k + 6; n++) want.add(n);
+    book.querySelectorAll("img[data-src]").forEach(img => {
+      const n = parseInt(img.dataset.src.match(/p(\d+)\.jpg/)[1], 10);
+      if (preloadAll || want.has(n)) { img.src = img.dataset.src; img.removeAttribute("data-src"); }
+    });
+  }
+  function label(k) {
+    if (turned) return "Back cover";
+    if (k === 0) return "Front cover";
+    if (k === 1) return "How to use";
+    if (k === 2) return "Contents · Credits";
+    const a = 2 * k - 1 - 4, b = 2 * k - 4;
+    return "Bars " + a + " · " + b;
+  }
+  function render() {
+    const open = flipped > 0 && !turned;
+    leafEls.forEach((el, i) => {
+      const f = i < flipped;
+      const z = f ? i * 0.55 : (SPREADS - i) * 0.55 + 0.6;
+      el.style.transform = "translateZ(" + z.toFixed(2) + "px) rotateY(" + (f ? -179.6 : 0) + "deg)";
+    });
+    base.style.transform = "translateZ(0px)";
+    book.classList.toggle("is-open", open);
+    stage.classList.toggle("is-open", open);
+    const ry = turned ? rotY + 180 : rotY;
+    const shift = open ? "translateX(calc(var(--pw) / 2))" : "";
+    book.style.transform = "rotateX(" + rotX + "deg) rotateY(" + ry + "deg) " + shift;
+    status.textContent = label(flipped);
+    prev.disabled = flipped === 0 && !turned;
+    next.disabled = flipped === SPREADS || turned;
+    loadAround(flipped);
+  }
+  function go(k) {
+    turned = false;
+    flipped = Math.max(0, Math.min(SPREADS, k));
+    if (flipped > 0) { rotX = Math.min(rotX, 8); rotY = Math.max(-14, Math.min(14, rotY)); }
+    render();
+  }
+  function showDossier(on) {
+    stage.classList.toggle("show-dossier", on);
+    openBtn.setAttribute("aria-expanded", String(on));
+    openBtn.textContent = on ? "Hide specifications" : "Specifications";
+  }
+  function touch() {
+    if (interacted) return;
+    interacted = true; stage.classList.add("has-interacted");
+    // After the first interaction, fetch the rest of the book quietly so every turn lands on a loaded page.
+    setTimeout(() => { preloadAll = true; loadAround(flipped); }, 1500);
+  }
+
+  // Drag to rotate; a click (no drag) opens the book, shows the dossier, then turns pages.
+  let down = null;
+  scene.addEventListener("pointerdown", e => {
+    if (e.button !== 0) return;
+    down = { x: e.clientX, y: e.clientY, rx: rotX, ry: rotY, moved: false };
+    scene.setPointerCapture(e.pointerId);
+  });
+  scene.addEventListener("pointermove", e => {
+    if (!down) return;
+    const dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (!down.moved && Math.hypot(dx, dy) < 6) return;
+    down.moved = true; scene.classList.add("is-dragging"); touch();
+    const lim = flipped > 0 && !turned ? 22 : 40;
+    rotY = Math.max(-lim, Math.min(lim, down.ry + dx * 0.25));
+    rotX = Math.max(-6, Math.min(26, down.rx - dy * 0.2));
+    render();
+  });
+  scene.addEventListener("pointerup", e => {
+    const d = down; down = null; scene.classList.remove("is-dragging");
+    if (!d || d.moved) return;
+    touch();
+    if (!stage.classList.contains("show-dossier") && flipped === 0) showDossier(true);
+    if (turned) { go(0); return; }
+    const r = book.getBoundingClientRect(), mid = r.left + r.width / 2;
+    if (flipped === 0) go(1);
+    else if (e.clientX >= mid) go(flipped + 1);
+    else go(flipped - 1);
+  });
+  scene.addEventListener("pointercancel", () => { down = null; scene.classList.remove("is-dragging"); });
+
+  prev.addEventListener("click", () => { touch(); turned ? (turned = false, render()) : go(flipped - 1); });
+  next.addEventListener("click", () => { touch(); go(flipped + 1); });
+  over.addEventListener("click", () => { touch(); flipped = 0; turned = !turned; render(); });
+  openBtn.addEventListener("click", () => showDossier(!stage.classList.contains("show-dossier")));
+  closeBtn.addEventListener("click", () => showDossier(false));
+  document.addEventListener("keydown", e => {
+    if (e.target.closest("input, textarea")) return;
+    if (e.key === "ArrowRight") { touch(); go(flipped + 1); }
+    if (e.key === "ArrowLeft") { touch(); go(flipped - 1); }
+    if (e.key === "Escape") showDossier(false);
+  });
+
+  // Tabs
+  const tabs = [...document.querySelectorAll(".pp-tab")];
+  tabs.forEach(t => t.addEventListener("click", () => {
+    tabs.forEach(o => { const on = o === t; o.setAttribute("aria-selected", String(on)); document.getElementById(o.getAttribute("aria-controls")).hidden = !on; });
+  }));
+
+  render();
+})();
+</script>
+
+</body>
+</html>
