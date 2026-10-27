@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deterministic-First Fact-Checking of Local News | Alec Meeker</title>
+<meta name="description" content="A deterministic-first fact-checking desk for AI-drafted local news, evaluated in pre-registered, blind-audited test rounds on unseen articles, including sources in other languages.">
+<style>
+:root{
+  --paper:#faf8f2; --ink:#1a1712; --ink-soft:#4a463c; --muted:#736c5c; --rule:#cfc7b3;
+  --red:#8f2018; --link:#8f2018; --green:#245536; --greenbg:#eef3ec; --amber:#7a4f00;
+  --amberbg:#f6efdd; --blue:#274a78; --bluebg:#eceff5;
+  --serif:"Charter","Source Serif 4","Iowan Old Style","Georgia","Times New Roman",serif;
+  --sans:"Avenir Next","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono",ui-monospace,"Berkeley Mono",Menlo,Consolas,monospace;
+  --measure:40rem;
+}
+*{box-sizing:border-box}
+html{background:#e9e4d6;-webkit-text-size-adjust:100%}
+body{
+  max-width:46rem;margin:0 auto;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:1.0625rem;line-height:1.62;
+  padding:4.5rem 4.5rem 6rem;
+  box-shadow:0 0 0 1px #00000012, 0 20px 60px -30px #00000033;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  font-variant-numeric:oldstyle-nums proportional-nums;
+  hyphens:auto;
+}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid #8f201855}
+a:hover{border-bottom-color:var(--link)}
+::selection{background:#8f20181f}
+
+/* ---- title block ---- */
+.docmeta{font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin-bottom:1.4rem;font-variant-numeric:lining-nums}
+h1.title{font-size:1.62rem;line-height:1.28;font-weight:700;text-align:center;letter-spacing:-.006em;
+  max-width:34rem;margin:0 auto .9rem;text-wrap:balance}
+.byline{text-align:center;font-size:.92rem;color:var(--ink-soft);margin-bottom:.3rem}
+.byline .aff{font-style:italic;color:var(--muted);font-size:.86rem}
+.rule-sep{border:0;border-top:1px solid var(--rule);max-width:12rem;margin:1.7rem auto}
+
+/* ---- abstract ---- */
+.abstract{max-width:38rem;margin:1.6rem auto 0;padding:0 1.4rem;font-size:.975rem;line-height:1.58}
+.abstract .h{font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.08em;
+  text-transform:uppercase;text-align:center;color:var(--ink);margin-bottom:.5rem}
+.abstract p{margin:.5rem 0;text-align:justify}
+.keywords{max-width:38rem;margin:1rem auto 0;padding:0 1.4rem;font-size:.9rem;color:var(--ink-soft)}
+.keywords b{font-family:var(--sans);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- headings: numbered, restrained ---- */
+h2{font-size:1.18rem;font-weight:700;margin:2.5rem 0 .55rem;letter-spacing:-.004em;line-height:1.3}
+h2 .secnum{display:inline-block;min-width:1.5rem;color:var(--red)}
+h3{font-size:1.0rem;font-weight:700;margin:1.5rem 0 .4rem;color:var(--ink)}
+h3 .secnum{display:inline-block;min-width:2.1rem;color:var(--red);font-weight:700}
+h4{font-family:var(--sans);font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink-soft);margin:1.1rem 0 .3rem}
+
+/* ---- body text: journal paragraphing ---- */
+p{margin:0;max-width:var(--measure)}
+p + p{text-indent:1.4em}
+h2 + p, h3 + p, .boxed p, .abstract p, li p, td p{text-indent:0}
+section > p, .wrap > p{text-align:justify}
+.lead{margin-top:.2rem}
+strong{font-weight:700}
+em{font-style:italic}
+code{font-family:var(--mono);font-size:.85em;background:#00000008;padding:.05em .3em;border-radius:2px;
+  font-variant-numeric:lining-nums}
+.mono{font-family:var(--mono);font-variant-numeric:lining-nums}
+small{font-size:.86rem;color:var(--ink-soft)}
+
+/* ---- boxed statement (proposition/definition), academic convention ---- */
+.boxed{border:1px solid var(--rule);border-left:3px solid var(--green);background:var(--greenbg);
+  padding:.85rem 1.15rem;margin:1.1rem 0;max-width:var(--measure)}
+.boxed.blue{border-left-color:var(--blue);background:var(--bluebg)}
+.boxed .lbl{font-family:var(--sans);font-weight:700;font-size:.74rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--green);margin-bottom:.25rem}
+.boxed.blue .lbl{color:var(--blue)}
+.boxed p{margin:.2rem 0;max-width:none;font-size:.98rem}
+
+/* ---- tables: booktabs style, captioned ---- */
+figure.tbl{margin:1.6rem 0;max-width:none}
+figure.tbl figcaption{font-size:.86rem;color:var(--ink-soft);margin-bottom:.5rem;text-align:left;line-height:1.45}
+figure.tbl figcaption b{font-family:var(--sans);font-weight:700;font-size:.76rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink);margin-right:.5em}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:lining-nums tabular-nums;
+  font-family:var(--sans)}
+thead th{text-align:left;font-weight:700;font-size:.82rem;padding:.4rem .7rem;
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--ink)}
+tbody td{padding:.42rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.42}
+tbody tr:last-child td{border-bottom:1.5px solid var(--ink)}
+th.num,td.num{text-align:right;white-space:nowrap}
+
+.footnote{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);
+  font-size:.82rem;color:var(--muted);line-height:1.5}
+.footnote a{color:var(--muted);border-bottom-color:#73728c55}
+
+@media (max-width:640px){
+  body{padding:2.4rem 1.4rem 3.5rem;font-size:1rem}
+  h1.title{font-size:1.35rem}
+  .abstract,.keywords{padding:0}
+  figure.tbl{overflow-x:auto}
+  p + p{text-indent:1.2em}
+}
+@media (prefers-color-scheme: dark){
+  html{background:#14120d}
+  :root{--paper:#1c1a15;--ink:#e9e3d4;--ink-soft:#b3ab97;--muted:#8a836f;--rule:#3a362c;
+    --link:#e08a80;--greenbg:#1a241c;--bluebg:#181d26;--amberbg:#241f14;}
+  body{box-shadow:0 0 0 1px #ffffff0d,0 20px 60px -30px #00000080}
+  code{background:#ffffff10}
+  a{border-bottom-color:#e08a8055}
+}
+@media print{
+  html{background:#fff} body{box-shadow:none;max-width:none;padding:0;font-size:10.5pt}
+  h2,h3{break-after:avoid} figure.tbl,.boxed{break-inside:avoid}
+}
+</style>
+<style>table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:.82rem;margin:1rem 0;font-variant-numeric:lining-nums tabular-nums}th,td{border-bottom:1px solid var(--rule);padding:.35rem .4rem;text-align:left;vertical-align:top}th{font-weight:700;color:var(--ink-soft)}@media (max-width:640px){body{padding:2rem 1rem 3rem}}</style>
+</head>
+<body>
+
+<div class="docmeta">Research paper &middot; October 2026</div>
+<h1 class="title">Deterministic-First Fact-Checking of Local News: A Pre-Registered Evaluation on Unseen Articles</h1>
+<div class="byline">Alec Meeker</div>
+<div class="byline"><span class="aff">Bushwick Daily / Brooklyn New Media, New York</span></div>
+<hr class="rule-sep">
+
+<div class="abstract">
+<div class="h">Abstract</div>
+<p>A newsroom that drafts local news with language models has to check every sentence against the sources it holds. This paper describes a deterministic-first fact-checking desk and its evaluation. Code reads every sentence against every held document and settles what it can: a quotation or figure that no source holds, a passage that states the whole sentence. A language model is asked only about the remaining sentences, is shown the passages code retrieved, and code verifies every excerpt the model cites against the whole document it names. Sources in other languages are read by meaning with a local multilingual embedding model.</p>
+<p>The desk was evaluated in pre-registered test rounds on articles it had never checked. In each round a blind writer planted 40 single-fact errors into real sentences, and two blind readers labelled every sentence against the held evidence. Across the five completed rounds (1,249 sentences), the desk did not confirm 195 of 200 planted errors (97.5%) and blocked 193 (96.5%); blocks on correct sentences fell from 3.7% in the first round to 0.9% to 2.1% in rounds three to five. On the articles whose sources were in Spanish and Italian, reading them by meaning cut blocks on correct sentences from 8 to 0. The strictest criterion, no confirmed factual error in a round, has not yet been met: rounds two to five confirmed 1, 5, 3 and 3 errors among 187 to 290 confirmed sentences. Each failure was diagnosed, fixed, measured offline, and tested again on new articles in the next round.</p>
+</div>
+<div class="keywords"><b>Keywords</b> fact-checking, local news, LLM evaluation, pre-registration, cross-language verification, retrieval</div>
+
+<h2><span class="secnum">1</span>The desk</h2>
+<p>Every article is checked sentence by sentence (headline, body, SEO title and description) against an evidence snapshot: every document the newsroom's routes delivered for the article, every document an editor attached, and every page the article links, each read whole. Code settles a sentence when it can decide it without judgment: no checkable fact; a quotation no held document contains; a figure no independent source holds; one passage that states the whole sentence, with its names, dates and figures bound to the same source sentence. A language model (Claude) judges only the rest. Each answer is stored and replayed on later runs instead of being asked again, and a sentence the desk cannot support blocks publication until an editor fixes it.</p>
+
+<h2><span class="secnum">2</span>Sources in other languages</h2>
+<p>In the newsroom's articles, 66 of 208 hold a source document that is not in English. In the first test round, 8 of the 9 blocks on correct sentences were in the two articles whose sources were Spanish and Italian: the desk read evidence with tools that match English words, so a quotation the writer had translated looked fabricated, and keyword retrieval never showed the original passage. Measured before shipping, keyword retrieval showed a supporting excerpt for 22 of 31 held-out sentences with non-English support; one additional passage retrieved by meaning (intfloat/multilingual-e5-small, run locally) brought it to 30 of 31. With the fix, the model is shown passages by meaning, judges an English quotation against the original-language words, and a quotation held only in another language is no longer blocked by code. On those two articles, blocks on correct sentences fell from 8 to 0 and model calls from 11 to 6. Round six included an article whose sources are all in Urdu; it exposed one more code rule that matched only English names and figures, which blocked five correct sentences; a fix that sends such sentences to the model when a source is not in English has been written and is measured before it ships.</p>
+
+<h2><span class="secnum">3</span>Evaluation method</h2>
+<p>Each round's protocol was committed to version control after ten articles were drawn at random from the never-checked queue and before the desk ran on any of them. Part A: a blind writer agent, which never saw the desk's code or results, changed exactly one fact in 40 confirmed sentences (numbers, dates, people, places, outcomes, attributions) and reworded 10 more with every fact kept. Part B: two blind readers labelled every sentence of the round against the held evidence, and an adjudicator decided every disagreement, recording outside checks with raw copies. The pre-registered criteria: A1, at least 36 of 40 planted errors not confirmed; A2, at least 32 blocked; A3, the rewrites confirmed; B1, no desk-confirmed sentence that is a factual error; B2, blocks on correct sentences at most 2% of the round.</p>
+
+<h2><span class="secnum">4</span>Results</h2>
+<table>
+<thead><tr><th>Round</th><th>A1 not confirmed</th><th>A2 blocked</th><th>B1 confirmed factual errors</th><th>B2 blocks on correct sentences</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>40 of 40</td><td>39 of 40</td><td>0 (under the owner's review standard)</td><td>9 of 242 (3.7%)</td></tr>
+<tr><td>2</td><td>40 of 40</td><td>39 of 40</td><td>1 of 290</td><td>10 of 306 (3.3%)</td></tr>
+<tr><td>3</td><td>38 of 40</td><td>38 of 40</td><td>5 of 232</td><td>4 of 251 (1.6%)</td></tr>
+<tr><td>4</td><td>39 of 40</td><td>39 of 40</td><td>3 of 202</td><td>2 of 214 (0.9%)</td></tr>
+<tr><td>5</td><td>38 of 40</td><td>38 of 40</td><td>3 of 187</td><td>5 of 236 (2.1%)</td></tr>
+</tbody>
+</table>
+<p>Part A passed in every round. B2 passed in rounds three and four. B1 failed in rounds two to five: half of the 12 confirmed errors were a correct detail credited to the wrong outlet or source, 11 of the 12 were confirmed by the model and 10 of those on a single reading. Round six (173 sentences) has finished its blind audit: 6 confirmed factual errors among 129 confirmed sentences, three of them relative dates ("this weekend", "on Monday") that went stale between the day the article was written and the day it was checked, and 5 blocks on correct sentences, all from the Urdu rule in section 2; its planted-error test is running.</p>
+
+<h2><span class="secnum">5</span>In production</h2>
+<p>The desk has checked every machine-drafted article since June 2026. By September 2026 it had run 5,165 checks over 2,729 drafts, verifying 96,765 claims and 13,735 quotes and blocking 1,014 drafts for correction (<a href="verification-desk.html">the production report</a>).</p>
+
+<h2><span class="secnum">6</span>Limitations</h2>
+<p>Each round has ten articles and forty planted errors, so the intervals are wide. The writer, the readers and the desk's model are models of the same family, and the adjudicator built the fixes; every adjudication decision is recorded with its evidence. The complete record (protocols, deviations, every model call with its prompt and tokens, the code at each version, and the readers' labels) is held in a peer-review package; it includes private newsroom evidence and is available to reviewers on request.</p>
+
+</body>
+</html>
