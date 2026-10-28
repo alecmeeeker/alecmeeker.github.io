@@ -3,18 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deterministic-First Fact-Checking of AI-Drafted News | Alec Meeker</title>
-<meta name="description" content="A deterministic-first fact-checking desk for AI-drafted news, evaluated in pre-registered, blind-audited test rounds on unseen articles, including sources in other languages.">
+<title>Deterministic-First Fact-Checking of Local News Against Multilingual Sources: A Pre-Registered Evaluation on Held-Out Articles | Alec Meeker</title>
+<meta name="description" content="A fact-check desk that settles what it can with code and asks a language model only the rest, evaluated in twelve pre-registered rounds on held-out news articles: 476 of 482 planted errors stopped, 2.3% of correct sentences blocked, and no measurable difference on articles sourced in fifteen other languages.">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="Alec Meeker Portfolio">
-<meta property="og:title" content="Deterministic-First Fact-Checking of AI-Drafted News | Alec Meeker">
-<meta property="og:description" content="A deterministic-first fact checker for AI-drafted news, tested in pre-registered, blind-audited rounds on unseen articles: 97.5% of planted errors caught, sources in other languages read by meaning. By Alec Meeker.">
+<meta property="og:site_name" content="Alec Meeker">
+<meta property="og:title" content="Deterministic-First Fact-Checking of Local News Against Multilingual Sources: A Pre-Registered Evaluation on Held-Out Articles">
+<meta property="og:description" content="A fact-check desk that settles what it can with code and asks a language model only the rest, evaluated in twelve pre-registered rounds on held-out news articles: 476 of 482 planted errors stopped, 2.3% of correct sentences blocked, and no measurable difference on articles sourced in fifteen other languages.">
 <meta property="og:url" content="https://alecmeeker.com/factcheck-research.html">
 <meta property="og:image" content="https://alecmeeker.com/photo.jpg">
-<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Deterministic-First Fact-Checking of AI-Drafted News | Alec Meeker">
-<meta name="twitter:description" content="A deterministic-first fact checker for AI-drafted news, tested in pre-registered, blind-audited rounds on unseen articles: 97.5% of planted errors caught, sources in other languages read by meaning. By Alec Meeker.">
+<meta name="twitter:title" content="Deterministic-First Fact-Checking of Local News Against Multilingual Sources: A Pre-Registered Evaluation on Held-Out Articles">
+<meta name="twitter:description" content="A fact-check desk that settles what it can with code and asks a language model only the rest, evaluated in twelve pre-registered rounds on held-out news articles: 476 of 482 planted errors stopped, 2.3% of correct sentences blocked, and no measurable difference on articles sourced in fifteen other languages.">
 <meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
 <link rel="canonical" href="https://alecmeeker.com/factcheck-research.html">
 <style>
@@ -125,52 +124,66 @@ th.num,td.num{text-align:right;white-space:nowrap}
   html{background:#fff} body{box-shadow:none;max-width:none;padding:0;font-size:10.5pt}
   h2,h3{break-after:avoid} figure.tbl,.boxed{break-inside:avoid}
 }
+
+
+.downloads{font-family:var(--sans);font-size:.82rem;text-align:center;margin:1.1rem 0 0;letter-spacing:.02em}
+.downloads a{margin:0 .6rem}
+figure.tbl .tscroll{overflow-x:auto}
+figure.tbl td{white-space:normal}
+.refs p{text-indent:-1.6em;padding-left:1.6em;margin:.35rem 0;text-align:left;font-size:.9rem;line-height:1.45}
+.refs p + p{text-indent:-1.6em}
+section.body h2:first-child{margin-top:2rem}
+@media (prefers-color-scheme: dark){:root{--red:#e08a80}}
+
+.readlinks{display:flex;gap:0;margin:2rem auto 0;max-width:38rem;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);font-family:var(--sans)}
+.readlinks a{flex:1;padding:.9rem .8rem;border:0;border-left:1px solid var(--rule);font-size:.86rem;line-height:1.35;color:var(--ink)}
+.readlinks a:first-child{border-left:0}
+.readlinks a b{display:block;color:var(--red);font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.2rem}
+.readlinks a:hover{background:#8f20180a}
+@media (max-width:640px){.readlinks{flex-direction:column}.readlinks a{border-left:0;border-top:1px solid var(--rule)}.readlinks a:first-child{border-top:0}}
 </style>
-<style>table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:.82rem;margin:1rem 0;font-variant-numeric:lining-nums tabular-nums}th,td{border-bottom:1px solid var(--rule);padding:.35rem .4rem;text-align:left;vertical-align:top}th{font-weight:700;color:var(--ink-soft)}@media (max-width:640px){body{padding:2rem 1rem 3rem}}</style>
 </head>
 <body>
-
-<div class="docmeta">Research paper &middot; October 2026</div>
-<h1 class="title">Deterministic-First Fact-Checking of AI-Drafted News: A Pre-Registered Evaluation on Unseen Articles</h1>
+<div class="docmeta">Research &middot; October 2026</div>
+<h1 class="title">Deterministic-First Fact-Checking of Local News Against Multilingual Sources: A Pre-Registered Evaluation on Held-Out Articles</h1>
 <div class="byline">Alec Meeker</div>
-<div class="byline"><span class="aff">Bushwick Daily / Brooklyn New Media, New York</span></div>
+<div class="byline"><span class="aff">Bushwick Daily, Brooklyn, New York</span></div>
 <hr class="rule-sep">
-
 <div class="abstract">
 <div class="h">Abstract</div>
-<p>A newsroom that drafts news with language models has to check every sentence against the sources it holds. This paper describes a deterministic-first fact-checking desk and its evaluation. Code reads every sentence against every held document and settles what it can: a quotation or figure that no source holds, a passage that states the whole sentence. A language model is asked only about the remaining sentences, is shown the passages code retrieved, and code verifies every excerpt the model cites against the whole document it names. Sources in other languages are read by meaning with a multilingual embedding model that runs on the newsroom's own machine.</p>
-<p>The desk was evaluated in pre-registered test rounds on articles it had never checked. In each round a blind writer planted 40 single-fact errors into real sentences, and two blind readers labelled every sentence against the held evidence. Across six rounds (1,422 sentences), the desk did not confirm 235 of 240 planted errors (97.9%) and blocked 233 (97.1%); blocks on correct sentences fell from 3.7% in the first round to between 0.9% and 2.9% in rounds three to six. On the articles whose sources were in Spanish and Italian, reading them by meaning cut blocks on correct sentences from 8 to 0. The strictest criterion, no confirmed factual error in a round, has not yet been met: rounds two to six confirmed 1, 5, 3, 3 and 6 errors among 129 to 290 confirmed sentences. Each failure was diagnosed, fixed, measured offline, and tested again on new articles in the next round.</p>
+<p><strong>Background.</strong> Newsrooms that draft articles with language models need a check of every sentence against the documents
+the article was written from, before publication. Model-only checking is costly, varies between runs, and fails silently
+in ways an editor cannot audit.</p>
+<p><strong>System.</strong> We built a fact-check desk for a New York City local news publisher that settles what it can with deterministic
+code and asks a language model only about the rest. Code holds every evidence document whole, settles sentences with five
+rules (no checkable fact; a quotation in no document; a figure in no independent document; one passage holds the whole
+sentence; nothing in any document shares its content), retrieves passages for the remainder, verifies every excerpt the
+model cites, and re-checks every confirmed sentence for stale relative dates, date ranges, the outlets it credits and
+durations that contradict the article's own years. The model reads only located passages; its readings are recorded and
+replayed.</p>
+<p><strong>Evaluation.</strong> Thirteen pre-registered rounds, each on ten never-checked articles: Part A, forty factual errors planted by a
+blind writer agent plus ten meaning-preserving rewrites; Part B, every sentence labelled by two blind reader agents against
+the same evidence, with adjudication and checks outside the evidence. A round passes when at least 36 of 40 planted errors
+are not confirmed, at least 32 are blocked, rewrites are confirmed, no factual error is confirmed (B1), and at most 2% of
+the round's sentences are correct but blocked (B2).</p>
+<p><strong>Results.</strong> Over rounds 2-13 (2,934 sentences), the desk did not confirm 476 of 482 planted errors (98.8%) and confirmed
+111 of 113 rewrites. Confirmed factual errors fell from 1-6 per round in rounds 2-7 to 0-2 in rounds 8-13; under the
+publisher's standard, which does not
+count hair-splitting or stale verb tense as factual errors, 15 of the 30 confirmed errors are withdrawn and rounds 9 and 11
+pass every criterion. False blocks were 0.9%-3.9% per round (2.3% overall). A third of the articles (38 of 120) drew on
+documents in 15 languages other than English; on them the desk performed as on English-only articles (false blocks
+2.3% and 2.3%; planted errors not confirmed 98.5% and 98.9%), and of 221 sentences it confirmed on a passage not in
+English, 2 were factual errors under the publisher's standard. The remaining failures are mostly the model's:
+a fiscal year inside a credited figure, a source's own error repeated with its credit.</p>
+<p><strong>Conclusion.</strong> A deterministic-first desk reaches near-complete detection of planted errors on held-out articles at about
+one model call per three to four sentences checked, with every decision traceable to a document. Passing every criterion in a
+single round is not yet reliable: rounds differ by a few sentences, within the variation of the model between runs.</p>
 </div>
-<div class="keywords"><b>Keywords</b> fact-checking, digital news, LLM evaluation, pre-registration, cross-language verification, retrieval</div>
-
-<h2><span class="secnum">1</span>The desk</h2>
-<p>Every article is checked sentence by sentence (headline, body, SEO title and description) against an evidence snapshot: every document the newsroom's routes delivered for the article, every document an editor attached, and every page the article links, each read whole. Code settles a sentence when it can decide it without judgment: no checkable fact; a quotation no held document contains; a figure no independent source holds; one passage that states the whole sentence, with its names, dates and figures bound to the same source sentence. A language model (Claude) judges only the rest. Each answer is stored and replayed on later runs instead of being asked again, and a sentence the desk cannot support blocks publication until an editor fixes it.</p>
-
-<h2><span class="secnum">2</span>Sources in other languages</h2>
-<p>In the newsroom's articles, 66 of 208 hold a source document that is not in English. In the first test round, 8 of the 9 blocks on correct sentences were in the two articles whose sources were Spanish and Italian: the desk read evidence with tools that match English words, so a quotation the writer had translated looked fabricated, and keyword retrieval never showed the original passage. Measured before shipping, keyword retrieval showed a supporting excerpt for 22 of 31 held-out sentences with non-English support; one additional passage retrieved by meaning (intfloat/multilingual-e5-small, run on the newsroom's own machine) brought it to 30 of 31. With the fix, the model is shown passages by meaning, judges an English quotation against the original-language words, and a quotation held only in another language is no longer blocked by code. On those two articles, blocks on correct sentences fell from 8 to 0 and model calls from 11 to 6. Round six included an article whose sources are all in Urdu; it exposed one more code rule that matched only English names and figures, which blocked five correct sentences; that rule now defers to the model when a source is not in English, and when the article was checked again none of the five was blocked.</p>
-
-<h2><span class="secnum">3</span>Evaluation method</h2>
-<p>Each round's protocol was committed to version control after ten articles were drawn at random from the never-checked queue and before the desk ran on any of them. Part A: a blind writer agent, which never saw the desk's code or results, changed exactly one fact in 40 confirmed sentences (numbers, dates, people, places, outcomes, attributions) and reworded 10 more with every fact kept. Part B: two blind readers labelled every sentence of the round against the held evidence, and an adjudicator decided every disagreement, recording outside checks with raw copies. The pre-registered criteria: A1, at least 36 of 40 planted errors not confirmed; A2, at least 32 blocked; A3, the rewrites confirmed; B1, no desk-confirmed sentence that is a factual error; B2, blocks on correct sentences at most 2% of the round.</p>
-
-<h2><span class="secnum">4</span>Results</h2>
-<table>
-<thead><tr><th>Round</th><th>A1 not confirmed</th><th>A2 blocked</th><th>B1 confirmed factual errors</th><th>B2 blocks on correct sentences</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>40 of 40</td><td>39 of 40</td><td>0 (under the owner's review standard)</td><td>9 of 242 (3.7%)</td></tr>
-<tr><td>2</td><td>40 of 40</td><td>39 of 40</td><td>1 of 290</td><td>10 of 306 (3.3%)</td></tr>
-<tr><td>3</td><td>38 of 40</td><td>38 of 40</td><td>5 of 232</td><td>4 of 251 (1.6%)</td></tr>
-<tr><td>4</td><td>39 of 40</td><td>39 of 40</td><td>3 of 202</td><td>2 of 214 (0.9%)</td></tr>
-<tr><td>5</td><td>38 of 40</td><td>38 of 40</td><td>3 of 187</td><td>5 of 236 (2.1%)</td></tr>
-<tr><td>6</td><td>40 of 40</td><td>40 of 40</td><td>6 of 129</td><td>5 of 173 (2.9%)</td></tr>
-</tbody>
-</table>
-<p>Part A passed in every round. B2 passed in rounds three and four. B1 failed in rounds two to six. In rounds two to five, half of the 12 confirmed errors were a correct detail credited to the wrong outlet or source; 11 of the 12 were confirmed by the model, 10 of those on a single reading. In round six, three of the six were relative dates ("this weekend", "on Monday") that went stale between the day the article was written and the day it was checked; the desk now compares every relative time on both days and flags the ones that moved, and on the re-check it flagged all three. Its five blocks on correct sentences were the Urdu rule in section 2, now fixed.</p>
-
-<h2><span class="secnum">5</span>In production</h2>
-<p>The desk has checked every machine-drafted article since June 2026. By September 2026 it had run 5,165 checks over 2,729 drafts, verifying 96,765 claims and 13,735 quotes and blocking 1,014 drafts for correction (<a href="verification-desk.html">the production report</a>).</p>
-
-<h2><span class="secnum">6</span>Limitations</h2>
-<p>Each round has ten articles and forty planted errors, so the intervals are wide. The writer, the readers and the desk's model are models of the same family, and the adjudicator built the fixes; every adjudication decision is recorded with its evidence. The complete record (protocols, deviations, every model call with its prompt and tokens, the code at each version, and the readers' labels) is held in a peer-review package; it includes private newsroom evidence and is available to reviewers on request.</p>
-
+<nav class="readlinks">
+<a href="factcheck-paper.html"><b>Read the paper</b>The full manuscript, on this site</a>
+<a href="factcheck-paper.pdf"><b>PDF</b>The manuscript as submitted</a>
+<a href="verification-layer.html"><b>For businesses</b>A verification layer for AI agents</a>
+</nav>
+<div class="footnote">Alec Meeker &middot; <a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a> &middot; <a href="/">alecmeeker.com</a></div>
 </body>
 </html>

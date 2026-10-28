@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Verification Layer for AI Agents | Alec Meeker</title>
+<meta name="description" content="A fact-check desk in production at a New York news publisher checks every sentence an AI system drafts against the documents behind it, and blocks what they do not support. The same layer can stand between a company's AI agents and its customers.">
+<meta name="author" content="Alec Meeker">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Alec Meeker">
+<meta property="og:title" content="A Verification Layer for AI Agents">
+<meta property="og:description" content="Every sentence an AI agent writes, checked against the company's own documents before it is sent. In production in a newsroom; 476 of 482 planted errors stopped in pre-registered tests.">
+<meta property="og:url" content="https://alecmeeker.com/verification-layer.html">
+<meta property="og:image" content="https://alecmeeker.com/photo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A Verification Layer for AI Agents">
+<meta name="twitter:description" content="Every sentence an AI agent writes, checked against the company's own documents before it is sent. In production in a newsroom; 476 of 482 planted errors stopped in pre-registered tests.">
+<meta name="twitter:image" content="https://alecmeeker.com/photo.jpg">
+<link rel="canonical" href="https://alecmeeker.com/verification-layer.html">
+<style>
+:root{
+  --paper:#faf8f2; --ink:#1a1712; --ink-soft:#4a463c; --muted:#736c5c; --rule:#cfc7b3;
+  --red:#8f2018; --link:#8f2018; --green:#245536; --greenbg:#eef3ec; --amber:#7a4f00;
+  --amberbg:#f6efdd; --blue:#274a78; --bluebg:#eceff5;
+  --serif:"Charter","Source Serif 4","Iowan Old Style","Georgia","Times New Roman",serif;
+  --sans:"Avenir Next","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono",ui-monospace,"Berkeley Mono",Menlo,Consolas,monospace;
+  --measure:40rem;
+}
+*{box-sizing:border-box}
+html{background:#e9e4d6;-webkit-text-size-adjust:100%}
+body{
+  max-width:46rem;margin:0 auto;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:1.0625rem;line-height:1.62;
+  padding:4.5rem 4.5rem 6rem;
+  box-shadow:0 0 0 1px #00000012, 0 20px 60px -30px #00000033;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  font-variant-numeric:oldstyle-nums proportional-nums;
+  hyphens:auto;
+}
+a{color:var(--link);text-decoration:none;border-bottom:1px solid #8f201855}
+a:hover{border-bottom-color:var(--link)}
+::selection{background:#8f20181f}
+
+/* ---- title block ---- */
+.docmeta{font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin-bottom:1.4rem;font-variant-numeric:lining-nums}
+h1.title{font-size:1.62rem;line-height:1.28;font-weight:700;text-align:center;letter-spacing:-.006em;
+  max-width:34rem;margin:0 auto .9rem;text-wrap:balance}
+.byline{text-align:center;font-size:.92rem;color:var(--ink-soft);margin-bottom:.3rem}
+.byline .aff{font-style:italic;color:var(--muted);font-size:.86rem}
+.rule-sep{border:0;border-top:1px solid var(--rule);max-width:12rem;margin:1.7rem auto}
+
+/* ---- abstract ---- */
+.abstract{max-width:38rem;margin:1.6rem auto 0;padding:0 1.4rem;font-size:.975rem;line-height:1.58}
+.abstract .h{font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.08em;
+  text-transform:uppercase;text-align:center;color:var(--ink);margin-bottom:.5rem}
+.abstract p{margin:.5rem 0;text-align:justify}
+.keywords{max-width:38rem;margin:1rem auto 0;padding:0 1.4rem;font-size:.9rem;color:var(--ink-soft)}
+.keywords b{font-family:var(--sans);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- headings: numbered, restrained ---- */
+h2{font-size:1.18rem;font-weight:700;margin:2.5rem 0 .55rem;letter-spacing:-.004em;line-height:1.3}
+h2 .secnum{display:inline-block;min-width:1.5rem;color:var(--red)}
+h3{font-size:1.0rem;font-weight:700;margin:1.5rem 0 .4rem;color:var(--ink)}
+h3 .secnum{display:inline-block;min-width:2.1rem;color:var(--red);font-weight:700}
+h4{font-family:var(--sans);font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink-soft);margin:1.1rem 0 .3rem}
+
+/* ---- body text: journal paragraphing ---- */
+p{margin:0;max-width:var(--measure)}
+p + p{text-indent:1.4em}
+h2 + p, h3 + p, .boxed p, .abstract p, li p, td p{text-indent:0}
+section > p, .wrap > p{text-align:justify}
+.lead{margin-top:.2rem}
+strong{font-weight:700}
+em{font-style:italic}
+code{font-family:var(--mono);font-size:.85em;background:#00000008;padding:.05em .3em;border-radius:2px;
+  font-variant-numeric:lining-nums}
+.mono{font-family:var(--mono);font-variant-numeric:lining-nums}
+small{font-size:.86rem;color:var(--ink-soft)}
+
+/* ---- boxed statement (proposition/definition), academic convention ---- */
+.boxed{border:1px solid var(--rule);border-left:3px solid var(--green);background:var(--greenbg);
+  padding:.85rem 1.15rem;margin:1.1rem 0;max-width:var(--measure)}
+.boxed.blue{border-left-color:var(--blue);background:var(--bluebg)}
+.boxed .lbl{font-family:var(--sans);font-weight:700;font-size:.74rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--green);margin-bottom:.25rem}
+.boxed.blue .lbl{color:var(--blue)}
+.boxed p{margin:.2rem 0;max-width:none;font-size:.98rem}
+
+/* ---- tables: booktabs style, captioned ---- */
+figure.tbl{margin:1.6rem 0;max-width:none}
+figure.tbl figcaption{font-size:.86rem;color:var(--ink-soft);margin-bottom:.5rem;text-align:left;line-height:1.45}
+figure.tbl figcaption b{font-family:var(--sans);font-weight:700;font-size:.76rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink);margin-right:.5em}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:lining-nums tabular-nums;
+  font-family:var(--sans)}
+thead th{text-align:left;font-weight:700;font-size:.82rem;padding:.4rem .7rem;
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--ink)}
+tbody td{padding:.42rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.42}
+tbody tr:last-child td{border-bottom:1.5px solid var(--ink)}
+th.num,td.num{text-align:right;white-space:nowrap}
+
+.footnote{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);
+  font-size:.82rem;color:var(--muted);line-height:1.5}
+.footnote a{color:var(--muted);border-bottom-color:#73728c55}
+
+@media (max-width:640px){
+  body{padding:2.4rem 1.4rem 3.5rem;font-size:1rem}
+  h1.title{font-size:1.35rem}
+  .abstract,.keywords{padding:0}
+  figure.tbl{overflow-x:auto}
+  p + p{text-indent:1.2em}
+}
+@media (prefers-color-scheme: dark){
+  html{background:#14120d}
+  :root{--paper:#1c1a15;--ink:#e9e3d4;--ink-soft:#b3ab97;--muted:#8a836f;--rule:#3a362c;
+    --link:#e08a80;--greenbg:#1a241c;--bluebg:#181d26;--amberbg:#241f14;}
+  body{box-shadow:0 0 0 1px #ffffff0d,0 20px 60px -30px #00000080}
+  code{background:#ffffff10}
+  a{border-bottom-color:#e08a8055}
+}
+@media print{
+  html{background:#fff} body{box-shadow:none;max-width:none;padding:0;font-size:10.5pt}
+  h2,h3{break-after:avoid} figure.tbl,.boxed{break-inside:avoid}
+}
+
+.dek{text-align:center;font-size:1.05rem;color:var(--ink-soft);max-width:34rem;margin:0 auto;line-height:1.5;text-wrap:balance}
+.figures{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:2rem 0 .4rem;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.figures > div{padding:.9rem .7rem .8rem;border-left:1px solid var(--rule)}
+.figures > div:first-child{border-left:0}
+.figures .n{font-family:var(--serif);font-size:1.7rem;font-weight:700;line-height:1;font-variant-numeric:lining-nums;color:var(--red)}
+.figures .l{font-family:var(--sans);font-size:.74rem;line-height:1.35;color:var(--ink-soft);margin-top:.4rem}
+.figsrc{font-family:var(--sans);font-size:.72rem;color:var(--muted);margin:0 0 1.6rem}
+ul.tight{margin:.4rem 0 .2rem 1.1rem;padding:0;max-width:var(--measure)}
+ul.tight li{margin:.35rem 0;line-height:1.5}
+.cases{margin:.9rem 0;border-top:1px solid var(--rule)}
+.case{display:grid;grid-template-columns:7.5rem 1fr;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--rule)}
+.case .who{font-family:var(--sans);font-size:.78rem;font-weight:700;letter-spacing:.03em;color:var(--ink)}
+.case .who span{display:block;font-weight:400;color:var(--muted);margin-top:.15rem}
+.case p{font-size:.95rem;text-indent:0}
+.flow{display:flex;align-items:stretch;gap:0;margin:1.2rem 0;font-family:var(--sans);font-size:.8rem}
+.flow div{flex:1;border:1px solid var(--rule);padding:.65rem .7rem;line-height:1.35;background:var(--paper)}
+.flow div + div{border-left:0}
+.flow b{display:block;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem}
+.flow .gate{background:var(--greenbg);border-color:var(--green)}
+.flow .gate b{color:var(--green)}
+.cta{margin-top:2.2rem;text-align:center;font-family:var(--sans);font-size:.9rem}
+.cta a{font-weight:700}
+.sources{margin-top:2.6rem;padding-top:.9rem;border-top:1px solid var(--rule);font-size:.78rem;color:var(--muted);line-height:1.45}
+.sources ol{padding-left:1.2rem;margin:.4rem 0 0}
+.sources li{margin:.25rem 0}
+sup{font-family:var(--sans);font-size:.62rem;color:var(--muted);margin-left:.05em}
+@media (max-width:640px){
+  .figures{grid-template-columns:repeat(2,1fr)}
+  .figures > div:nth-child(3){border-left:0}
+  .figures > div:nth-child(n+3){border-top:1px solid var(--rule)}
+  .case{grid-template-columns:1fr;gap:.2rem}
+  .flow{flex-direction:column}
+  .flow div + div{border-left:1px solid var(--rule);border-top:0}
+}
+@media (prefers-color-scheme: dark){:root{--red:#e08a80;--green:#8fc39f}}
+@page{size:Letter;margin:.5in .6in}
+@media print{
+  body{font-size:9.4pt;line-height:1.45;background:#fff}
+  .docmeta{margin-bottom:.6rem} h1.title{margin-bottom:.4rem} .dek{font-size:10pt}
+  .rule-sep{margin:.8rem auto} .figures{margin:.9rem 0 .3rem} .figures > div{padding:.5rem .6rem}
+  .figures .n{font-size:1.35rem} .figsrc{margin-bottom:.7rem}
+  h2{margin:1.1rem 0 .3rem;font-size:11pt} .case{padding:.4rem 0} .case p{font-size:9.2pt}
+  ul.tight li{margin:.15rem 0} .flow{margin:.6rem 0} .cta{margin-top:1rem} .sources{margin-top:1.1rem;font-size:7.6pt}
+  .footnote{margin-top:.8rem}
+  .figures,.case,.flow{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="docmeta">Brief &middot; October 2026</div>
+<h1 class="title">A Verification Layer for AI Agents</h1>
+<p class="dek">Every sentence an AI system writes, checked against the documents behind it before anyone outside sees it. Built and run in production in a newsroom; designed for any business that lets AI speak for it.</p>
+<hr class="rule-sep">
+
+<div class="figures">
+  <div><div class="n">98.8%</div><div class="l">of planted factual errors caught (476 of 482)</div></div>
+  <div><div class="n">2.3%</div><div class="l">of all sentences blocked although correct (68 of 2,934)</div></div>
+  <div><div class="n">15</div><div class="l">source languages besides English, with no measurable loss of accuracy</div></div>
+  <div><div class="n">1 call</div><div class="l">to the language model per three to four sentences checked</div></div>
+</div>
+<p class="figsrc">Twelve pre-registered test rounds on 120 held-out news articles, October 2026. <a href="https://alecmeeker.com/factcheck-paper.html">The paper</a> gives every figure with its 95% interval.</p>
+
+<h2><span class="secnum">1</span>The problem: agents state company facts no document supports</h2>
+<p>Companies are putting AI agents in front of customers and into daily decisions. Forty percent of respondents at organizations with more than $1&nbsp;billion in revenue report scaling AI agents, up from 27% a year earlier.<sup>1</sup> Gartner expects a third of enterprise software applications to include agentic AI by 2028, and more than 40% of agentic AI projects to be canceled by the end of 2027 for escalating costs, unclear business value or inadequate risk controls.<sup>2</sup> The risk is concrete:</p>
+<div class="cases">
+  <div class="case"><div class="who">Air Canada<span>2024</span></div><p>The website chatbot told a customer that a bereavement fare could be claimed retroactively, which the airline did not allow. The tribunal held the airline responsible: it "did not take reasonable care to ensure its chatbot was accurate."<sup>3</sup></p></div>
+  <div class="case"><div class="who">Cursor<span>2025</span></div><p>An AI support agent told a user that a subscription allowed one device "as a core security feature." The company had no such policy.<sup>4</sup></p></div>
+  <div class="case"><div class="who">Deloitte Australia<span>2025</span></div><p>A government report written with a language model contained a fabricated quote from a court judgment and references to research papers that do not exist. Deloitte agreed to repay the final instalment of the contract.<sup>5</sup></p></div>
+</div>
+<p>In each case the company held the documents that settled the question. Nothing checked the agent's words against them before they went out.</p>
+
+<h2><span class="secnum">2</span>What exists: a fact-check desk in production</h2>
+<p>Bushwick Daily, a New York City news publisher, drafts articles with language models. Since October 2026 no machine-drafted article can be published until it has passed a fact-check desk. The desk holds every document the article was written from and checks each sentence against them:</p>
+<ul class="tight">
+  <li><strong>Code first.</strong> Code settles every sentence it can decide with certainty: a quotation no document contains, a figure no document holds, a passage that states the whole sentence. A language model reads only the remaining sentences, and only the passages code located for them.</li>
+  <li><strong>Every claim traced.</strong> Each excerpt the model cites is verified word for word against the document it names. Each decision is stored with the passages behind it and can be replayed.</li>
+  <li><strong>Fail-closed.</strong> A sentence the documents do not support blocks publication until an editor resolves it. After the model reads, code checks dates, date ranges, durations and who-reported-what again.</li>
+  <li><strong>Any language.</strong> Sources in Spanish, Chinese, Urdu, Polish, Korean and ten other languages are read by meaning with a model that runs on the company's own machine.</li>
+</ul>
+<p>It was tested the hard way. Before each round, the protocol, the articles and the pass criteria were committed in writing; an agent that never saw the desk planted forty errors into real sentences; and agents that never saw its verdicts labelled every sentence. Twelve such rounds stopped 476 of 482 planted errors. The cost is controlled by design: in the latest rounds code settled 23 to 31 sentences per round with no model call, and a re-check of an unchanged text replays stored readings instead of buying them again.</p>
+
+<h2><span class="secnum">3</span>Where it fits in an agentic system</h2>
+<div class="flow">
+  <div><b>Company documents</b>Policies, price lists, contracts, filings, procedures</div>
+  <div><b>Agent drafts</b>A reply, quote, summary or report</div>
+  <div class="gate"><b>Verification layer</b>Each sentence checked against the documents; unsupported ones blocked, with the reason</div>
+  <div><b>Out the door</b>Only what the documents support</div>
+</div>
+<p>A company's own documents are a closed set of evidence, like a newsroom's folder. The layer sits between the agent and the outside world:</p>
+<ul class="tight">
+  <li><strong>Customer service:</strong> refund, fare, warranty and eligibility answers checked against the policy that governs them.</li>
+  <li><strong>Sales and proposals:</strong> prices, terms and product claims checked against the price list and the contract.</li>
+  <li><strong>Finance and investor relations:</strong> figures, periods and attributions in summaries and notes checked against the filings they restate.</li>
+  <li><strong>Legal and compliance:</strong> quotations and cited provisions checked word for word against the authorities held.</li>
+  <li><strong>Internal assistants:</strong> HR, IT and operations answers checked against the company's own procedures.</li>
+</ul>
+<p>What a business would get: fewer statements it is liable for, an audit trail for every sentence an agent sent, model spend that does not grow with every re-check, and coverage across the languages its customers use.</p>
+
+<h2><span class="secnum">4</span>What is proven and what is next</h2>
+<p>Proven: news articles drawing on sources in fifteen languages besides English, in production, under a pre-registered evaluation with independent labels. Not yet tested: company documents. Moving to them means rules for units and scale, for figures derived by arithmetic, and for tables, and then the same pre-registered test against the company's own standard of what counts as an error. The evaluation method transfers unchanged; it is how a business would know the layer works on its own documents before it relies on it.</p>
+
+<div class="cta"><a href="https://alecmeeker.com/factcheck-paper.html">Read the paper</a> &middot; <a href="https://alecmeeker.com/factcheck-paper.pdf">PDF</a> &middot; <a href="mailto:alec@bushwickdaily.com">alec@bushwickdaily.com</a></div>
+
+<div class="sources">
+<b>Sources</b>
+<ol>
+  <li>McKinsey &amp; Company, <em>The state of AI in 2026: On the road to ROI</em>, 25 August 2026 (survey of 1,719 participants, May&ndash;June 2026).</li>
+  <li>Gartner, "Gartner predicts over 40% of agentic AI projects will be canceled by end of 2027," press release, 25 June 2025.</li>
+  <li><em>Moffatt v. Air Canada</em>, 2024 BCCRT 149 (Civil Resolution Tribunal of British Columbia).</li>
+  <li>B. Edwards, "Company apologizes after AI support agent invents policy that causes user uproar," <em>Ars Technica</em>, 17 April 2025.</li>
+  <li>Associated Press, "Deloitte to partially refund Australian government for report with apparent AI-generated errors," 7 October 2025.</li>
+</ol>
+</div>
+
+<div class="footnote">Alec Meeker &middot; Bushwick Daily, Brooklyn, New York &middot; <a href="https://alecmeeker.com/">alecmeeker.com</a></div>
+</body>
+</html>
