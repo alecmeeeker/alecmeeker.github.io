@@ -153,17 +153,19 @@ section.body h2:first-child{margin-top:2rem}
 
 <div class="abstract">
 <div class="h">Abstract</div>
-<p><strong>Background.</strong> Newsrooms that draft articles with language models need a check of every sentence against the documents
-the article was written from, before publication. Model-only checking is costly, varies between runs, and fails silently
-in ways an editor cannot audit.</p>
+<p><strong>Background.</strong> Every news article needs a check of each sentence against the documents it was written from before it is
+published, whether a reporter or a language model wrote it. Model-only checking is costly, varies between runs, and fails
+silently in ways an editor cannot audit.</p>
 <p><strong>System.</strong> We built a fact-check desk for a New York City local news publisher that settles what it can with deterministic
-code and asks a language model only about the rest. Code holds every evidence document whole, settles sentences with five
+code and asks a language model only about the rest. It reads an article and the documents behind it, whoever wrote the
+article. Code holds every evidence document whole, settles sentences with five
 rules (no checkable fact; a quotation in no document; a figure in no independent document; one passage holds the whole
 sentence; nothing in any document shares its content), retrieves passages for the remainder, verifies every excerpt the
 model cites, and re-checks every confirmed sentence for stale relative dates, date ranges, the outlets it credits and
 durations that contradict the article's own years. The model reads only located passages; its readings are recorded and
 replayed.</p>
-<p><strong>Evaluation.</strong> Thirteen pre-registered rounds, each on ten never-checked articles: Part A, forty factual errors planted by a
+<p><strong>Evaluation.</strong> Thirteen pre-registered rounds, each on ten never-checked articles from the publisher's review queue (127
+of the 130 drafted by its language-model writer): Part A, forty factual errors planted by a
 blind writer agent plus ten meaning-preserving rewrites; Part B, every sentence labelled by two blind reader agents against
 the same evidence, with adjudication and checks outside the evidence. A round passes when at least 36 of 40 planted errors
 are not confirmed, at least 32 are blocked, rewrites are confirmed, no factual error is confirmed (B1), and at most 2% of
@@ -185,8 +187,8 @@ single round is not yet reliable: rounds differ by a few sentences, within the v
 
 <section class="body">
 <h2><span class="secnum">1</span>Introduction</h2>
-<p>A local newsroom that uses language models to draft articles inherits a specific risk: a sentence that says more, less or
-something other than the documents behind it. The risk is not abstract. A wrong date tells a reader to show up a week late;
+<p>Every article a newsroom publishes, whether a reporter or a language model drafted it, carries a specific risk: a sentence
+that says more, less or something other than the documents behind it. The risk is not abstract. A wrong date tells a reader to show up a week late;
 a quotation with one word changed puts words in an official's mouth; a figure credited to the wrong outlet misleads about
 who reported what. The editor who must catch these has the article and, at best, a folder of documents.</p>
 <p>Automated fact-checking research has mostly framed the task as verifying a claim against a large reference corpus such as
@@ -316,7 +318,8 @@ day when the article is read is a date, not a tense, and still counts.</p>
 <h3><span class="secnum">3.2</span>Rounds</h3>
 <p>Each round drew ten articles at random (a seeded sample, seed in the protocol) from the publisher's queue of articles awaiting
 review that had never been fact-checked, and committed its protocol (the system under test by commit and policy version,
-the articles, the criteria, the reference date on which relative times are read) before any run. The desk ran once on the
+the articles, the criteria, the reference date on which relative times are read) before any run. Of the 130 articles, 127
+were drafted by the publisher's language-model writer; the other three, published earlier, carry no drafting record. The desk ran once on the
 production service (Part B), then in process with each article changed in memory and rolled back (Part A). Nothing was
 published, and no run on other code used the desk while a round ran.</p>
 <p><strong>Part A: planted errors.</strong> A writer agent that never saw the desk, given only the evidence and a draw order of sentences,
@@ -703,7 +706,9 @@ AI projects will be canceled by the end of 2027 for escalating costs, unclear bu
 An agent's answer can be checked against them before it is sent: a statement no document supports is the case this desk
 blocks, and the decision is kept with the passage that settled it.</p>
 <h2><span class="secnum">6</span>Limitations</h2>
-<p>All labelling was done by language-model agents, not human annotators; their agreement (kappa 0.74-0.96 per round) is
+<p>The desk reads only an article and its documents, so nothing in it depends on who wrote the article, but the test articles
+were drafted almost entirely by one language-model writer (127 of 130). Its accuracy on reporters' copy, whose errors may
+differ in kind and rate, is untested. All labelling was done by language-model agents, not human annotators; their agreement (kappa 0.74-0.96 per round) is
 between agents of one model family, and the adjudicator is an agent of that family too. The publisher's rulings, not an
 external standard, define a factual error. Fixes were chosen on each round's failures and measured on the next round's
 articles; every round is held out from the fixes it tests, but the policy as a whole was developed on the same publisher's

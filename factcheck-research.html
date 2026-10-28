@@ -151,17 +151,19 @@ section.body h2:first-child{margin-top:2rem}
 <hr class="rule-sep">
 <div class="abstract">
 <div class="h">Abstract</div>
-<p><strong>Background.</strong> Newsrooms that draft articles with language models need a check of every sentence against the documents
-the article was written from, before publication. Model-only checking is costly, varies between runs, and fails silently
-in ways an editor cannot audit.</p>
+<p><strong>Background.</strong> Every news article needs a check of each sentence against the documents it was written from before it is
+published, whether a reporter or a language model wrote it. Model-only checking is costly, varies between runs, and fails
+silently in ways an editor cannot audit.</p>
 <p><strong>System.</strong> We built a fact-check desk for a New York City local news publisher that settles what it can with deterministic
-code and asks a language model only about the rest. Code holds every evidence document whole, settles sentences with five
+code and asks a language model only about the rest. It reads an article and the documents behind it, whoever wrote the
+article. Code holds every evidence document whole, settles sentences with five
 rules (no checkable fact; a quotation in no document; a figure in no independent document; one passage holds the whole
 sentence; nothing in any document shares its content), retrieves passages for the remainder, verifies every excerpt the
 model cites, and re-checks every confirmed sentence for stale relative dates, date ranges, the outlets it credits and
 durations that contradict the article's own years. The model reads only located passages; its readings are recorded and
 replayed.</p>
-<p><strong>Evaluation.</strong> Thirteen pre-registered rounds, each on ten never-checked articles: Part A, forty factual errors planted by a
+<p><strong>Evaluation.</strong> Thirteen pre-registered rounds, each on ten never-checked articles from the publisher's review queue (127
+of the 130 drafted by its language-model writer): Part A, forty factual errors planted by a
 blind writer agent plus ten meaning-preserving rewrites; Part B, every sentence labelled by two blind reader agents against
 the same evidence, with adjudication and checks outside the evidence. A round passes when at least 36 of 40 planted errors
 are not confirmed, at least 32 are blocked, rewrites are confirmed, no factual error is confirmed (B1), and at most 2% of
