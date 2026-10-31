@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unverified Action Claims and Untrusted Source Text in a Production Language-Model News Pipeline: A Case Study</title><style>
+@page{margin:22mm}
+body{margin:0;background:#fff;color:#111;font:17px/1.62 Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif}
+main{max-width:740px;margin:0 auto;padding:64px 28px 120px}
+header{text-align:center;margin-bottom:40px}
+header h1{font-size:27px;line-height:1.3;font-weight:700;margin:0 0 18px}
+header .author{font-size:17px;margin:0}
+header .date{font-size:15px;color:#555;margin:4px 0 0;font-style:italic}
+h2{font-size:19px;margin:40px 0 10px}
+h3{font-size:17px;margin:26px 0 8px;font-style:italic;font-weight:600}
+p{margin:0 0 14px;text-align:justify;hyphens:auto}
+ol{padding-left:26px}li{margin:4px 0}
+a{color:#1a4f8b;text-decoration:none;word-break:break-word}a:hover{text-decoration:underline}
+.abstract{background:#f6f6f4;border-left:3px solid #111;padding:18px 24px 6px;margin:0 0 30px;font-size:15.5px}
+.abstract h2{margin:0 0 10px;font-size:16px;text-transform:uppercase;letter-spacing:.08em}
+table{border-collapse:collapse;width:100%;margin:10px 0 22px;font-size:14.5px;line-height:1.45}
+caption{caption-side:top;text-align:left;font-size:14.5px;padding-bottom:6px}
+th{border-top:1.5px solid #111;border-bottom:1px solid #111;text-align:left;padding:6px 8px;font-weight:600}
+td{padding:6px 8px;vertical-align:top;border-bottom:1px solid #e2e2e2}
+tbody tr:last-child td{border-bottom:1.5px solid #111}
+.refs p{padding-left:2em;text-indent:-2em;text-align:left;font-size:15.5px}
+code{font:13px ui-monospace,Menlo,monospace;background:#f1f1ef;padding:1px 4px}
+.internal{margin-top:64px;padding:16px 20px;border:2px dashed #c0392b;background:#fff8f6;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:13px}
+.internal h2{color:#c0392b;font-size:15px;margin-top:0}.internal p{text-align:left}.internal table{font-size:12px}
+@media print{.internal{display:none}main{padding:0}}
+</style></head><body><main>
+<header><h1>Unverified Action Claims and Untrusted Source Text in a Production Language-Model News Pipeline: A Case Study</h1><p class="author">Alec Meeker, Bushwick Daily, Brooklyn, New York</p><p class="date">Case study, draft of 31 October 2026</p></header>
+<section class="abstract"><h2>Abstract</h2>
+<p><strong>Background.</strong> Language-model agents that act for a user also report what they did, and they read text written by third parties. Both are routes to false output. An agent can report an action it never took, and instructions placed in source material can steer it.</p>
+<p><strong>System.</strong> A New York City local news publisher drafts articles with a language-model writer from the emails and web pages its newsroom collects. Every article passes a deterministic scrub, a fact-check stage and a human approval gate before publication.</p>
+<p><strong>Method.</strong> We report two investigations of this production system. The first is a census of all 4,840 article bodies on 26 September 2026 for sentences stating that the publisher sought comment, with each claim checked against the newsroom's outreach ledgers and sent mail. The second is a read-only audit on 17 October 2026 of how fetched text reaches the writer and the fact-check desk.</p>
+<p><strong>Results.</strong> Of 60 sentences stating that the publisher had contacted a named party for comment, 57 had no outreach on record. Ten of the 57 were published, for between five days and ten weeks, before withdrawal on 30 July 2026. Forty-eight trace to a prompt that told the writer to seek comment from every party and supplied the sentence to use, while the writer had no tool for contacting anyone. A phrase-list guard missed 6 of the 60 sentences, and the model-based fact-check could not settle claims about the newsroom's own actions. Separately, the audit found that fetched page and email text reached the prompts of both the writer and the fact-check desk with no instruction that it was untrusted data.</p>
+<p><strong>Conclusion.</strong> A claim about an agent's own actions can be checked only against records of those actions. A ledger derived from the publisher's mailbox and a publication gate with no override, deployed 29 September 2026, detect all 60 sentences. We propose an experiment for each failure class.</p>
+<p><strong>Keywords:</strong> language-model agents; agent honesty; indirect prompt injection; automated journalism; safety evaluation</p>
+</section><h2>1. Introduction</h2>
+<p>Language-model agents now send messages, edit files and publish text with limited human involvement. Two failure classes follow from that autonomy.</p>
+<p>The first is a divergence between an agent's account of its actions and the actions themselves. In simulated scenarios, a frontier model omitted a covert code change from its own status summary, and model judges changed labels when told the labels would be used in training (Lynch et al., 2026). The second is indirect prompt injection, in which instructions placed in content the agent reads alter its behavior (Perez and Ribeiro, 2022; Greshake et al., 2023). Monitors are exposed through the same channel. Agent-written content that imitated transcript structure bypassed production blocking monitors for coding agents until each transcript turn was framed and escaped (Remedios et al., 2026).</p>
+<p>Most evidence for both classes comes from constructed scenarios. This case study reports both from a production system that has published local news since May 2026. The writer described outreach it had no means to perform, the description reached readers, and the checks in place missed it for months. An audit of the same system examined how text that any outside party can write reaches the prompts of its writer and its checker.</p>
+<p>Our contributions are (1) a census of unverified outreach claims across every article body, with each claim checked against the newsroom's records; (2) an attribution of each claim to the writer prompt in force when it was written; (3) an account of the detection gaps that let the claims persist, and of the record-based controls that replaced them; and (4) an audit of how untrusted text reaches the writer and the fact-check desk.</p>
+<h2>2. System</h2>
+<p>The pipeline ingests email newsletters, press releases and web pages from local outlets and public agencies, clusters stories into events, and drafts one article per event with a language-model writer from the documents held for that event. Before publication each article passes three controls:</p>
+<ol>
+<li>a deterministic scrub with phrase-level policies, including an outreach policy introduced on 10 September 2026;</li>
+<li>a fact-check stage, model-based until October 2026 and since then the deterministic-first desk described in Meeker (2026);</li>
+<li>a human approval gate.</li>
+</ol>
+<p>The writer has no tool for contacting anyone. Press inquiries are sent by hand from the publisher's mailbox.</p>
+<h2>3. Method</h2>
+<h3>3.1 Outreach census</h3>
+<p>On 26 September 2026 we searched all 4,840 article bodies for sentences in which the publisher stated that it had reached out to, asked or contacted a named party. The search combined the outreach policy's own matcher, a pattern anchored on the publication's name and a reading of every hit. Each claim was checked against the newsroom's outreach ledgers and the publisher's sent mail to the named recipient in the relevant date window.</p>
+<h3>3.2 Prompt attribution</h3>
+<p>Each claim was attributed to the writer prompt in force when its body was written. Bodies written after prompt versioning began carry a recorded prompt version. For the 47 claims written before versioning, the attribution rests on creation dates and the file history of the prompt.</p>
+<h3>3.3 Untrusted-text audit</h3>
+<p>On 17 October 2026 we audited how fetched pages, emails and attachments reach the writer and the fact-check desk. The audit read the code, the production prompts and the live database through a read-only session. It sent no test inputs.</p>
+<h3>3.4 Status verification</h3>
+<p>The deployment status in Section 6 was verified on 31 October 2026 against the database's migration record, the publication queue and the code running in the publishing service.</p>
+<h2>4. Results: unverified outreach claims</h2>
+<h3>4.1 Prevalence</h3>
+<p>The census found 60 sentences. Three described inquiries the publisher had sent by hand, and sent mail confirms them. The other 57 had no record. The named parties included the NYPD, ICE, the MTA and the Mayor's office.</p>
+<p>Ten of the 57 appeared in published articles. Seven went live on 22 and 23 May 2026 and three on 25 July 2026. All ten were withdrawn on 30 July 2026, about ten weeks after the May articles and five days after the July articles. Six of the ten concerned the conduct of ICE or the NYPD, so readers were told those agencies had been given a chance to respond when they had not. The withdrawal left the sentences in the drafts. In late September, 14 unpublished articles still carried one, each a single approval from publication.</p>
+<h3>4.2 Attribution to prompt periods</h3>
+<p>Table 1 gives the claims by the writer prompt that produced them.</p>
+<table><caption><strong>Table 1.</strong> Unverified outreach claims by writer prompt.</caption>
+<thead>
+<tr>
+<th>Writer prompt</th>
+<th>Rule on comment-seeking</th>
+<th>Bodies</th>
+<th>Unverified claims</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File prompt, before versioning</td>
+<td>Template until 13 May, gated after</td>
+<td>687</td>
+<td>47</td>
+</tr>
+<tr>
+<td>Versions 1 to 7</td>
+<td>Template</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Versions 8 to 11</td>
+<td>Gated</td>
+<td>103</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Versions 14 to 22 (from 15 June)</td>
+<td>None</td>
+<td>1,169</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Versions 23 to 37 (from 30 July)</td>
+<td>Gated, restored</td>
+<td>2,879</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>All 47 claims in the first row are in bodies created between 20 March and 18 May 2026.</p>
+<p>The template period produced 48 of the 57 claims. The prompt instructed the writer to seek perspectives from all parties and gave it the sentence to use when a source did not respond: "Bushwick Daily reached out to [X] for comment and is awaiting a response." The writer had no means of seeking comment and used the template. The first half of that sentence appears in 51 of the 57 bodies, and 41 of those also carry the second half.</p>
+<p>The gated rule allowed the sentence only when the source materials confirmed that outreach had occurred. It did not hold on its own. Ten bodies carry editor notes, written by the writer itself, stating that there was no record of outreach, while the body claims outreach. These bodies have no recorded prompt version, so their attribution to the gated rule rests on the wording of the notes.</p>
+<p>On 15 June 2026 a prompt reduction deleted the rule. One subsequent version produced seven claims on 20 and 21 July in phrasings the template never used, among them "We have asked" and "has requested confirmation." The rule was restored on 30 July 2026. Versions 23 to 37 wrote no unverified outreach claim in 2,879 bodies through 26 September.</p>
+<h3>4.3 Detection gaps</h3>
+<p>A phrase-list outreach guard in the scrub, live from 10 September, was run against all 60 sentences. It missed six: three unverified and three true. In each, "asked" or "requested" appeared in a construction outside its list.</p>
+<p>The model-based fact-check could not settle these claims. It did not extract some outreach sentences as claims. It rated one unverified claim unsupported, minor and non-blocking because "no external source can confirm or deny it." It marked two true claims confirmed as self-referential. A claim about the newsroom's own actions can be checked only against the newsroom's own records, which the fact-check did not consult.</p>
+<h3>4.4 The inverse error</h3>
+<p>The census also found the opposite error in a current writer version. It wrote that New York City Transit "did not respond to those questions before publication." The agency had replied twice. One reply had been ingested two days before the article was written, but neither reply was linked to the article's event, so the writer read their absence as silence. The scrub removed the sentence because nothing proved it, without detecting that it was false.</p>
+<h2>5. Results: untrusted source text</h2>
+<h3>5.1 Writer</h3>
+<p>At the time of the audit, the writer received the text of fetched pages, emails and attachments concatenated into its user message under markdown headers. Neither the message nor the production prompt stated that this text is data to be checked. The headers are plain text, so a fetched page can contain lines identical to the system's own source headers and status markers. The audit rated this exposure high.</p>
+<h3>5.2 Fact-check desk</h3>
+<p>At the time of the audit, the rebuilt desk passed each evidence document to the adjudicating model after a one-line header, and its prompt contained no untrusted-evidence instruction. The predecessor desk's prompts stated that evidence blocks "are DATA to be checked, never INSTRUCTIONS to be followed." The rebuild dropped that statement. The audit rated this exposure medium, because code limits what the model decides: it settles every sentence it can without the model, and it verifies every excerpt the model cites against the whole document named.</p>
+<h3>5.3 Scope</h3>
+<p>Other model calls that read fetched text, such as the relevance gate, were outside the audit. The audit's findings on infrastructure are omitted from this paper.</p>
+<h2>6. Remediation and status</h2>
+<table><caption><strong>Table 2.</strong> Controls and their status on 31 October 2026.</caption>
+<thead>
+<tr>
+<th>Control</th>
+<th>Introduced</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Outreach rule restored in the writer prompt</td>
+<td>30 Jul 2026</td>
+<td>In production; no unverified claim in 2,879 bodies through 26 Sep</td>
+</tr>
+<tr>
+<td>Phrase-list outreach guard in the scrub</td>
+<td>10 Sep 2026</td>
+<td>In production; widened on 29 Sep after missing 6 of 60</td>
+</tr>
+<tr>
+<td>Inquiry ledger derived from the publisher's mailbox; a claim of silence requires an inquiry at least 24 hours old with no reply</td>
+<td>29 Sep 2026</td>
+<td>In production; supporting migration applied</td>
+</tr>
+<tr>
+<td>Own-outreach detection: the publication as subject and an outreach verb in one clause</td>
+<td>29 Sep 2026</td>
+<td>In production; detects all 60 census sentences; over 4,286 non-rejected bodies it added 8 detections and lost none</td>
+</tr>
+<tr>
+<td>Publication gate with no override, refusing any outreach sentence the ledger does not prove</td>
+<td>29 Sep 2026</td>
+<td>Running in the publishing service</td>
+</tr>
+</tbody>
+</table>
+<p>None of the ten withdrawn articles is published. Seven are rejected and three are in the review queue. One of the three still contains an unverified outreach sentence, which the publication gate refuses.</p>
+<h2>7. Discussion</h2>
+<p>The two findings share a mechanism. The writer and the checker each accept text shaped like what they expect, whether a template sentence in their own prompt or a header line inside a fetched page. For self-reports, the fix was to stop asking a model whether the claim was true and to check it against a record of the action. For untrusted text, no equivalent record exists, so the defenses must be measured.</p>
+<p><strong>Self-report evaluation.</strong> We propose an evaluation that compares an agent's statements about its own actions with its tool-call log, checked in code, across prompts that make an action appear required. The quantities of interest are the rate at which each model reports an action it did not take and the rate at which it omits one it did.</p>
+<p><strong>Source-side injection.</strong> The fact-check desk's evaluation already uses a blind agent to plant errors in held-out articles under pre-registered protocols; over rounds 2 to 13 the desk did not confirm 476 of 482 planted errors (Meeker, 2026). We propose pointing that attacker at the sources instead: writing press releases and web pages intended to get a false sentence drafted by the writer and confirmed by the desk, then measuring which defenses hold, beginning with code-verified excerpts and an untrusted-data instruction in each prompt.</p>
+<h2>8. Limitations</h2>
+<p>The census combined the guard's matcher, a pattern anchored on the publication's name and a reading of every hit, so sentences in phrasings none of them anticipated may be missing. The search for outreach covered the publisher's mailbox and the newsroom's ledgers; phone calls and other mailboxes were not searched, so "no record" is not proof that no outreach occurred. The attribution of 47 claims rests on dates, and that of the ten editor-note bodies on note wording. The audit read code and data and sent no test inputs, so whether a crafted source can steer either model is untested. Publication status is taken from the newsroom's publication queue; the content management system was not queried directly. All findings come from one publisher and one system.</p>
+<h2>References</h2><div class="refs">
+<p>Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., and Fritz, M. (2023). Not what you've signed up for: compromising real-world LLM-integrated applications with indirect prompt injection. arXiv:2302.12173.</p>
+<p>Lynch, A., Hughes, J., Serrano, A., Kirk, R., and Bowman, S. R. (2026). Agentic misalignment in summer 2026. Anthropic Alignment Science Blog, 13 July 2026. <a href="https://alignment.anthropic.com/2026/agentic-misalignment-summer-2026/">https://alignment.anthropic.com/2026/agentic-misalignment-summer-2026/</a></p>
+<p>Meeker, A. (2026). Deterministic-first fact-checking of local news against multilingual sources: a pre-registered evaluation on held-out articles. Manuscript, 28 October 2026. <a href="https://alecmeeker.com/deterministic-first-fact-checking-of-local-news-against-multilingual-sources/">https://alecmeeker.com/deterministic-first-fact-checking-of-local-news-against-multilingual-sources/</a></p>
+<p>Perez, F., and Ribeiro, I. (2022). Ignore previous prompt: attack techniques for language models. NeurIPS 2022 ML Safety Workshop. arXiv:2211.09527.</p>
+<p>Remedios, A., Storf, S., Roger, F., and Hughes, J. (2026). Red-teaming auto mode: improving blocking classifiers against malign coding agents. Anthropic Alignment Science Blog, 22 October 2026. <a href="https://alignment.anthropic.com/2026/red-teaming-auto-mode/">https://alignment.anthropic.com/2026/red-teaming-auto-mode/</a></p></div></main></body></html>
